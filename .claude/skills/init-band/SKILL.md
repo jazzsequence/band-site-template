@@ -24,7 +24,8 @@ The helper does the deterministic work: `pnpm exec tsx scripts/init-band.ts <com
 1. `pnpm exec tsx scripts/init-band.ts status`. If `initialized` is true, stop: the band is already set up. Re-running overwrites `band.config.json`, so only continue if the person asks to start over, and then pass `--force` to `apply`.
 2. `gh repo view --json isTemplate,nameWithOwner`. If `isTemplate` is true this is the template repository itself: stop and tell the person to create a repository from the template first ("Use this template" on GitHub, or `gh repo create <name> --template <owner>/band-site-template --public`), then run this in that copy. If the command fails (no remote, not signed in), stop and ask what repository this is and whether it was made from the template; do not guess.
 3. `git status --short` should be clean apart from files they expect. If not, say what is dirty and ask whether to go on.
-4. `apply` regenerates the icons and social card with a headless browser, so dependencies must be installed (`pnpm install`) and Chromium available (`pnpm exec playwright install chromium`). Check `gh auth status` and `terminus auth:whoami` only as each step needs them.
+4. Note the repository owner from step 2 (`nameWithOwner`): it becomes `github.owner` in the answers, and CODEOWNERS is pointed at it so the template's author is not asked to review the band's pull requests.
+5. `apply` regenerates the icons and social card with a headless browser, so dependencies must be installed (`pnpm install`) and Chromium available (`pnpm exec playwright install chromium`). Check `gh auth status` and `terminus auth:whoami` only as each step needs them.
 
 ## Step 1: identity (first batch)
 
@@ -82,9 +83,9 @@ If either is not known yet, leave it out: the answers file allows that, and `app
 
 ## Step 6: write the answers, confirm, apply
 
-1. Write `docs/init-answers.json` (gitignored) in the shape of `.claude/skills/init-band/answers.example.json`: `identity` (name, tagline, description, genre, fictional, siteUrl, optional imprint, social, offLimits), `look.palette` (the 13 roles), `type`, `features`, optional `audio.baseUrl`, optional `hosting` (`pantheonSite`, `p1SiteId`).
+1. Write `docs/init-answers.json` (gitignored) in the shape of `.claude/skills/init-band/answers.example.json`: `identity` (name, tagline, description, genre, fictional, siteUrl, optional imprint, social, offLimits), `look.palette` (the 13 roles), `type`, `features`, optional `audio.baseUrl`, optional `hosting` (`pantheonSite`, `p1SiteId`), optional `github.owner`.
 2. Summarise what you are about to apply in a short list (never the off-limits topics; say how many) and get a yes.
-3. `pnpm exec tsx scripts/init-band.ts apply docs/init-answers.json`. It validates first and changes nothing if anything is wrong; fix what it names and run it again. **Show the whole output.** It writes `band.config.json` (with `setup.initialized: true`), the local `docs/off-limits.md`, `CLAUDE.md` and `README.md` for the band, the home page fixture's title, `.env.example`'s audio URL, installs `test-deployed-site.yml` and `sync-puck-registry.yml` when it has the facts for them, and regenerates the theme, placeholder images, icons and social card.
+3. `pnpm exec tsx scripts/init-band.ts apply docs/init-answers.json`. It validates first and changes nothing if anything is wrong; fix what it names and run it again. **Show the whole output.** It writes `band.config.json` (with `setup.initialized: true`), the local `docs/off-limits.md`, `CLAUDE.md` and `README.md` for the band, `package.json`'s name and description, the owner in `.github/CODEOWNERS`, the home page fixture's title, `.env.example`'s audio URL, installs `test-deployed-site.yml` and `sync-puck-registry.yml` when it has the facts for them, and regenerates the theme, placeholder images, icons and social card.
 
 ## Step 7: secrets (the person runs these)
 
