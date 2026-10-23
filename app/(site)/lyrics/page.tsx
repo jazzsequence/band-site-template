@@ -27,11 +27,11 @@ async function LyricsFallback() {
       <SectionHeading as="h1" kicker="Words">Lyrics</SectionHeading>
       {groups.map((g) => (
         <section key={g.key} className="space-y-3">
-          <h2 className="font-display text-xs uppercase tracking-[0.25em] text-violet">{g.title}</h2>
+          <h2 className="font-display text-xs uppercase tracking-[0.25em] text-accent-2">{g.title}</h2>
           <ul className="divide-y divide-line border-y border-line">
             {g.items.map((l) => (
               <li key={l.slug}>
-                <AppLink href={`/lyrics/${l.slug}`} className="flex items-baseline justify-between gap-4 py-3 hover:text-magenta">
+                <AppLink href={`/lyrics/${l.slug}`} className="flex items-baseline justify-between gap-4 py-3 hover:text-accent">
                   <span className="text-lg">{l.title}</span>
                   {l.track && <span className="text-sm tabular-nums text-dim">{String(l.track).padStart(2, "0")}</span>}
                 </AppLink>
