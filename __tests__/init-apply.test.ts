@@ -137,6 +137,30 @@ describe("applyInit", () => {
     await expect(applyInit({ root, answers: answers(), run, skipAssets: true })).rejects.toThrow(/already been set up/);
   });
 
+  it("a forced re-run on a configured repo updates the config but leaves the already-rewritten CLAUDE.md alone, and says so", async () => {
+    const root = tempRepo();
+    await applyInit({ root, answers: answers(), today: "2026-10-23", run, skipAssets: true });
+    const rewritten = text(root, "CLAUDE.md");
+    const renamed = answers() as Record<string, any>;
+    renamed.identity.name = "Orchard Neon";
+    const report = await applyInit({ root, answers: renamed, force: true, run, skipAssets: true });
+    expect(JSON.parse(text(root, "band.config.json")).band.name).toBe("Orchard Neon");
+    expect(text(root, "CLAUDE.md")).toBe(rewritten);
+    expect(report.notes.join("\n")).toMatch(/CLAUDE\.md was already rewritten/);
+  });
+
+  it("does not guess when a CLAUDE.md without markers meets an un-forced run", async () => {
+    const root = tempRepo();
+    writeFileSync(join(root, "CLAUDE.md"), "# CLAUDE.md\n\nAlready a band's file.\n");
+    await expect(applyInit({ root, answers: answers(), run, skipAssets: true })).rejects.toThrow(/template:intro/);
+  });
+
+  it("explains a malformed band.config.json instead of throwing a bare parse error", async () => {
+    const root = tempRepo();
+    writeFileSync(join(root, "band.config.json"), "{ not json");
+    await expect(applyInit({ root, answers: answers(), run, skipAssets: true })).rejects.toThrow(/band\.config\.json is not valid JSON/);
+  });
+
   it("leaves .gitignore alone when docs/ is already ignored, and appends it when it is not", async () => {
     const withIt = tempRepo();
     const before = text(withIt, ".gitignore");

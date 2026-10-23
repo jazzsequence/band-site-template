@@ -54,7 +54,12 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   const configPath = path.join(root, "band.config.json");
   if ((await exists(configPath)) && !opts.force) {
-    const current = JSON.parse(await fs.readFile(configPath, "utf8")) as { setup?: { initialized?: boolean } };
+    let current: { setup?: { initialized?: boolean } };
+    try {
+      current = JSON.parse(await fs.readFile(configPath, "utf8"));
+    } catch (e) {
+      throw new Error(`band.config.json is not valid JSON (${e instanceof Error ? e.message : e}); fix it or pass force to overwrite it.`);
+    }
     if (current.setup?.initialized === true) throw new Error("This repo has already been set up (setup.initialized is true). Pass force to run it again.");
   }
 
@@ -72,7 +77,14 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
       ? `# Off limits\n\nPublic copy, metadata, alt text, comments and docs must never state or hint at any of these. This file is gitignored: keep it that way.\n\n${offLimits.map((t) => `- ${t}`).join("\n")}\n`
       : "# Off limits\n\nNothing recorded yet. List topics here, one per line; this file is gitignored and the reviewer checks every commit against it.\n",
   );
-  files.set("CLAUDE.md", renderClaudeMd(await read(root, "CLAUDE.md"), { answers, date: today, adjustments, offLimitsCount: offLimits.length, installed }));
+  const notes: string[] = [];
+  const claudeMd = await read(root, "CLAUDE.md");
+  if (/<!-- template:/.test(claudeMd) || !opts.force) {
+    files.set("CLAUDE.md", renderClaudeMd(claudeMd, { answers, date: today, adjustments, offLimitsCount: offLimits.length, installed }));
+  } else {
+    // A forced re-run on a repo whose CLAUDE.md was already rewritten: the markers are gone, so leave it alone rather than guess.
+    notes.push("CLAUDE.md was already rewritten for a band, so it was left as it is. Update its Setup decisions section by hand to match the new answers.");
+  }
   files.set("README.md", renderReadme(answers));
 
   const home = "content/p1-pages/home.json";
@@ -113,7 +125,6 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
     run("node", ["scripts/make-brand-assets.mjs"], root);
   }
 
-  const notes: string[] = [];
   if (!site) notes.push("No Pantheon site recorded: the promote and deployed-site workflows still use the placeholder name, and no secrets can be listed yet. Create the site, then re-run the hosting questions.");
   if (!answers.hosting?.p1SiteId) notes.push("No P1 site id recorded: the registry sync is not installed. Create the P1 site, then re-run the hosting questions.");
   if (!answers.audio?.baseUrl) notes.push("No audio host recorded: set NEXT_PUBLIC_AUDIO_BASE_URL (and the R2 secrets) when the bucket exists.");
