@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { band, token } from "./helpers/config";
+import { band, features, token } from "./helpers/config";
 
 /**
  * The audio player lives in the site layout, so it only survives navigation if links are client-side.
@@ -29,13 +29,13 @@ async function navigateWithoutReload(page: import("@playwright/test").Page, star
 test("header links navigate without reloading the page", async ({ page, isMobile }) => {
   test.skip(isMobile === true, "covered by the desktop project; layout differs only in wrapping");
   await navigateWithoutReload(page, "/", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Albums" }).click(), /\/albums$/);
-  await navigateWithoutReload(page, "/albums", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Tour" }).click(), /\/tour$/);
+  await navigateWithoutReload(page, "/albums", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Listen" }).click(), /\/listen$/);
 });
 
 test("album cards and buttons navigate without reloading the page", async ({ page }) => {
   await navigateWithoutReload(page, "/albums", () => page.getByRole("link", { name: /^First EP/ }).click(), /\/albums\/first-ep$/);
-  await navigateWithoutReload(page, "/", () => page.getByRole("link", { name: "All dates" }).click(), /\/tour$/);
-  await navigateWithoutReload(page, "/lyrics", () => page.getByRole("link", { name: /First Song/ }).first().click(), /\/lyrics\/first-song$/);
+  if (features.tour) await navigateWithoutReload(page, "/", () => page.getByRole("link", { name: "All dates" }).click(), /\/tour$/);
+  if (features.lyrics) await navigateWithoutReload(page, "/lyrics", () => page.getByRole("link", { name: /First Song/ }).first().click(), /\/lyrics\/first-song$/);
 });
 
 test("the wordmark link goes home without reloading", async ({ page }) => {

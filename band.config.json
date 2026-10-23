@@ -20,6 +20,9 @@
     "wordmarkFace": false,
     "accentFace": false
   },
+  "setup": {
+    "initialized": false
+  },
   "editorial": {
     "offLimitsFile": "docs/off-limits.md"
   },

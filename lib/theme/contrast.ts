@@ -32,10 +32,10 @@ export function contrastRatio(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-type Lch = readonly [number, number, number];
+export type Lch = readonly [number, number, number];
 
 // Björn Ottosson's OKLab, https://bottosson.github.io/posts/oklab/
-function hexToOklch(hex: string): Lch {
+export function hexToOklch(hex: string): Lch {
   const [r, g, b] = hexToRgb(hex).map((v) => toLinear(v / 255));
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
@@ -62,7 +62,7 @@ function oklchToLinearRgb([L, C, h]: Lch): Rgb {
 const inGamut = (rgb: Rgb) => rgb.every((v) => v >= -1e-6 && v <= 1 + 1e-6);
 
 // Keeps L and hue and gives up chroma until the colour fits sRGB, so a lifted colour never clips to a different hue.
-function oklchToHex(lch: Lch): string {
+export function oklchToHex(lch: Lch): string {
   const [L, C, h] = lch;
   let lo = 0;
   let hi = C;

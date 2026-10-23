@@ -83,7 +83,8 @@ export function checkPalette(palette: Palette): PairResult[] {
 
 export type Adjustment = { key: PaletteKey; from: string; to: string; reason: string };
 
-const fmt = (n: number) => (Math.floor(n * 10) / 10).toFixed(1);
+/** A ratio floored to one decimal, never rounded up: a 4.49 must not read as 4.5, or a note would overstate a passing ratio. */
+export const fmt = (n: number) => (Math.floor(n * 10) / 10).toFixed(1);
 
 /** Lifts failing text colours, keeping their hue, or throws a PaletteError saying why it cannot. */
 export function resolvePalette(input: Palette): { palette: Palette; adjustments: Adjustment[] } {

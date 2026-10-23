@@ -51,6 +51,7 @@ Never commit `.env`.
 | `pnpm storybook` | Design system on port 6006 |
 | `pnpm build-storybook` | Static Storybook build |
 | `pnpm theme` | Regenerate `design-system/theme.generated.css` from the palette in `band.config.json`; fails the palette if a text colour cannot reach WCAG AA |
+| `pnpm init-band <command>` | Set-up helper driven by the `/init-band` skill (`status`, `suggest-palette`, `check-palette`, `apply`); it never takes a secret |
 | `pnpm sync:registry` | Push the Puck component registry to P1 (needs the registry secrets; see `examples/workflows/`) |
 
 ## Content

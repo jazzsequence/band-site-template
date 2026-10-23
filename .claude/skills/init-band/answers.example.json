@@ -1,0 +1,55 @@
+{
+  "identity": {
+    "name": "Neon Orchard",
+    "tagline": "Slow synths for fast nights.",
+    "description": "Neon Orchard is a three-piece making slow synth music for fast nights.",
+    "genre": "Synthpop",
+    "fictional": true,
+    "siteUrl": "https://neon-orchard.example.com",
+    "imprint": "Orchard Records, distributed by Example Distribution",
+    "social": [
+      {
+        "label": "Bandcamp",
+        "url": "https://neonorchard.bandcamp.com"
+      }
+    ],
+    "offLimits": [
+      "A topic public copy must never mention"
+    ]
+  },
+  "look": {
+    "palette": {
+      "void": "#020703",
+      "surface": "#041107",
+      "raised": "#071b0c",
+      "line": "#133c1f",
+      "text": "#ebf5ed",
+      "muted": "#acc5b0",
+      "dim": "#829d87",
+      "accent": "#58cd78",
+      "accent-2": "#a4bbff",
+      "accent-3": "#ffbfb4",
+      "metal-hi": "#ecf4ee",
+      "metal-mid": "#cfdbd1",
+      "metal-lo": "#7a8c7d"
+    }
+  },
+  "type": {
+    "wordmarkFace": true,
+    "accentFace": false
+  },
+  "features": {
+    "tour": true,
+    "merch": true,
+    "lyrics": true,
+    "map": true,
+    "press": false
+  },
+  "audio": {
+    "baseUrl": "https://audio.neon-orchard.example.com"
+  },
+  "hosting": {
+    "pantheonSite": "neon-orchard",
+    "p1SiteId": "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60"
+  }
+}

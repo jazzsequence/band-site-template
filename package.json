@@ -12,6 +12,7 @@
     "start": "node .next/standalone/server.js",
     "sync:registry": "tsx scripts/sync-puck-registry.ts",
     "theme": "tsx scripts/generate-theme.ts",
+    "init-band": "tsx scripts/init-band.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "test:a11y": "playwright test",

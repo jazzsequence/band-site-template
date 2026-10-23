@@ -102,10 +102,10 @@ describe("tracked files use colour roles", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("keeps the allowlist honest: every entry still exists and still holds a literal", () => {
-    for (const f of Object.keys(PALETTE_LITERAL_ALLOWED)) {
-      expect(files, `${f} is allowlisted but not tracked`).toContain(f);
-      expect(read(f), `${f} no longer holds a palette literal; drop it from the allowlist`).toMatch(PALETTE_LITERAL);
-    }
+  it("keeps the allowlist honest: every entry still exists, and the fixture still holds the reference palette", () => {
+    for (const f of Object.keys(PALETTE_LITERAL_ALLOWED)) expect(files, `${f} is allowlisted but not tracked`).toContain(f);
+    // band.config.json, the generated theme and the icon hold the band's own palette, which stops matching the reference one
+    // once a band sets up its own colours, so only the fixture is required to hold it.
+    expect(read("__tests__/fixtures/reference-palette.json")).toMatch(PALETTE_LITERAL);
   });
 });
