@@ -32,6 +32,15 @@ export type BandConfig = {
     /** Use the blackletter face for kickers. Off: kickers use the display face. */
     accentFace: boolean;
   };
+  /** Set by /init-band when it has run. false means this repo is still the placeholder band. */
+  setup: { initialized: boolean };
+  /** Where the site is hosted. Neither value is a secret; the keys and tokens never go in this file. */
+  hosting: {
+    /** Machine name of the Pantheon site (promote workflow, deployed-site check, terminus commands). */
+    pantheonSite?: string;
+    /** The P1 site id (NEXT_PUBLIC_CSS_SITE_ID; the registry sync's CSS_SITE_ID). */
+    p1SiteId?: string;
+  };
   editorial: {
     /**
      * Local, gitignored file listing what public copy must never state or hint at. It stays under docs/
@@ -97,6 +106,8 @@ export function parseBandConfig(input: unknown): BandConfig {
     },
     features: { tour: false, merch: false, lyrics: false, map: false, press: false },
     typography: { wordmarkFace: false, accentFace: false },
+    setup: { initialized: false },
+    hosting: {},
     editorial: { offLimitsFile: "" },
   };
 
@@ -109,6 +120,28 @@ export function parseBandConfig(input: unknown): BandConfig {
   const t = section("typography");
   config.typography.wordmarkFace = flag(t, "typography", "wordmarkFace");
   config.typography.accentFace = flag(t, "typography", "accentFace");
+
+  // setup and hosting are optional so a config written before they existed still loads.
+  const setupRaw = root.setup;
+  if (setupRaw !== undefined) {
+    if (!isObject(setupRaw) || typeof setupRaw.initialized !== "boolean") problems.push("setup.initialized must be true or false");
+    else config.setup.initialized = setupRaw.initialized;
+  }
+  const hostingRaw = root.hosting;
+  if (hostingRaw !== undefined) {
+    if (!isObject(hostingRaw)) problems.push("hosting must be an object");
+    else {
+      const { pantheonSite, p1SiteId } = hostingRaw;
+      if (pantheonSite !== undefined) {
+        if (typeof pantheonSite !== "string" || !/^[a-z0-9][a-z0-9-]{0,49}$/.test(pantheonSite)) problems.push("hosting.pantheonSite must be a Pantheon site machine name (lowercase letters, digits, hyphens)");
+        else config.hosting.pantheonSite = pantheonSite;
+      }
+      if (p1SiteId !== undefined) {
+        if (typeof p1SiteId !== "string" || !/^[0-9a-f][0-9a-f-]{7,63}$/i.test(p1SiteId)) problems.push("hosting.p1SiteId must be a P1 site id (hex digits and hyphens)");
+        else config.hosting.p1SiteId = p1SiteId;
+      }
+    }
+  }
 
   const e = section("editorial");
   const file = text(e, "editorial", "offLimitsFile", 200);
@@ -127,5 +160,7 @@ export const band = parsed.band;
 export const features = parsed.features;
 export const typography = parsed.typography;
 export const editorial = parsed.editorial;
+export const setup = parsed.setup;
+export const hosting = parsed.hosting;
 
 export const isEnabled = (feature: Feature) => features[feature];

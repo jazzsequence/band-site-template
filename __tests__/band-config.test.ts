@@ -66,6 +66,29 @@ describe("band.config.json", () => {
     expect(valid.editorial.offLimitsFile.startsWith("docs/")).toBe(true);
   });
 
+  it("is still the placeholder band until /init-band sets setup.initialized", () => {
+    expect(parseBandConfig(valid).setup.initialized).toBe(false);
+    const done = clone();
+    done.setup.initialized = true;
+    expect(parseBandConfig(done).setup.initialized).toBe(true);
+    const old = clone();
+    delete old.setup;
+    delete old.hosting;
+    expect(parseBandConfig(old)).toMatchObject({ setup: { initialized: false }, hosting: {} });
+    old.setup = { initialized: "yes" };
+    expect(problems(old)).toContain("setup.initialized must be true or false");
+  });
+
+  it("checks the hosting facts it records", () => {
+    const c = clone();
+    c.hosting = { pantheonSite: "my-band-site", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" };
+    expect(parseBandConfig(c).hosting).toEqual(c.hosting);
+    c.hosting = { pantheonSite: "Not A Machine Name", p1SiteId: "x" };
+    const out = problems(c);
+    expect(out).toContain("hosting.pantheonSite must be a Pantheon site machine name");
+    expect(out).toContain("hosting.p1SiteId must be a P1 site id");
+  });
+
   it("allows an optional imprint and rejects an empty one", () => {
     const c = clone();
     c.band.imprint = "Label Name, distributed by Distributor";
