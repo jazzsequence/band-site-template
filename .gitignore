@@ -1,0 +1,26 @@
+node_modules
+.DS_Store
+.next/*
+.cache
+next-env.d.ts
+
+# audio is hosted outside git
+music/
+.env
+.env.local
+storybook-static
+*.tsbuildinfo
+
+# Local-only source material (never publish)
+/docs/
+/images/
+
+# Playwright
+test-results/
+playwright-report/
+
+# claude-code-reviewer approval flag
+reviewer-approved
+
+# MapLibre worker files copied from node_modules by scripts/copy-maplibre-worker.mjs
+/public/maplibre/

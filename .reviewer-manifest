@@ -1,0 +1,4 @@
+.githooks/pre-commit:1dd3766366e2efad212f08849df982895e11d3a6329eb7a85ac8d46f9c4026f3
+.githooks/lib/approval.sh:6128df0315bac534d5fa7e0b77ed569ffc644bf7eeb74fc4b07b4a06a81a7fca
+.claude/helpers/hook-handler.cjs:82d3d1a04dac5b7d0fb6caaa4324a5e849e3533a8f2d4f59e3e48193c2bca401
+.claude/agents/reviewer.md:ddebcb0ab7b730f321995e90f03f3aff7a52364e513ae2f709120ea1243ea3bd

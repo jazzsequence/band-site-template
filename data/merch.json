@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "well-enough-vinyl",
+    "name": "Well Enough (vinyl LP)",
+    "price": "$26",
+    "image": "/images/merch/well-enough-vinyl.jpg"
+  },
+  {
+    "slug": "tribute-vinyl",
+    "name": "Tribute (vinyl)",
+    "price": "$26",
+    "image": "/images/merch/tribute-vinyl.jpg"
+  },
+  {
+    "slug": "well-enough-cd",
+    "name": "Well Enough (CD)",
+    "price": "$14.98",
+    "image": "/images/well-enough-cover.jpg"
+  },
+  {
+    "slug": "tribute-cd",
+    "name": "Tribute (CD)",
+    "price": "$11.98",
+    "image": "/images/tribute-cover.jpg"
+  },
+  {
+    "slug": "consent-of-the-quiet-cassette",
+    "name": "Consent of the Quiet (cassette single)",
+    "price": "$8",
+    "image": "/images/merch/consent-of-the-quiet-cassette.jpg"
+  },
+  {
+    "slug": "well-enough-cassette",
+    "name": "Well Enough (cassette single)",
+    "price": "$8",
+    "image": "/images/merch/well-enough-cassette.jpg"
+  },
+  {
+    "slug": "tour-tee",
+    "name": "Tour tee",
+    "price": "$24",
+    "image": "/images/merch/tour-tee.jpg"
+  },
+  {
+    "slug": "baby-tee",
+    "name": "Baby tee",
+    "price": "$22",
+    "image": "/images/merch/baby-tee.jpg"
+  },
+  {
+    "slug": "zip-hoodie",
+    "name": "Zip hoodie",
+    "price": "$48",
+    "image": "/images/merch/zip-hoodie.jpg"
+  },
+  {
+    "slug": "poster",
+    "name": "Poster",
+    "price": "$12",
+    "image": "/images/merch/poster.jpg"
+  },
+  {
+    "slug": "zine",
+    "name": "Tour zine",
+    "price": "$10",
+    "image": "/images/merch/zine.jpg"
+  },
+  {
+    "slug": "enamel-pins",
+    "name": "Enamel pin set",
+    "price": "$16",
+    "image": "/images/merch/enamel-pins.jpg"
+  },
+  {
+    "slug": "choker-and-chain",
+    "name": "Choker and wallet chain",
+    "price": "$14",
+    "image": "/images/merch/choker-and-chain.jpg"
+  },
+  {
+    "slug": "sticker-sheet",
+    "name": "Sticker sheet",
+    "price": "$6",
+    "image": "/images/merch/sticker-sheet.jpg"
+  }
+]

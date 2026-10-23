@@ -1,0 +1,163 @@
+import { P1_FALLBACKS } from '@/lib/assets';
+import { FallbackImg } from '@/lib/img';
+import { Btn, TextLink } from "@/lib/btn";
+import "./hero.css";
+
+export interface HeroProps {
+  eyebrow: string;
+  title: string;
+  description: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+  primaryHref?: string;
+  primaryTarget?: "_self" | "_blank";
+  secondaryHref?: string;
+  secondaryTarget?: "_self" | "_blank";
+  tone: "accent" | "dark" | "light";
+  layout: "split" | "full image" | "text only";
+  imageSrc: string;
+  imageSide: "right" | "left";
+  imageFill: "card" | "flush";
+  splitRatio: "even" | "copy-wide" | "image-wide";
+  align: "left" | "center" | "right";
+  overlay: "none" | "scrim" | "gradient down" | "gradient right";
+  overlayStrength: "light" | "medium" | "heavy";
+  knockout: "off" | "on";
+}
+
+
+const ALPHA: Record<HeroProps["overlayStrength"], number> = { light: 0.32, medium: 0.56, heavy: 0.8 };
+
+function overlayGradient(overlay: HeroProps["overlay"], strength: HeroProps["overlayStrength"]): string | undefined {
+  const a = ALPHA[strength];
+  if (overlay === "scrim") return `rgba(10,6,30,${a})`;
+  if (overlay === "gradient down") return `linear-gradient(180deg, rgba(10,6,30,0) 30%, rgba(10,6,30,${a}) 100%)`;
+  if (overlay === "gradient right") return `linear-gradient(90deg, rgba(10,6,30,${a + 0.12}) 0%, rgba(10,6,30,${a * 0.5}) 45%, rgba(10,6,30,0) 80%)`;
+  return undefined;
+}
+
+const SPLIT_COLS: Record<HeroProps["imageSide"], Record<HeroProps["splitRatio"], string>> = {
+  right: { even: "1fr 1fr", "copy-wide": "7fr 5fr", "image-wide": "5fr 7fr" },
+  left: { even: "1fr 1fr", "copy-wide": "5fr 7fr", "image-wide": "7fr 5fr" },
+};
+
+export function HeroRender({
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  secondaryLabel,
+  primaryHref,
+  primaryTarget,
+  secondaryHref,
+  secondaryTarget,
+  tone,
+  layout,
+  imageSrc,
+  imageSide,
+  imageFill,
+  splitRatio,
+  align,
+  overlay,
+  overlayStrength,
+  knockout,
+}: HeroProps) {
+  const img = imageSrc || P1_FALLBACKS.LANDSCAPE;
+  const onDark = layout === "full image" || tone !== "light";
+
+  const koStyle: React.CSSProperties | undefined =
+    knockout === "on"
+      ? {
+          backgroundImage: `url(${img}), url(${P1_FALLBACKS.LANDSCAPE})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+          WebkitTextFillColor: "transparent",
+        }
+      : undefined;
+
+  const copyBlock = (
+    <div className="p1-hero__copy" data-align={align} data-ondark={onDark ? "true" : undefined}>
+      {eyebrow && <span className="p1-hero__eyebrow">{eyebrow}</span>}
+      <h1 className="p1-hero__title" style={koStyle}>
+        {title}
+      </h1>
+      {description && <p className="p1-hero__desc">{description}</p>}
+      <div className="p1-hero__actions" data-align={align}>
+        {primaryLabel && (
+          <Btn variant="yellow" href={primaryHref} target={primaryTarget}>
+            {primaryLabel}
+          </Btn>
+        )}
+        {secondaryLabel && (
+          <TextLink className="p1-hero__secondary" href={secondaryHref} target={secondaryTarget}>
+            {secondaryLabel}
+          </TextLink>
+        )}
+      </div>
+    </div>
+  );
+
+  if (layout === "full image") {
+    const bg = overlayGradient(overlay, overlayStrength);
+    return (
+      <section className="p1-hero p1-block" data-layout="full-image">
+        <FallbackImg src={img} alt="" className="p1-hero__bg-img" loading="eager" fetchPriority="high" />
+        {bg && <div className="p1-hero__overlay" style={{ background: bg }} />}
+        <div className="p1-hero__fullimg-content" data-align={align}>
+          {copyBlock}
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === "text only") {
+    return (
+      <section className="p1-hero p1-block" data-layout="text-only" data-tone={tone}>
+        <div className="p1-hero__text-content" data-align={align}>
+          {copyBlock}
+        </div>
+      </section>
+    );
+  }
+
+  // split
+  const imgFirst = imageSide === "left";
+  const cols = SPLIT_COLS[imageSide]?.[splitRatio] ?? "1fr 1fr";
+
+  const imageEl =
+    imageFill === "flush" ? (
+      <div className="p1-hero__img-flush">
+        <FallbackImg src={img} alt="" className="p1-hero__img" loading="eager" fetchPriority="high" />
+      </div>
+    ) : (
+      <div className="p1-hero__img-card">
+        <FallbackImg src={img} alt="" className="p1-hero__img" loading="eager" fetchPriority="high" />
+      </div>
+    );
+
+  const copyWrap = <div className="p1-hero__copy-wrap">{copyBlock}</div>;
+
+  return (
+    <section className="p1-hero p1-block" data-layout="split" data-tone={tone} data-imagefill={imageFill}>
+      <div
+        className="p1-hero__split-grid"
+        style={{ "--p1-hero-split-cols": cols } as React.CSSProperties}
+      >
+        {imgFirst ? (
+          <>
+            {imageEl}
+            {copyWrap}
+          </>
+        ) : (
+          <>
+            {copyWrap}
+            {imageEl}
+          </>
+        )}
+      </div>
+    </section>
+  );
+}

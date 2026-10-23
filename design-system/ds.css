@@ -1,0 +1,83 @@
+@import "tailwindcss";
+/* Font files are imported from fonts.ts, not here: Vite cannot resolve font URLs that arrive through a
+   Tailwind CSS @import, so the Storybook build shipped no font files and fell back to system fonts. */
+
+/*
+ * PARIS design tokens. Dark only. Neon on near-black with a violet cast, taken from the
+ * stage photography (magenta / violet / electric blue light on chrome and black leather),
+ * plus a cold silver "chrome" neutral. Every text/background pair below clears WCAG AA;
+ * ratios are noted against --color-surface (#0e0a18).
+ */
+@theme {
+  /* Surfaces */
+  --color-void: #07050d;
+  --color-surface: #0e0a18;
+  --color-raised: #17112a;
+  --color-line: #2c2250;
+
+  /* Text */
+  --color-text: #f5f0ff;      /* 17.5:1 */
+  --color-muted: #b9aed6;     /* 9.4:1 */
+  --color-dim: #8f84ad;       /* 5.7:1 — large or secondary text only */
+
+  /* Neon accents */
+  --color-magenta: #ff3fa4;   /* 6.0:1 */
+  --color-violet: #a98bff;    /* 7.3:1 */
+  --color-cyan: #3ef0ff;      /* 14.1:1 */
+
+  /* Chrome (metallic neutral) */
+  --color-chrome-hi: #f1effa;
+  --color-chrome-lo: #8d8aa6;
+
+  /* Headings. Deliberately not the wordmark face. */
+  --font-display: "Encode Sans Expanded", system-ui, sans-serif;
+  /* The PARIS wordmark only (Wordmark component). Nothing else uses this face. */
+  --font-wordmark: "Unbounded Variable", "Arial Black", sans-serif;
+  --font-body: "Space Grotesk Variable", system-ui, sans-serif;
+  /* Accent only: kickers and flourishes. NEVER the PARIS name, which is always capitals in --font-wordmark. */
+  --font-gothic: "UnifrakturCook", serif;
+
+  --radius-card: 0.25rem;
+  --shadow-glow-magenta: 0 0 24px rgb(255 63 164 / 0.45);
+  --shadow-glow-cyan: 0 0 24px rgb(62 240 255 / 0.35);
+
+  /* A short confirmation sliding up into place (the player bar's notice). Reduced motion turns it off in base.css. */
+  --animate-notice-in: notice-in 0.2s ease-out;
+  @keyframes notice-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --grad-neon: linear-gradient(110deg, #ff3fa4 0%, #a98bff 55%, #3ef0ff 100%);
+  --grad-chrome: linear-gradient(180deg, #f1effa 0%, #8d8aa6 55%, #d9d6ea 100%);
+}
+
+/* Chrome-filled display type */
+.text-chrome {
+  background: var(--grad-chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-neon {
+  background: var(--grad-neon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

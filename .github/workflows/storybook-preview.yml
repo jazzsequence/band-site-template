@@ -1,0 +1,84 @@
+name: Storybook preview
+
+# Publishes a Storybook build per PR to the gh-pages branch under pr-<N>/, and removes it when
+# the PR closes. Merging a PR into `design` is the design approval (see CLAUDE.md).
+#
+# GitHub Pages must be enabled: Settings > Pages > Deploy from branch `gh-pages`, `/ (root)`.
+# On a private repo that needs a paid GitHub plan; on a public repo it is free.
+#
+# Preview: https://<owner>.github.io/<repo>/pr-<N>/
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+  push:
+    branches: [design]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: storybook-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    name: Build and publish Storybook
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build-storybook
+
+      # Fork PRs get a read-only token, so publishing would fail; skip rather than go red.
+      - name: Publish preview
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook-static
+          destination_dir: ${{ github.event_name == 'push' && 'design' || format('pr-{0}', github.event.pull_request.number) }}
+          keep_files: true
+
+      - name: Comment preview link
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/
+        run: |
+          # Update a single marker comment instead of adding one per push.
+          MARKER="<!-- storybook-preview -->"
+          ID=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+            --jq "[.[] | select(.body | contains(\"$MARKER\"))][0].id // empty")
+          BODY="$MARKER"$'\n'"Storybook preview: $URL"
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$ID" -f body="$BODY"
+          else
+            gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+          fi
+
+  cleanup:
+    if: github.event.action == 'closed'
+    name: Remove preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+        continue-on-error: true  # no gh-pages branch yet means nothing to clean
+      - name: Delete pr-${{ github.event.pull_request.number }}/
+        run: |
+          [ -d "pr-${{ github.event.pull_request.number }}" ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm -rq "pr-${{ github.event.pull_request.number }}"
+          git commit -qm "Remove Storybook preview for PR ${{ github.event.pull_request.number }}"
+          git push

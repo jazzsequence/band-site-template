@@ -1,0 +1,61 @@
+{
+  "path": "/",
+  "root": {
+    "props": {
+      "title": "PARIS",
+      "description": "PARIS: tour dates, music, lyrics and the new album Well Enough."
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "id": "HeroBlock-1",
+        "imageUrl": "/images/paris-on-stage.jpg",
+        "kicker": "New album",
+        "title": "Well Enough",
+        "blurb": "The new album, out now on Hostile Takeover.",
+        "actions": [
+          {
+            "label": "Tour dates",
+            "href": "/tour",
+            "style": "primary"
+          },
+          {
+            "label": "Listen",
+            "href": "/listen",
+            "style": "outline"
+          }
+        ]
+      }
+    },
+    {
+      "type": "TourPreviewBlock",
+      "props": {
+        "id": "TourPreviewBlock-2",
+        "kicker": "On the road",
+        "heading": "Tour dates",
+        "count": 4,
+        "linkLabel": "All dates",
+        "linkHref": "/tour"
+      }
+    },
+    {
+      "type": "SectionHeadingBlock",
+      "props": {
+        "id": "SectionHeadingBlock-3",
+        "kicker": "Music",
+        "title": "Albums"
+      }
+    },
+    {
+      "type": "AlbumGridBlock",
+      "props": {
+        "id": "AlbumGridBlock-4",
+        "headingLevel": "h3",
+        "includeUnreleased": "yes"
+      }
+    }
+  ],
+  "zones": {}
+}

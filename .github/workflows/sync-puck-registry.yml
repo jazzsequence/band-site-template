@@ -1,0 +1,64 @@
+# Optional: syncs this site's Puck component registry to the backend
+# headlessly on every push, without anyone needing to open the editor.
+#
+# Requires repo secrets CSS_BASE_URL, CSS_SITE_ID and CSS_REGISTRY_API_KEY
+# (a "Component registry sync" token; never reuse the site's read token).
+# Until they exist this workflow fails on pushes that touch the paths below.
+#
+# Triggers on push to any branch that touches puck.config.tsx or
+# components/puck/**. The sync script resolves the target branch from the
+# pushed git branch's name: the repo's default branch always targets the
+# site's main branch (whatever the git branch is called), any other ref
+# matches a branch on the site by name. A push on a non-default branch with
+# no matching branch on the site is not an error: the script logs a skip and
+# exits 0.
+#
+# CSS_DEFAULT_BRANCH defaults to "main" if omitted — repos whose default
+# branch has another name (master, trunk) need the line below (or must set
+# the variable themselves) for default-branch pushes to sync at all.
+name: Sync Puck Component Registry
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'puck.config.tsx'
+      - 'components/puck/**'
+  workflow_dispatch:
+    inputs:
+      branch_id:
+        description: 'Branch ID/name to sync against (blank = match the current git branch, else site main)'
+        required: false
+        default: ''
+
+# A branch pushed several times in quick succession only needs its newest
+# component set synced. Without this, every push starts its own run and they
+# race each other into the same registry documents.
+concurrency:
+  group: sync-puck-registry-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync-registry:
+    # Dependabot runs only see Dependabot secrets, not the repo secrets above, so the sync would fail on missing credentials.
+    # It has nothing to sync either: Dependabot never edits the registry, and a rebase only brings in changes that were
+    # already synced when they landed on main.
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Sync component registry
+        run: pnpm sync:registry
+        env:
+          CSS_BASE_URL: ${{ secrets.CSS_BASE_URL }}
+          CSS_SITE_ID: ${{ secrets.CSS_SITE_ID }}
+          CSS_REGISTRY_API_KEY: ${{ secrets.CSS_REGISTRY_API_KEY }}
+          CSS_BRANCH_ID: ${{ github.event.inputs.branch_id || github.ref_name }}
+          CSS_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}

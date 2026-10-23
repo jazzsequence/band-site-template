@@ -1,0 +1,49 @@
+{
+  "path": "/listen",
+  "root": {
+    "props": {
+      "title": "Listen",
+      "description": "Stream and download PARIS: every album, the EP, B-sides and unreleased recordings."
+    }
+  },
+  "content": [
+    {
+      "type": "PageHeadingBlock",
+      "props": {
+        "id": "PageHeadingBlock-5",
+        "kicker": "Music",
+        "title": "Listen",
+        "intro": ""
+      }
+    },
+    {
+      "type": "AlbumSectionBlock",
+      "props": {
+        "id": "AlbumSectionBlock-6",
+        "albumSlug": "well-enough"
+      }
+    },
+    {
+      "type": "AlbumSectionBlock",
+      "props": {
+        "id": "AlbumSectionBlock-7",
+        "albumSlug": "tribute"
+      }
+    },
+    {
+      "type": "AlbumSectionBlock",
+      "props": {
+        "id": "AlbumSectionBlock-8",
+        "albumSlug": "ep"
+      }
+    },
+    {
+      "type": "AlbumSectionBlock",
+      "props": {
+        "id": "AlbumSectionBlock-9",
+        "albumSlug": "unreleased"
+      }
+    }
+  ],
+  "zones": {}
+}

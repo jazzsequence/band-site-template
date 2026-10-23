@@ -1,0 +1,27 @@
+{
+  "path": "/lyrics",
+  "root": {
+    "props": {
+      "title": "Lyrics",
+      "description": "Every PARIS lyric, by album."
+    }
+  },
+  "content": [
+    {
+      "type": "PageHeadingBlock",
+      "props": {
+        "id": "PageHeadingBlock-21",
+        "kicker": "Words",
+        "title": "Lyrics",
+        "intro": ""
+      }
+    },
+    {
+      "type": "LyricsIndexBlock",
+      "props": {
+        "id": "LyricsIndexBlock-22"
+      }
+    }
+  ],
+  "zones": {}
+}

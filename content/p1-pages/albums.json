@@ -1,0 +1,29 @@
+{
+  "path": "/albums",
+  "root": {
+    "props": {
+      "title": "Albums",
+      "description": "The PARIS catalogue: albums, EP, B-sides and unreleased recordings."
+    }
+  },
+  "content": [
+    {
+      "type": "PageHeadingBlock",
+      "props": {
+        "id": "PageHeadingBlock-10",
+        "kicker": "Music",
+        "title": "Albums",
+        "intro": ""
+      }
+    },
+    {
+      "type": "AlbumGridBlock",
+      "props": {
+        "id": "AlbumGridBlock-11",
+        "headingLevel": "h2",
+        "includeUnreleased": "yes"
+      }
+    }
+  ],
+  "zones": {}
+}

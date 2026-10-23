@@ -1,0 +1,4 @@
+# Design changes are approved by the repo owner merging into `design`.
+/.storybook/ @jazzsequence
+/design-system/ @jazzsequence
+/.github/ @jazzsequence

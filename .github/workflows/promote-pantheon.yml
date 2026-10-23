@@ -1,0 +1,134 @@
+name: Promote to Pantheon Environment
+
+# Triggered when code is merged/pushed to the test or live branches.
+# Creates the appropriate Pantheon tag, which the Pantheon GitHub App
+# uses to trigger a build and deploy to that environment.
+#
+# Tag naming convention (required by Pantheon):
+#   pantheon_test_N  →  Test environment
+#   pantheon_live_N  →  Live environment
+#
+# Branches:
+#   test  →  equivalent to Pantheon Test environment
+#   live  →  equivalent to Pantheon Live environment
+#   main  →  equivalent to Pantheon Dev (handled by test-pantheon.yml)
+
+on:
+  push:
+    branches:
+      - test
+      - live
+
+permissions:
+  contents: write  # Required to create and push tags
+
+env:
+  PANTHEON_SITE_NAME: paris-site
+
+jobs:
+  promote:
+    name: Tag for Pantheon ${{ github.ref_name }} environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout with full tag history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Determine next tag
+        id: tag
+        run: |
+          BRANCH="${{ github.ref_name }}"
+
+          if [[ "$BRANCH" == "test" ]]; then
+            PREFIX="pantheon_test"
+          elif [[ "$BRANCH" == "live" ]]; then
+            PREFIX="pantheon_live"
+          else
+            echo "Unexpected branch: $BRANCH" && exit 1
+          fi
+
+          LAST_TAG=$(git tag -l "${PREFIX}_*" | sort -t_ -k3 -n | tail -1)
+          LAST=$(echo "${LAST_TAG}" | grep -o '[0-9]*$' || echo "0")
+          NEXT=$(( LAST + 1 ))
+          TAG="${PREFIX}_${NEXT}"
+
+          echo "prefix=${PREFIX}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}"       >> $GITHUB_OUTPUT
+          echo "env=${BRANCH}"    >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.tag.outputs.tag }}"
+          git push origin "${{ steps.tag.outputs.tag }}"
+          echo "✅ Pushed tag ${{ steps.tag.outputs.tag }} — Pantheon will now build and deploy to ${{ steps.tag.outputs.env }}"
+
+      - name: Wait for Pantheon build and deployment to complete
+        uses: jazzsequence/pantheon-wait-for-build@v2
+        with:
+          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+          site-name: ${{ env.PANTHEON_SITE_NAME }}
+          environment: ${{ steps.tag.outputs.env }}
+          # Redundant here: the cache handler purges the whole edge itself when the
+          # buildId changes (checkBuildInvalidation -> invalidateRouteCache ->
+          # nukeCache). This action's step is a second full GCDN purge of the same
+          # scope, via POST /v0/sites/{id}/environments/{env}/cache/clear — it does
+          # NOT use Terminus, despite the name suggesting a CLI call.
+          #
+          # On live the duplicate is worse than wasteful. Traffic is continuous, so
+          # the handler's purge fires on the first request and traffic repopulates;
+          # this step polls for up to 150s and can land afterwards, discarding fresh
+          # entries and forcing another round of origin renders when the environment
+          # can least absorb it. On a quiet environment the order reverses and it is
+          # merely redundant — which is why this is set on promote only. Leave it on
+          # in test-pantheon.yml: a cold edge is desirable there for E2E determinism.
+          #
+          # This does NOT stop the edge going cold on deploy. The handler's own purge
+          # does that, and it is the condition the bounded init has to survive.
+          #
+          # Kept reachable, not deleted, because the handler has several silent
+          # no-purge paths: init failing before checkBuildInvalidation runs;
+          # invalidateRouteCache swallowing a getFiles() throw before nukeCache is
+          # reached; and edgeCacheClearer being null when OUTBOUND_PROXY_ENDPOINT is
+          # unset. A failed nukeCache is a warn only. In all of those the API purge
+          # is the sole one that does not depend on the app being healthy, and the
+          # detection is a human noticing stale content. Flip back to 'true' if that
+          # ever happens.
+          clear-cache: 'false'
+
+      - name: Warm ISR cache
+        continue-on-error: true  # Cold starts can exceed any reasonable timeout — not a deployment failure
+        run: |
+          SITE="${{ env.PANTHEON_SITE_NAME }}"
+          ENV="${{ steps.tag.outputs.env }}"
+          BASE_URL="https://${ENV}-${SITE}.pantheonsite.io"
+
+          echo "Warming ISR cache for ${BASE_URL}..."
+
+          # Warm key pages — fires SSR on first hit, populating ISR cache.
+          # Cold starts after deployment can be slow; failures here are non-fatal.
+          for path in "/"; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 120 "${BASE_URL}${path}")
+            echo "  ${path} → ${STATUS}"
+          done
+
+          echo "Cache warm complete."
+
+      - name: Summary
+        run: |
+          echo "### Pantheon Promotion" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tag** | \`${{ steps.tag.outputs.tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Pantheon env** | ${{ steps.tag.outputs.env }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          SITE="${{ env.PANTHEON_SITE_NAME }}"
+          ENV="${{ steps.tag.outputs.env }}"
+          echo "🔗 [https://${ENV}-${SITE}.pantheonsite.io](https://${ENV}-${SITE}.pantheonsite.io)" >> $GITHUB_STEP_SUMMARY

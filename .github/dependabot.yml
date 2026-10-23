@@ -1,0 +1,51 @@
+# Dependency updates, mirroring jazz-nextjs (weekly, grouped minor/patch, Monday).
+# Dependabot PRs are ordinary PRs into main: the owner reviews and squash-merges them.
+version: 2
+
+updates:
+  # npm packages (pnpm: Dependabot reads pnpm-lock.yaml)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    # Project rule: do not adopt a release less than two weeks old (maplibre-gl is pinned exactly for this reason).
+    # Security updates ignore the cooldown.
+    cooldown:
+      default-days: 14
+    # Blocked majors. Each one was observed in jazz-nextjs, which runs the same Next.js on Pantheon stack. They have
+    # not been re-tested here, so lift an entry by trying the update on a PR environment. Each is scoped to the one
+    # known-bad line, so the next line still opens a PR. NOTE: a `versions:` ignore also suppresses security-update PRs
+    # inside that range; Dependabot alerts still fire and are the signal that survives, so keep them enabled.
+    ignore:
+      # BLOCKER: TypeScript 7 (the native port) crashes Next's build worker ('The "id" argument must be of type string').
+      # LIFT WHEN: Next.js declares TypeScript 7 support.
+      - dependency-name: "typescript"
+        versions: ["7.x"]
+      # BLOCKER: ESLint 10 breaks eslint-plugin-react ('contextOrFilename.getFilename is not a function').
+      # LIFT WHEN: eslint-plugin-react supports ESLint 10's rule-context API. Verify with `pnpm lint`.
+      - dependency-name: "eslint"
+        versions: ["10.x"]
+    groups:
+      # Group minor and patch updates to cut PR noise. Majors arrive one PR each.
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7

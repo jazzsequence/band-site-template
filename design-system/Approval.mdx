@@ -1,0 +1,13 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Process/Design approval" />
+
+# Design approval
+
+Nothing in this design system reaches the site until a human has reviewed it here.
+
+1. Work on a branch named `design-<topic>` (not `design/<topic>`: git cannot hold both `design` and `design/x`) and open a PR into `design`.
+2. CI builds Storybook and posts a preview link on the PR.
+3. Review the stories in the preview, including the a11y panel.
+4. Merging the PR **is** the approval.
+5. Only then are tokens and components from `design` applied to the site, via a PR into `main`.

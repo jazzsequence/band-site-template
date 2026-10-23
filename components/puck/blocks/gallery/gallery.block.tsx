@@ -1,0 +1,100 @@
+import type { ComponentConfig } from "@puckeditor/core";
+import { defineMeta } from '@/lib/define-meta';
+import { P1_ASSETS } from '@/lib/assets';
+import { GalleryRender, type GalleryProps, type GalleryImage } from "./gallery";
+export type { GalleryProps, GalleryImage };
+
+export const GalleryBlock: ComponentConfig<GalleryProps> = {
+  fields: {
+    heading: {
+      type: "text" as const,
+      contentEditable: true,
+      visible: false,
+      ai: { instructions: "A short section heading of 2–5 words. Plain text, sentence case." },
+    },
+    layout: {
+      type: "select" as const,
+      options: [
+        { label: "Grid", value: "grid" },
+        { label: "Masonry", value: "masonry" },
+        { label: "Filmstrip", value: "filmstrip" },
+        { label: "Carousel", value: "carousel" },
+      ],
+    },
+    columns: {
+      type: "select" as const,
+      options: [
+        { label: "2", value: "2" },
+        { label: "3", value: "3" },
+        { label: "4", value: "4" },
+      ],
+    },
+    gap: {
+      type: "select" as const,
+      options: [
+        { label: "Tight", value: "tight" },
+        { label: "Regular", value: "regular" },
+        { label: "Wide", value: "wide" },
+      ],
+    },
+    ratio: {
+      type: "select" as const,
+      options: [
+        { label: "1 / 1", value: "1 / 1" },
+        { label: "4 / 3", value: "4 / 3" },
+        { label: "3 / 2", value: "3 / 2" },
+        { label: "16 / 9", value: "16 / 9" },
+      ],
+    },
+    radius: {
+      type: "select" as const,
+      options: [
+        { label: "None", value: "none" },
+        { label: "Soft", value: "soft" },
+        { label: "Round", value: "round" },
+      ],
+    },
+    captions: {
+      type: "radio" as const,
+      options: [
+        { label: "Off", value: "off" },
+        { label: "On", value: "on" },
+      ],
+    },
+    images: {
+      type: "array" as const,
+      arrayFields: {
+        src: { type: "text" as const },
+        caption: { type: "text" as const, contentEditable: true, visible: false },
+      },
+      defaultItemProps: { src: P1_ASSETS.LANDSCAPE, caption: "" },
+      getItemSummary: (item: GalleryImage) => item.caption || "Image",
+    },
+  },
+  defaultProps: {
+    heading: "From the field",
+    layout: "grid",
+    columns: "3",
+    gap: "regular",
+    ratio: "4 / 3",
+    radius: "soft",
+    captions: "off",
+    images: [
+      { src: P1_ASSETS.GALLERY_1, caption: "Team offsite" },
+      { src: P1_ASSETS.GALLERY_2, caption: "Workshop" },
+      { src: P1_ASSETS.GALLERY_3, caption: "Launch day" },
+      { src: P1_ASSETS.GALLERY_4, caption: "Planning" },
+      { src: P1_ASSETS.GALLERY_5, caption: "Standup" },
+      { src: P1_ASSETS.GALLERY_6, caption: "Ship it" },
+    ],
+  },
+  render: GalleryRender,
+};
+
+export const meta = defineMeta({
+  title: 'Gallery',
+  description: 'Multi-image display in grid, masonry, filmstrip, or carousel layout with optional captions and configurable columns/gap/ratio; use for photo galleries.',
+  categories: ["showcase"],
+  published: true,
+  registryDependencies: ["@p1/tokens","@p1/internal-icons","@p1/internal-img"],
+});

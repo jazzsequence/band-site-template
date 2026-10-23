@@ -1,0 +1,11 @@
+[
+  { "id": "sf-1997-10-07", "date": "1997-10-07", "city": "San Francisco, CA", "venue": "Roderick's Chamber", "address": "715 Harrison St", "doors": "9:00 PM", "price": 12, "status": "on-sale", "lat": 37.7821, "lon": -122.3976 },
+  { "id": "oakland-1997-10-18", "date": "1997-10-18", "city": "Oakland, CA", "venue": "Paramount Theatre", "address": "2025 Broadway", "doors": "7:00 PM", "price": 28.5, "status": "on-sale", "lat": 37.8099, "lon": -122.2687 },
+  { "id": "portland-1997-10-21", "date": "1997-10-21", "city": "Portland, OR", "venue": "Satyricon", "address": "125 NW 6th Ave", "capacity": "400", "doors": "8:00 PM", "price": 14, "status": "on-sale", "lat": 45.524, "lon": -122.6766 },
+  { "id": "seattle-1997-10-23", "date": "1997-10-23", "city": "Seattle, WA", "venue": "Crocodile Cafe", "address": "2200 2nd Ave", "capacity": "550", "doors": "8:00 PM", "price": 15, "status": "sold-out", "lat": 47.6136, "lon": -122.3443 },
+  { "id": "la-1997-10-31", "date": "1997-10-31", "city": "Los Angeles, CA", "venue": "Hollywood Palace", "address": "1735 N Vine St", "doors": "8:00 PM", "price": 22, "status": "on-sale", "lat": 34.1027, "lon": -118.327 },
+  { "id": "sandiego-1997-11-01", "date": "1997-11-01", "city": "Solana Beach, CA", "venue": "Belly Up Tavern", "address": "143 S Cedros Ave", "capacity": "600", "doors": "8:00 PM", "price": 16, "status": "on-sale", "lat": 32.991, "lon": -117.2707 },
+  { "id": "phoenix-1997-11-04", "date": "1997-11-04", "city": "Phoenix, AZ", "venue": "Mason Jar", "address": "2303 E Indian School Rd", "doors": "8:00 PM", "price": 14, "status": "on-sale", "lat": 33.4945, "lon": -112.0321 },
+  { "id": "slc-1997-11-06", "date": "1997-11-06", "city": "Salt Lake City, UT", "venue": "Club DV8", "address": "115 S West Temple", "doors": "8:00 PM", "price": 13, "status": "on-sale", "lat": 40.7668, "lon": -111.8938 },
+  { "id": "denver-1997-11-08", "date": "1997-11-08", "city": "Denver, CO", "venue": "Ogden Theatre", "address": "935 E Colfax Ave", "capacity": "1,600", "doors": "7:00 PM", "price": 18, "status": "on-sale", "lat": 39.7403, "lon": -104.9753 }
+]

@@ -1,0 +1,20 @@
+{
+  "path": "/privacy",
+  "root": {
+    "props": {
+      "title": "Privacy",
+      "description": "What this site does and does not collect. Short version: nothing, unless you ask for a map."
+    }
+  },
+  "content": [
+    {
+      "type": "ArticleBlock",
+      "props": {
+        "id": "ArticleBlock-24",
+        "markdown": "# Privacy\n\n## What we collect\n\nNothing. This site sets no cookies, runs no analytics or advertising trackers, has no accounts and no sign-up forms, and does not store anything about you in your browser.\n\n## Tickets\n\nThe ticket page is a demonstration. The name you type is placed in the address of your ticket page so it can be shown back to you, and is not sent to or kept by anyone. No payment details are asked for or taken.\n\n## Who can see your visit\n\nEvery website is delivered by someone. Pantheon hosts the pages and, like any host, keeps ordinary server logs that include your IP address and what you requested. Songs are served from Cloudflare, which sees a request each time you play or download one. Fonts and images are served from this site itself, not from a third party. The one exception is the optional map, below.\n\n## The map\n\nThe tour pages can show a map. It is off until you press Show map, and until then nothing is requested from anyone. When you press it, your browser asks OpenStreetMap, run by the OpenStreetMap Foundation, for the map pictures it needs, so OpenStreetMap sees your IP address and which part of the map you are looking at, as any website you visit would. This site does not receive or keep any of that. OpenStreetMap’s own [privacy policy](https://osmfoundation.org/wiki/Privacy_Policy) covers what it does with it.\n\n## Listening\n\nWhat you play is not recorded by this site. The player lives only in your open tab and disappears when you close it.\n\n## Editors\n\nThe people who maintain the site sign in to a separate editor, which uses cookies to keep them signed in. Visitors never see or receive them.\n",
+        "kicker": "Your data"
+      }
+    }
+  ],
+  "zones": {}
+}
