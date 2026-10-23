@@ -66,8 +66,10 @@ describe("band.config.json", () => {
     expect(valid.editorial.offLimitsFile.startsWith("docs/")).toBe(true);
   });
 
-  it("is still the placeholder band until /init-band sets setup.initialized", () => {
-    expect(parseBandConfig(valid).setup.initialized).toBe(false);
+  it("tracks whether /init-band has run in setup.initialized", () => {
+    const fresh = clone();
+    fresh.setup = { initialized: false };
+    expect(parseBandConfig(fresh).setup.initialized).toBe(false);
     const done = clone();
     done.setup.initialized = true;
     expect(parseBandConfig(done).setup.initialized).toBe(true);

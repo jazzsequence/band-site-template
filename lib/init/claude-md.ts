@@ -48,7 +48,7 @@ Recorded by \`/init-band\` on ${date}. Change them in \`band.config.json\` (then
 - **Sections on:** ${on.length ? on.join(", ") : "none"}.${off.length ? ` **Off:** ${off.join(", ")}; their routes return 404 and they drop out of the nav, sitemap and \`llms.txt\`.` : ""}
 - **Type:** wordmark face ${a.type.wordmarkFace ? "on (Unbounded, capitals)" : "off (display face, as typed)"}; blackletter kicker accent ${a.type.accentFace ? "on" : "off"}.
 - **Palette:** see \`band.config.json\`; the gate${adjustments.length ? ` lifted ${adjustments.map((x) => `\`${x.key}\``).join(", ")} for contrast (the config keeps the written value, the generated theme the lifted one)` : " needed no adjustments"}.
-- **Hosting:** ${host.pantheonSite ? `Pantheon site \`${host.pantheonSite}\`` : "Pantheon site not set yet"}; ${host.p1SiteId ? `P1 site \`${host.p1SiteId}\`` : "P1 site not set yet"}; audio ${a.audio?.baseUrl ? `served from ${a.audio.baseUrl}` : "host not set yet (\`NEXT_PUBLIC_AUDIO_BASE_URL\`)"}.
+- **Hosting:** ${host.pantheonSite ? `Pantheon site \`${host.pantheonSite}\`` : "Pantheon site not set yet"}; ${host.p1SiteId ? `P1 site \`${host.p1SiteId}\`` : "P1 site not set yet"}; audio ${a.audio?.baseUrl ? `served from ${a.audio.baseUrl}` : "host not set yet (`NEXT_PUBLIC_AUDIO_BASE_URL`)"}.
 - **Workflows installed:** ${[installed.deployedSite && "`test-deployed-site.yml`", installed.registrySync && "`sync-puck-registry.yml`"].filter(Boolean).join(", ") || "none yet (the examples are in `examples/workflows/`)"}.
 - Secrets are never in files; see "Secrets on Pantheon" below for how each is set.`;
 

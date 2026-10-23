@@ -3,12 +3,59 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 
+import { setup } from "../lib/band/config";
 import { parseAnswers } from "../lib/init/answers";
 import { renderClaudeMd } from "../lib/init/claude-md";
 import { suggestPalette } from "../lib/init/palette-suggest";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const template = readFileSync(resolve(root, "CLAUDE.md"), "utf-8");
+
+// The render tests use a small stand-in with the same markers, so they keep passing after /init-band has rewritten the real CLAUDE.md.
+const template = `# CLAUDE.md
+
+<!-- template:intro:start -->
+Band site template. Your Band is the placeholder.
+
+## First run
+
+"initialized": false means run /init-band. It came out of a production site.
+<!-- template:intro:end -->
+
+## Commit review (reviewer agent)
+
+Rules that stay.
+
+## Commands
+
+| Command | Purpose |
+
+## Architecture decisions
+
+<!-- template:placeholders:start -->
+- **Placeholders.** The seeded band is neutral.
+<!-- template:placeholders:end -->
+
+## Accessibility
+
+Rules that stay.
+
+## CI / deployment
+
+<!-- template:workflow-sync:start -->
+- \`examples/workflows/sync-puck-registry.yml\`: inactive example.
+<!-- template:workflow-sync:end -->
+<!-- template:workflow-deploy:start -->
+- \`examples/workflows/test-deployed-site.yml\`: inactive example.
+<!-- template:workflow-deploy:end -->
+
+## Palette
+
+Rules that stay.
+
+## Design approval workflow
+
+Rules that stay.
+`;
 
 const { answers } = parseAnswers(
   {
@@ -30,18 +77,28 @@ const { answers } = parseAnswers(
 );
 const ctx = { answers, date: "2026-10-23", adjustments: [], offLimitsCount: 2, installed: { deployedSite: true, registrySync: true } };
 
-describe("the template CLAUDE.md", () => {
+// Only meaningful while the repo is still the template: /init-band replaces CLAUDE.md with the band's version, which has no markers.
+describe.skipIf(setup.initialized)("the template CLAUDE.md", () => {
+  const live = readFileSync(resolve(root, "CLAUDE.md"), "utf-8");
+
   it("marks every block that only makes sense while the repo is the placeholder band", () => {
     for (const name of ["intro", "placeholders", "workflow-sync", "workflow-deploy"]) {
-      expect(template, name).toContain(`<!-- template:${name}:start -->`);
-      expect(template, name).toContain(`<!-- template:${name}:end -->`);
+      expect(live, name).toContain(`<!-- template:${name}:start -->`);
+      expect(live, name).toContain(`<!-- template:${name}:end -->`);
     }
   });
 
   it("tells a fresh session to run /init-band when setup has not run", () => {
-    expect(template).toContain("## First run");
-    expect(template).toMatch(/"initialized": false/);
-    expect(template).toContain("`/init-band`");
+    expect(live).toContain("## First run");
+    expect(live).toMatch(/"initialized": false/);
+    expect(live).toContain("`/init-band`");
+  });
+
+  it("renders cleanly for a band", () => {
+    const out = renderClaudeMd(live, ctx);
+    expect(out).not.toContain("template:");
+    expect(out).not.toContain("## First run");
+    expect(out).toContain("## Setup decisions");
   });
 });
 
@@ -53,6 +110,7 @@ describe("renderClaudeMd", () => {
     expect(out).not.toContain("## First run");
     expect(out).not.toContain("Your Band");
     expect(out).not.toContain("came out of a production site");
+    expect(out).not.toContain("Band site template");
   });
 
   it("states the band, the decisions made, and the date", () => {
@@ -75,7 +133,7 @@ describe("renderClaudeMd", () => {
     for (const heading of ["## Commit review (reviewer agent)", "## Commands", "## Architecture decisions", "## Accessibility", "## Palette", "## Design approval workflow"]) {
       expect(out, heading).toContain(heading);
     }
-    expect(out.length).toBeGreaterThan(template.length * 0.8);
+    expect(out.match(/Rules that stay\./g)).toHaveLength(4);
   });
 
   it("records which workflows were installed, and how to install the rest", () => {
