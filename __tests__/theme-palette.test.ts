@@ -38,6 +38,11 @@ describe("the PARIS palette (regression fixture)", () => {
     for (const [key, ratio] of Object.entries(documented)) expect(Math.abs(on(key as keyof Palette) - ratio)).toBeLessThan(0.1);
   });
 
+  it("is what the committed theme.generated.css contains (run `pnpm theme` after editing band.config.json)", () => {
+    const committed = readFileSync(resolve(root, "design-system/theme.generated.css"), "utf-8");
+    expect(committed).toBe(renderThemeCss(resolvePalette(paris).palette));
+  });
+
   it("renders the token values, derived glows and gradients, and ratio notes", () => {
     const css = renderThemeCss(paris);
     for (const key of PALETTE_KEYS) expect(css).toContain(`--color-${key}: ${paris[key]};`);
