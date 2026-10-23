@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { JsonLd } from "../../../components/site/json-ld";
 import { Page } from "../../../components/site/section";
@@ -10,6 +11,7 @@ import { pageMetadata } from "../../../lib/site/seo";
 import { eventData } from "../../../lib/site/structured-data";
 import { dateParts, mapPoints, showId } from "../../../lib/site/tour";
 import { P1Page } from "../../../components/site/p1-page";
+import { features } from "../../../lib/band/config";
 
 export const revalidate = 300;
 
@@ -17,13 +19,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const doc = await getP1Page("/tour");
   return pageMetadata({
     title: rootProp(doc, "title") ?? "Tour",
-    description: rootProp(doc, "description") ?? "PARIS live: tour dates, venues and tickets.",
+    description: rootProp(doc, "description") ?? "Live: tour dates, venues and tickets.",
     path: "/tour",
   });
 }
 
 /** Renders the published P1 page when there is one; otherwise the dates in data/tour.json. */
 export default async function Tour() {
+  if (!features.tour) notFound();
   const [doc, shows] = await Promise.all([getP1Page("/tour"), getShows()]);
   const events = <JsonLd data={{ "@context": "https://schema.org", "@graph": shows.map(eventData) }} />;
   if (doc) {
@@ -53,7 +56,7 @@ export default async function Tour() {
           />
         ))}
       </ul>
-      {points.length > 0 && <TourMap points={points} label="Tour map" className="mt-8" />}
+      {features.map && points.length > 0 && <TourMap points={points} label="Tour map" className="mt-8" />}
     </Page>
   );
 }

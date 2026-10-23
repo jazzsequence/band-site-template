@@ -13,18 +13,19 @@ import { spacerBlock } from "./components/puck/spacer-block";
 import { welcomeBlock } from "./components/puck/welcome-block";
 import { dataListBlock } from "./components/puck/data-list-block";
 import { p1Blocks, p1Categories } from "./components/puck/blocks";
-import { albumGridBlock, albumHeaderBlock, albumSectionBlock, lyricsIndexBlock, tourPreviewBlock, trackListBlock } from "./components/puck/paris/catalog-blocks";
-import { articleBlock, buttonRowBlock, heroBlock, imageGalleryBlock, sectionHeadingBlock } from "./components/puck/paris/content-blocks";
-import { imageTextBlock } from "./components/puck/paris/image-text-block";
-import { merchGridBlock } from "./components/puck/paris/merch-grid-block";
-import { pageHeadingBlock } from "./components/puck/paris/page-heading-block";
-import { tourDatesBlock } from "./components/puck/paris/tour-dates-block";
+import { albumGridBlock, albumHeaderBlock, albumSectionBlock, lyricsIndexBlock, tourPreviewBlock, trackListBlock } from "./components/puck/band/catalog-blocks";
+import { articleBlock, buttonRowBlock, heroBlock, imageGalleryBlock, sectionHeadingBlock } from "./components/puck/band/content-blocks";
+import { imageTextBlock } from "./components/puck/band/image-text-block";
+import { merchGridBlock } from "./components/puck/band/merch-grid-block";
+import { pageHeadingBlock } from "./components/puck/band/page-heading-block";
+import { tourDatesBlock } from "./components/puck/band/tour-dates-block";
+import { band } from "./lib/band/config";
 
 export const config = {
   categories: {
     ...p1Categories,
-    paris: {
-      title: "PARIS",
+    band: {
+      title: band.name,
       components: [
         "HeroBlock",
         "PageHeadingBlock",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { Page } from "../../../components/site/section";
 import { SectionHeading } from "../../../design-system/components/SectionHeading";
@@ -6,10 +7,11 @@ import { albums } from "../../../lib/site/catalog";
 import { getLyrics } from "../../../lib/site/lyrics";
 import { AppLink } from "../../../design-system/components/AppLink";
 import { P1Page } from "../../../components/site/p1-page";
+import { features } from "../../../lib/band/config";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
-export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Lyrics", description: "Every PARIS lyric, by album.", path: "/lyrics" });
+export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Lyrics", description: "Every lyric, by album.", path: "/lyrics" });
 
 async function LyricsFallback() {
   const lyrics = await getLyrics();
@@ -46,6 +48,7 @@ async function LyricsFallback() {
 
 /** The published P1 page when there is one, otherwise the code version above. */
 export default async function LyricsRoute() {
+  if (!features.lyrics) notFound();
   const doc = await getP1Page("/lyrics");
   return doc ? <P1Page data={doc} path="/lyrics" /> : <LyricsFallback />;
 }

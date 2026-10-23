@@ -1,6 +1,9 @@
 import { QRCodeSVG } from "qrcode.react";
 
+import { band } from "../../lib/band/config";
 import { Wordmark } from "./Wordmark";
+
+const TICKET_PREFIX = band.name.toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "") || "BAND";
 
 export type TicketCardProps = {
   order: string;
@@ -37,7 +40,7 @@ export function TicketCard({ order, name, quantity, city, venue, date, doors }: 
         {/* Generated client-side from the order number; nothing is stored or sent anywhere. Drawn in the panel's own
             colours (currentColor on its background) because SVG attributes cannot read CSS variables. */}
         <QRCodeSVG
-          value={`PARIS-TICKET:${order}`}
+          value={`${TICKET_PREFIX}-TICKET:${order}`}
           size={144}
           level="M"
           marginSize={0}

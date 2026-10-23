@@ -1,3 +1,4 @@
+import { band } from "../band/config";
 import type { CatalogAlbum } from "./catalog";
 import { absoluteUrl, artistNode, SITE_URL } from "./seo";
 import type { Show } from "./tour";
@@ -31,10 +32,10 @@ export function artistData() {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
     "@id": `${SITE_URL}/#artist`,
-    name: "PARIS",
+    name: band.name,
     url: SITE_URL,
-    image: absoluteUrl("/images/paris-portrait.jpg"),
-    genre: "Industrial pop",
+    image: absoluteUrl("/images/band-portrait.png"),
+    genre: band.genre,
   };
 }
 
@@ -42,7 +43,7 @@ export function eventData(show: Show) {
   const [locality, region] = show.city.split(", ");
   return {
     "@type": "MusicEvent",
-    name: `PARIS at ${show.venue}`,
+    name: `${band.name} at ${show.venue}`,
     startDate: show.date,
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",

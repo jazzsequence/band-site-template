@@ -109,11 +109,12 @@ Rules for this repository (see CLAUDE.md). Numbering continues from the section 
 ### Editorial rule
 **Condition:** always
 
-16. Nothing staged states or hints at anything that `docs/Project Outline.md` marks off-limits. Read that local file and compare;
-    do not restate its contents here or in any committed file. Its restricted wording is allowed only in CLAUDE.md, AGENTS.md and
-    memory files (including what CLAUDE.md already says); copy, metadata, alt text, filenames, comments, README and Storybook text
-    never use it.
-17. The name PARIS is all capitals in the wordmark face; blackletter is used for kickers only, never on the name.
+16. Nothing staged states or hints at anything on the band's local off-limits list: the gitignored file named by `editorial.offLimitsFile` in
+    `band.config.json` (default `docs/off-limits.md`). Read that file and compare; do not restate its contents in this report or in any committed
+    file, say only whether there is a conflict. Its wording is allowed nowhere that is committed, so copy, metadata, alt text, filenames,
+    comments, README, fixtures and Storybook text never use it. If the file does not exist, report `⚠️ 16: no off-limits file; compared against the diff only` rather than failing.
+17. The band name is never hard-coded in a component, page or test: it comes from `band.config.json` (`band.name`, via `lib/band/config.ts`, or `e2e/helpers/config.ts` in specs).
+    Where a wordmark face is chosen (`typography.wordmarkFace`) it is for the name only, in flat colour, and the blackletter face is never used on the name.
 
 ### Design system
 **Condition:** any file under `design-system/` is staged

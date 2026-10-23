@@ -26,6 +26,11 @@
   --color-metal-lo: #8d8aa6;      /* 5.8:1 on surface, 5.4:1 worst case */
   --color-metal-mid: #d9d6ea;     /* 13.7:1 on surface, 12.8:1 worst case */
 
+  /* Type choices from band.config.json. The wordmark face and the blackletter accent are optional; when off,
+     those roles fall back to the display face, so components never need to know which was chosen. */
+  --font-wordmark: var(--font-display);
+  --font-gothic: var(--font-display);
+
   --shadow-glow-accent: 0 0 24px color-mix(in srgb, var(--color-accent) 45%, transparent);
   --shadow-glow-accent-3: 0 0 24px color-mix(in srgb, var(--color-accent-3) 35%, transparent);
 }

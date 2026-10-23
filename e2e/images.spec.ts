@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
  * also proves that versioned URLs resolve. A missing file fails here instead of showing as a broken
  * picture on the live site.
  */
-const routes = ["/", "/bio", "/tour", "/merch", "/listen", "/albums", "/albums/ep", "/albums/tribute", "/albums/unreleased", "/well-enough", "/press"];
+const routes = ["/", "/bio", "/tour", "/merch", "/listen", "/albums", "/albums/first-ep", "/albums/debut", "/albums/unreleased", "/press"];
 
 for (const route of routes) {
   test(`every image on ${route} loads`, async ({ page, request }) => {

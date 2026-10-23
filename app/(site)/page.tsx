@@ -10,14 +10,15 @@ import { albums, getFeaturedAlbum } from "../../lib/site/catalog";
 import { getP1Page, getShows } from "../../lib/site/p1-content";
 import { dateParts, showId } from "../../lib/site/tour";
 import { JsonLd } from "../../components/site/json-ld";
+import { band, features } from "../../lib/band/config";
 import { SITE_URL } from "../../lib/site/seo";
 import { artistData } from "../../lib/site/structured-data";
 import { P1Page } from "../../components/site/p1-page";
 import { p1PageMetadata } from "../../lib/site/p1-metadata";
 
 export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({
-  title: "PARIS",
-  description: "PARIS: tour dates, music, lyrics and the new album Well Enough.",
+  title: band.name,
+  description: band.description,
   path: "/",
   absoluteTitle: true,
 });
@@ -32,33 +33,35 @@ async function HomeFallback() {
       <JsonLd
         data={[
           artistData(),
-          { "@context": "https://schema.org", "@type": "WebSite", name: "PARIS", url: SITE_URL, publisher: { "@id": `${SITE_URL}/#artist` } },
+          { "@context": "https://schema.org", "@type": "WebSite", name: band.name, url: SITE_URL, publisher: { "@id": `${SITE_URL}/#artist` } },
         ]}
       />
       <Hero
-        image="/images/paris-on-stage.jpg"
+        image="/images/placeholder-wide.png"
         kicker="New album"
         title={latest.title}
-        blurb="The new album, out now on Hostile Takeover."
+        blurb="The latest release."
       />
       <Page>
-        <section className="space-y-6">
-          <SectionHeading kicker="On the road">Tour dates</SectionHeading>
-          <ul>
-            {shows.slice(0, 4).map((s) => (
-              <TourDateRow
-                key={showId(s)}
-                {...dateParts(s.date)}
-                city={s.city}
-                venue={s.venue}
-                capacity={s.capacity}
-                status={s.status}
-                href={`/tickets/${showId(s)}`}
-              />
-            ))}
-          </ul>
-          <ButtonLink href="/tour" variant="outline">All dates</ButtonLink>
-        </section>
+        {features.tour && (
+          <section className="space-y-6">
+            <SectionHeading kicker="On the road">Tour dates</SectionHeading>
+            <ul>
+              {shows.slice(0, 4).map((s) => (
+                <TourDateRow
+                  key={showId(s)}
+                  {...dateParts(s.date)}
+                  city={s.city}
+                  venue={s.venue}
+                  capacity={s.capacity}
+                  status={s.status}
+                  href={`/tickets/${showId(s)}`}
+                />
+              ))}
+            </ul>
+            <ButtonLink href="/tour" variant="outline">All dates</ButtonLink>
+          </section>
+        )}
         <section className="space-y-6">
           <SectionHeading kicker="Music">Albums</SectionHeading>
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
@@ -70,7 +73,7 @@ async function HomeFallback() {
                 cover={a.cover}
                 trackCount={a.tracks.length}
                 featured={a.featured}
-                href={a.featured ? "/well-enough" : `/albums/${a.slug}`}
+                href={`/albums/${a.slug}`}
               />
             ))}
           </div>
@@ -89,7 +92,7 @@ export default async function HomeRoute() {
       <JsonLd
         data={[
           artistData(),
-          { "@context": "https://schema.org", "@type": "WebSite", name: "PARIS", url: SITE_URL, publisher: { "@id": `${SITE_URL}/#artist` } },
+          { "@context": "https://schema.org", "@type": "WebSite", name: band.name, url: SITE_URL, publisher: { "@id": `${SITE_URL}/#artist` } },
         ]}
       />
       <P1Page data={doc} path="/" />

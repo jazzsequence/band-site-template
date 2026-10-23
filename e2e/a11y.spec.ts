@@ -5,19 +5,17 @@ import { expect, test } from "@playwright/test";
 const routes = [
   "/",
   "/albums",
-  "/albums/tribute",
-  "/albums/ep",
+  "/albums/debut",
+  "/albums/first-ep",
   "/albums/unreleased",
   "/listen",
   "/lyrics",
-  "/lyrics/say-when",
-  "/lyrics/seniority",
-  "/lyrics/banmal", // Korean text
-  "/well-enough",
+  "/lyrics/first-song",
+  "/lyrics/second-song",
   "/tour",
-  "/tickets/sf-1997-10-07",
-  "/tickets/seattle-1997-10-23", // sold-out variant
-  "/ticket?show=sf-1997-10-07&name=Test%20Name&qty=2&order=PRS-TEST01",
+  "/tickets/sample-city-2027-03-12",
+  "/tickets/sample-town-2027-03-14", // sold-out variant
+  "/ticket?show=sample-city-2027-03-12&name=Test%20Name&qty=2&order=PRS-TEST01",
   "/ticket", // missing-details variant
   "/press",
   "/bio",
@@ -60,7 +58,7 @@ test("the skip link is the first focusable element and moves focus to main conte
 });
 
 test("the ticket form is operable by keyboard and labelled", async ({ page }) => {
-  await page.goto("/tickets/sf-1997-10-07");
+  await page.goto("/tickets/sample-city-2027-03-12");
   await page.getByLabel("Name on ticket").fill("Test Name");
   await page.getByLabel("Tickets").selectOption("2");
   await page.getByRole("button", { name: "Complete purchase" }).press("Enter");

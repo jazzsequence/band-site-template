@@ -6,7 +6,7 @@ import { PlayerBar, type PlayerBarProps } from "../design-system/components/Play
 // text-accent-2 and text-accent-3 are other roles; match the primary accent only.
 const ACCENT = /text-accent(?![\w-])/;
 
-const base: PlayerBarProps = { title: "Say when", album: "Well Enough", cover: "images/well-enough-cover.jpg", elapsed: "0:10", duration: "3:00", progress: 5 };
+const base: PlayerBarProps = { title: "First Song", album: "Debut Album", cover: "images/placeholder-cover.png", elapsed: "0:10", duration: "3:00", progress: 5 };
 const html = (props: Partial<PlayerBarProps>) => renderToStaticMarkup(<PlayerBar {...base} {...props} />);
 const noop = () => {};
 

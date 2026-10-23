@@ -1,172 +1,56 @@
 [
   {
-    "slug": "well-enough",
-    "title": "Well Enough",
+    "slug": "debut",
+    "title": "Debut Album",
     "kind": "LP",
-    "year": 1997,
-    "cover": "/images/well-enough-cover.jpg",
-    "blurb": "The full-length album. Thirteen songs about manners, obedience and the quiet agreements that keep a room standing.",
+    "year": 2026,
+    "cover": "/images/placeholder-cover.png",
+    "blurb": "Placeholder text about the band's first album. Replace it in data/albums.json.",
     "featured": true,
-    "tracks": [
-      {
-        "number": 1,
-        "slug": "say-when",
-        "title": "Say when"
-      },
-      {
-        "number": 2,
-        "slug": "second-shift",
-        "title": "Second Shift"
-      },
-      {
-        "number": 3,
-        "slug": "dont-ask-what-i-am",
-        "title": "Don’t ask what I am"
-      },
-      {
-        "number": 4,
-        "slug": "family-business",
-        "title": "Family Business"
-      },
-      {
-        "number": 5,
-        "slug": "regular",
-        "title": "Regular"
-      },
-      {
-        "number": 6,
-        "slug": "well-enough",
-        "title": "Well Enough"
-      },
-      {
-        "number": 7,
-        "slug": "consent-of-the-quiet",
-        "title": "Consent of the quiet"
-      },
-      {
-        "number": 8,
-        "slug": "volunteer",
-        "title": "Volunteer"
-      },
-      {
-        "number": 9,
-        "slug": "dinner-party",
-        "title": "Dinner Party"
-      },
-      {
-        "number": 10,
-        "slug": "exit-interview",
-        "title": "Exit Interview"
-      },
-      {
-        "number": 11,
-        "slug": "if-nothing-happens",
-        "title": "If nothing happens"
-      },
-      {
-        "number": 12,
-        "slug": "dial-tone",
-        "title": "Dial Tone"
-      },
-      {
-        "number": 13,
-        "slug": "a-different-way",
-        "title": "A different way"
-      }
-    ]
-  },
-  {
-    "slug": "tribute",
-    "title": "Tribute",
-    "kind": "B-sides",
-    "year": 1997,
-    "cover": "/images/tribute-cover.jpg",
-    "blurb": "Seven B-sides.",
-    "featured": false,
     "gallery": [
-      { "src": "/images/tribute-liner.jpg", "alt": "Back cover: seven blank paper strips taped to a green work surface", "width": 1200, "height": 1200 },
-      { "src": "/images/tribute-inner.jpg", "alt": "Inner spread: a collage of cut-up photographs beside a lit glass display case", "width": 1600, "height": 800 }
+      {
+        "src": "/images/placeholder-wide.png",
+        "alt": "Placeholder back cover",
+        "width": 1600,
+        "height": 900
+      }
     ],
     "tracks": [
       {
         "number": 1,
-        "slug": "stand-in",
-        "title": "Stand-in"
+        "slug": "first-song",
+        "title": "First Song"
       },
       {
         "number": 2,
-        "slug": "no-further-action",
-        "title": "No further action"
+        "slug": "second-song",
+        "title": "Second Song"
       },
       {
         "number": 3,
-        "slug": "something-to-chew-on",
-        "title": "Something to chew on"
-      },
-      {
-        "number": 4,
-        "slug": "not-my-call",
-        "title": "Not my call"
-      },
-      {
-        "number": 5,
-        "slug": "never-the-same",
-        "title": "Never the same"
-      },
-      {
-        "number": 6,
-        "slug": "standard-issue",
-        "title": "Standard Issue"
-      },
-      {
-    "number": 7,
-        "slug": "hold-still",
-        "title": "Hold still"
+        "slug": "third-song",
+        "title": "Third Song"
       }
     ]
   },
   {
-    "slug": "ep",
-    "title": "EP",
+    "slug": "first-ep",
+    "title": "First EP",
     "kind": "EP",
-    "year": 1997,
-    "cover": "/images/ep-cover.jpg",
-    "blurb": "The independently released debut EP. Six songs.",
+    "year": 2025,
+    "cover": "/images/placeholder-cover.png",
+    "blurb": "Placeholder text about an earlier release.",
     "featured": false,
-    "gallery": [
-      { "src": "/images/ep-back.jpg", "alt": "Back cover: a smeared red mark across a mirror", "width": 1200, "height": 1200 },
-      { "src": "/images/ep-inner.jpg", "alt": "Inner spread: a crowd at the front of a venue", "width": 1600, "height": 791 }
-    ],
     "tracks": [
       {
         "number": 1,
-        "slug": "consent-of-the-quiet",
-        "title": "Consent of the Quiet (v1)"
+        "slug": "opening-track",
+        "title": "Opening Track"
       },
       {
         "number": 2,
-        "slug": "seniority",
-        "title": "Seniority"
-      },
-      {
-        "number": 3,
-        "slug": "public-figure",
-        "title": "Public Figure"
-      },
-      {
-        "number": 4,
-        "slug": "dont-ask-what-i-am",
-        "title": "Don’t Ask What I Am (v2)"
-      },
-      {
-        "number": 5,
-        "slug": "manners",
-        "title": "Manners"
-      },
-      {
-        "number": 6,
-        "slug": "outlast",
-        "title": "Outlast"
+        "slug": "closing-track",
+        "title": "Closing Track"
       }
     ]
   },
@@ -174,29 +58,14 @@
     "slug": "unreleased",
     "title": "Unreleased",
     "kind": "Unreleased",
-    "cover": "/images/paris-close.jpg",
-    "blurb": "Recordings with no public release. Anything here is available only on this site.",
+    "cover": "/images/placeholder-cover.png",
+    "blurb": "Recordings that have not been released yet.",
     "featured": false,
     "tracks": [
       {
         "number": 1,
-        "slug": "turndown-service",
-        "title": "Turndown Service"
-      },
-      {
-        "number": 2,
-        "slug": "if-nothing-happens",
-        "title": "If Nothing Happens (alternate)"
-      },
-      {
-        "number": 3,
-        "slug": "good-standing",
-        "title": "Good Standing"
-      },
-      {
-        "number": 4,
-        "slug": "banmal",
-        "title": "반말"
+        "slug": "work-in-progress",
+        "title": "Work in Progress"
       }
     ]
   }

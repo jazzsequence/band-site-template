@@ -1,4 +1,5 @@
 import albumsData from "../../data/albums.json";
+import { features } from "../band/config";
 import { listAudioKeys } from "./audio";
 import { getLyricSlugs } from "./lyrics";
 
@@ -54,7 +55,7 @@ export async function getCatalog(): Promise<CatalogAlbum[]> {
       albumTitle: a.title,
       cover: a.cover,
       hasAudio: keys.has(audioKey(a.slug, t)),
-      hasLyrics: lyricSlugs.has(t.slug),
+      hasLyrics: features.lyrics && lyricSlugs.has(t.slug),
       src: audioUrl(a.slug, t),
       downloadHref: `/api/download/${a.slug}/${t.slug}`,
     })),

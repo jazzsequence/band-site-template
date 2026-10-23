@@ -62,7 +62,7 @@ describe("puckRoot render", () => {
     const html = page({ isEditing: true });
     expect(html).toContain("Page content");
     expect(html).toContain("<header");
-    expect(html).toContain("Well Enough"); // a header link
+    expect(html).toContain("Albums"); // a header link
     expect(html).toContain("<footer");
     expect(html).toContain("All rights reserved");
     // Each is wrapped, whole, in a locked (inert) container that is also hidden from assistive technology.

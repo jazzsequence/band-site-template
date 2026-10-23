@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { Page } from "../../../components/site/section";
 import merch from "../../../data/merch.json";
@@ -7,6 +8,7 @@ import { SectionHeading } from "../../../design-system/components/SectionHeading
 import { getP1Page, rootProp } from "../../../lib/site/p1-content";
 import { pageMetadata } from "../../../lib/site/seo";
 import { P1Page } from "../../../components/site/p1-page";
+import { features } from "../../../lib/band/config";
 
 export const revalidate = 300;
 
@@ -14,13 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const doc = await getP1Page("/merch");
   return pageMetadata({
     title: rootProp(doc, "title") ?? "Merch",
-    description: rootProp(doc, "description") ?? "PARIS merchandise, sold at the merch table on tour.",
+    description: rootProp(doc, "description") ?? "Merchandise, sold at the merch table on tour.",
     path: "/merch",
   });
 }
 
 /** Renders the published P1 page when there is one; otherwise the items in data/merch.json. */
 export default async function Merch() {
+  if (!features.merch) notFound();
   const doc = await getP1Page("/merch");
   if (doc) return <P1Page data={doc} path="/merch" />;
   return (

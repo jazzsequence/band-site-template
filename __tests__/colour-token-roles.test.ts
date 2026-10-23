@@ -32,10 +32,9 @@ const PALETTE_LITERAL = /#(?:ff3fa4|a98bff|3ef0ff|f1effa|8d8aa6|d9d6ea)\b|rgb\(\
 // Files allowed to hold palette literals, and why. Hue-named tokens are never allowed anywhere.
 const PALETTE_LITERAL_ALLOWED: Record<string, string> = {
   "design-system/theme.generated.css": "generated from band.config.json",
+  "__tests__/fixtures/reference-palette.json": "the reference palette, kept as the generator's regression fixture",
   "band.config.json": "the palette values: the single source the theme CSS is generated from",
-  "scripts/make-brand-assets.mjs": "generates the favicon and social card, which cannot read CSS variables",
-  "app/icon.svg": "generated brand asset",
-  "e2e/hero-contrast.spec.ts": "measures contrast against the token values",
+  "app/icon.svg": "generated brand asset (scripts/make-brand-assets.mjs), carries the resolved colours",
 };
 
 const SELF = "__tests__/colour-token-roles.test.ts";

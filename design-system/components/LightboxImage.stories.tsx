@@ -5,7 +5,7 @@ import { LightboxImage } from "./LightboxImage";
 const meta = {
   title: "Components/LightboxImage",
   component: LightboxImage,
-  args: { src: "images/well-enough-cover.jpg", alt: "Well Enough cover art", className: "w-72 rounded-card border border-line" },
+  args: { src: "images/placeholder-cover.png", alt: "Placeholder cover art", className: "w-72 rounded-card border border-line" },
 } satisfies Meta<typeof LightboxImage>;
 export default meta;
 type Story = StoryObj<typeof meta>;

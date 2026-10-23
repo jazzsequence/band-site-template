@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 
+import { band } from "./helpers/config";
+
 /** Pages that render in a normal session; /ticket needs query parameters. */
 const pages = [
-  "/", "/albums", "/albums/ep", "/albums/unreleased", "/listen", "/lyrics", "/lyrics/say-when", "/well-enough",
-  "/tour", "/tickets/sf-1997-10-07", "/ticket?show=sf-1997-10-07&name=Test&qty=1&order=PRS-TEST01", "/press", "/bio", "/merch", "/privacy",
+  "/", "/albums", "/albums/first-ep", "/albums/unreleased", "/listen", "/lyrics", "/lyrics/first-song",
+  "/tour", "/tickets/sample-city-2027-03-12", "/ticket?show=sample-city-2027-03-12&name=Test&qty=1&order=PRS-TEST01", "/press", "/bio", "/merch", "/privacy",
 ];
 
 test.describe("security headers", () => {
@@ -59,9 +61,9 @@ test.describe("discovery files", () => {
 
   test("sitemap lists pages, albums and lyrics but not the private ticket page", async ({ request }) => {
     const body = await (await request.get("/sitemap.xml")).text();
-    expect(body).toContain("/albums/ep");
-    expect(body).toContain("/lyrics/say-when");
-    expect(body).toContain("/tickets/sf-1997-10-07");
+    expect(body).toContain("/albums/first-ep");
+    expect(body).toContain("/lyrics/first-song");
+    expect(body).toContain("/tickets/sample-city-2027-03-12");
     expect(body).not.toMatch(/\/ticket<\/loc>/);
   });
 
@@ -74,7 +76,7 @@ test.describe("discovery files", () => {
   test("llms.txt is plain text", async ({ request }) => {
     const res = await request.get("/llms.txt");
     expect(res.headers()["content-type"]).toMatch(/text\/plain/);
-    expect(await res.text()).toMatch(/^# PARIS/);
+    expect(await res.text()).toContain(`# ${band.name}`);
   });
 
   test("standard.site publication file is absent until a publication exists", async ({ request }) => {
@@ -107,22 +109,11 @@ test.describe("page metadata", () => {
   }
 
   test("structured data parses and album pages describe their tracks", async ({ page }) => {
-    await page.goto("/albums/ep");
+    await page.goto("/albums/first-ep");
     const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
     const nodes = blocks.map((b) => JSON.parse(b));
     const album = nodes.find((n) => n["@type"] === "MusicAlbum");
-    expect(album.track).toHaveLength(6);
+    expect(album.track).toHaveLength(2);
     expect(nodes.some((n) => n["@type"] === "BreadcrumbList")).toBe(true);
-  });
-
-  test("Korean lyrics are marked with their language", async ({ page }) => {
-    await page.goto("/lyrics/banmal");
-    await expect(page.locator("h1")).toHaveAttribute("lang", "ko");
-    expect(await page.locator('p[lang="ko"]').count()).toBeGreaterThanOrEqual(8);
-  });
-
-  test("Korean titles are marked with their language", async ({ page }) => {
-    await page.goto("/albums/unreleased");
-    await expect(page.locator('[lang="ko"]').first()).toContainText("반말");
   });
 });

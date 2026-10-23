@@ -8,23 +8,24 @@ import { getLyric, getLyrics } from "../../../../lib/site/lyrics";
 import { AppLink } from "../../../../design-system/components/AppLink";
 import { Breadcrumbs } from "../../../../components/site/breadcrumbs";
 import { JsonLd } from "../../../../components/site/json-ld";
-import { absoluteUrl, pageMetadata } from "../../../../lib/site/seo";
+import { features } from "../../../../lib/band/config";
+import { absoluteUrl, pageMetadata, SITE_NAME } from "../../../../lib/site/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return (await getLyrics()).map((l) => ({ slug: l.slug }));
+  return features.lyrics ? (await getLyrics()).map((l) => ({ slug: l.slug })) : [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lyric = await getLyric((await params).slug);
   return lyric
-    ? pageMetadata({ title: `${lyric.title} lyrics`, description: `Lyrics to ${lyric.title} by PARIS.`, path: `/lyrics/${lyric.slug}`, type: "music.song" })
+    ? pageMetadata({ title: `${lyric.title} lyrics`, description: `Lyrics to ${lyric.title} by ${SITE_NAME}.`, path: `/lyrics/${lyric.slug}`, type: "music.song" })
     : {};
 }
 
 export default async function LyricPage({ params }: Props) {
-  const lyric = await getLyric((await params).slug);
+  const lyric = features.lyrics ? await getLyric((await params).slug) : undefined;
   if (!lyric) notFound();
   return (
     <Page narrow>

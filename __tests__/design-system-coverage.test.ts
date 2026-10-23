@@ -53,8 +53,8 @@ describe("design system to P1 coverage", () => {
     }
   });
 
-  it("every PARIS block is offered in the editor's PARIS category", () => {
-    const offered = (config.categories as { paris: { components: string[] } }).paris.components;
+  it("every band block is offered in the editor's band category", () => {
+    const offered = (config.categories as { band: { components: string[] } }).band.components;
     const registered = Object.keys(config.components as object).filter((k) => offered.includes(k));
     expect(registered.sort()).toEqual([...offered].sort());
   });

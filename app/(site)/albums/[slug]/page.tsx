@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Page } from "../../../../components/site/section";
 import { TrackList } from "../../../../components/site/track-list";
 import { ButtonLink } from "../../../../design-system/components/Button";
-import { albums, getAlbum, getCatalog, getFeaturedAlbum } from "../../../../lib/site/catalog";
+import { albums, getAlbum, getCatalog } from "../../../../lib/site/catalog";
 import { Breadcrumbs } from "../../../../components/site/breadcrumbs";
 import { JsonLd } from "../../../../components/site/json-ld";
 import { albumData } from "../../../../lib/site/structured-data";
@@ -27,8 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function AlbumFallback({ params }: Props) {
   const { slug } = await params;
-  // The latest release has its own feature page; keep one canonical URL for it.
-  if (slug === getFeaturedAlbum().slug) permanentRedirect("/well-enough");
   const album = (await getCatalog()).find((a) => a.slug === slug);
   if (!album) notFound();
   const released = album.year !== undefined;
@@ -75,7 +73,6 @@ async function AlbumFallback({ params }: Props) {
 /** The published P1 page for this album when there is one, otherwise the code version above. */
 export default async function AlbumRoute({ params }: Props) {
   const { slug } = await params;
-  if (slug === getFeaturedAlbum().slug) permanentRedirect("/well-enough");
   const path = `/albums/${slug}`;
   const doc = await getP1Page(path);
   if (!doc) return <AlbumFallback params={params} />;
