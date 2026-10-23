@@ -1,19 +1,15 @@
 name: Test
 
-# Mirrors jazz-nextjs's test workflow, minus Playwright (this site has no E2E suite yet):
-#   local  - lint, typecheck, unit tests and a production build on the runner. Needs no
-#            Pantheon environment.
-#   deployed - waits for the PR / dev environment, then checks it answers 200.
-# Either failing fails the run.
+# Runs entirely on the runner: lint, typecheck, unit tests, a production build with placeholder
+# credentials, axe/keyboard e2e and a Storybook build. It needs no secrets and no Pantheon environment.
+# There is deliberately no "test the deployed site" job: a template has no site to deploy, and the
+# job would fail every PR. A site built from the template can add one back (wait for pr-N, check 200).
 
 on:
   push:
     branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
-
-env:
-  PANTHEON_SITE_NAME: paris-site
 
 permissions:
   contents: read
@@ -109,99 +105,3 @@ jobs:
       - name: Fail workflow if any checks failed
         if: steps.lint.outcome != 'success' || steps.typecheck.outcome != 'success' || steps.unit-tests.outcome != 'success' || steps.build.outcome != 'success' || steps.a11y.outcome != 'success' || steps.storybook.outcome != 'success'
         run: exit 1
-
-  deployed:
-    name: Test deployed site
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Determine environment
-        id: env
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            PR_NUM=${{ github.event.pull_request.number }}
-            ENV_NAME="pr-${PR_NUM}"
-          else
-            ENV_NAME="dev"
-          fi
-          echo "env_name=${ENV_NAME}" >> "$GITHUB_OUTPUT"
-          echo "base_url=https://${ENV_NAME}-${PANTHEON_SITE_NAME}.pantheonsite.io" >> "$GITHUB_OUTPUT"
-
-      # Pantheon's Cloudflare-backed GCDN answers unverified automation with a managed
-      # challenge (HTTP 403). A per-site bot-bypass token exempts it; it rotates, so fetch it
-      # fresh each run rather than storing it. Passed through a masked step output, not
-      # GITHUB_ENV, so later third-party actions never see it.
-      - name: Fetch Pantheon bot-bypass token
-        id: bypass
-        continue-on-error: true
-        env:
-          PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        run: |
-          if [ -z "$PANTHEON_MACHINE_TOKEN" ]; then
-            echo "::error::PANTHEON_MACHINE_TOKEN is empty. It must exist as an Actions secret AND a Dependabot secret."
-            exit 1
-          fi
-
-          curl -fsSL "https://github.com/pantheon-systems/terminus/releases/download/4.3.3/terminus.phar" -o terminus
-          chmod +x terminus
-          sudo mv terminus /usr/local/bin/terminus
-          # Pinned: the plugin runs in the same process as the Pantheon credential.
-          terminus self:plugin:install pantheon-systems/terminus-gcdn-plugin:0.4.0
-          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
-
-          # stderr dropped: terminus prints [notice] lines there that would corrupt the JSON.
-          TOKEN=$(terminus gcdn:bot-bypass "$PANTHEON_SITE_NAME" --format=json --fields=role,token 2>/dev/null \
-            | jq -r '.[] | select(.role == "current") | .token') || true
-
-          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
-            echo "::error::Could not read the current bot-bypass token for $PANTHEON_SITE_NAME."
-            exit 1
-          fi
-
-          echo "::add-mask::$TOKEN"
-          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for Pantheon build and deployment to complete
-        id: wait
-        uses: jazzsequence/pantheon-wait-for-build@v2
-        with:
-          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-          site-name: ${{ env.PANTHEON_SITE_NAME }}
-
-      - name: Verify Pantheon site is accessible
-        env:
-          BOT_BYPASS_TOKEN: ${{ steps.bypass.outputs.token }}
-        run: |
-          if [ -z "$BOT_BYPASS_TOKEN" ]; then
-            echo "::error::No bot-bypass token; the 'Fetch Pantheon bot-bypass token' step failed (see its log)."
-            exit 1
-          fi
-
-          # A new pr-N environment's hostname can take a few minutes to resolve (curl reports 000 until it does), so
-          # back off instead of hammering it: 5s first, escalating to 60s, about 5 minutes in all.
-          URL="${{ steps.env.outputs.base_url }}"
-          DELAYS=(5 10 15 20 30 45 60 60 60)
-          ATTEMPTS=$(( ${#DELAYS[@]} + 1 ))
-
-          for attempt in $(seq 1 "$ATTEMPTS"); do
-            # The query string defeats any cached error page; the header gets past bot protection.
-            HTTP_CODE=$(curl -s -o /dev/null -m 30 -w "%{http_code}" -H "x-pantheon-bot-bypass: ${BOT_BYPASS_TOKEN}" "${URL}/?ci=$(date +%s)-${attempt}") || true
-            if [ "$HTTP_CODE" = "200" ]; then
-              echo "✅ Site is accessible (HTTP $HTTP_CODE, attempt $attempt of $ATTEMPTS)"
-              exit 0
-            fi
-            if [ "$HTTP_CODE" = "000" ]; then
-              LAST="no response (the hostname is not resolving yet, or the connection failed)"
-            else
-              LAST="HTTP $HTTP_CODE"
-            fi
-            if [ "$attempt" -lt "$ATTEMPTS" ]; then
-              DELAY=${DELAYS[$((attempt - 1))]}
-              echo "⏳ Attempt $attempt of $ATTEMPTS: $LAST. Retrying in ${DELAY}s..."
-              sleep "$DELAY"
-            fi
-          done
-
-          echo "::error::${URL} was not accessible after $ATTEMPTS attempts over about 5 minutes. Last result: ${LAST}."
-          exit 1
