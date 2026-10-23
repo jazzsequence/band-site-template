@@ -23,7 +23,7 @@ async function PressFallback() {
     <Page narrow>
       <StandardDocumentLink path="/press" />
       <article
-        className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-xl prose-h2:font-body prose-h2:normal-case prose-h2:tracking-normal prose-strong:text-text prose-a:text-cyan"
+        className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-xl prose-h2:font-body prose-h2:normal-case prose-h2:tracking-normal prose-strong:text-text prose-a:text-accent-3"
       >
         {/* The article's title is a level-2 heading in the source; promote it so the page has an h1. */}
         <Markdown components={{ h2: ({ children }) => <h1>{children}</h1>, h3: ({ children }) => <h2>{children}</h2> }}>

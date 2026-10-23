@@ -84,8 +84,8 @@ export const articleBlock = {
   defaultProps: { kicker: "", markdown: "# Title\n\nWrite here." },
   render: ({ kicker, markdown }: { kicker?: string; markdown?: string }) => (
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
-      {kicker ? <p className="mb-2 font-gothic text-2xl text-magenta">{kicker}</p> : null}
-      <article className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-2xl prose-h2:text-text prose-p:text-muted prose-strong:text-text prose-a:text-cyan">
+      {kicker ? <p className="mb-2 font-gothic text-2xl text-accent">{kicker}</p> : null}
+      <article className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-2xl prose-h2:text-text prose-p:text-muted prose-strong:text-text prose-a:text-accent-3">
         <Markdown>{markdown ?? ""}</Markdown>
       </article>
     </div>

@@ -88,8 +88,8 @@ function AlbumHeader({ albumSlug, kicker, meta, actions }: { albumSlug?: string;
       <div className="grid items-end gap-10 md:grid-cols-[20rem_1fr]">
         <LightboxImage src={album.cover} alt={`${album.title} cover art`} width={1024} height={1024} fetchPriority="high" className="w-full rounded-card border border-line" />
         <div className="space-y-5">
-          <p className="font-gothic text-3xl text-magenta">{kicker || (released ? album.kind : "Unreleased")}</p>
-          <h1 className="text-chrome font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">{album.title}</h1>
+          <p className="font-gothic text-3xl text-accent">{kicker || (released ? album.kind : "Unreleased")}</p>
+          <h1 className="text-metal font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">{album.title}</h1>
           <p className="max-w-xl text-lg text-muted">{album.blurb}</p>
           <p className="text-sm text-dim">
             {meta ||
@@ -164,7 +164,7 @@ function AlbumSection({ albumSlug }: { albumSlug?: string }) {
       <div className="space-y-3">
         <LightboxImage src={album.cover} alt={`${album.title} cover art`} width={1024} height={1024} loading="lazy" decoding="async" className="w-full rounded-card border border-line" />
         <h2 className="font-display text-2xl font-extrabold uppercase tracking-[-0.03em]">
-          <AppLink href={albumHref(album)} className="hover:text-magenta">
+          <AppLink href={albumHref(album)} className="hover:text-accent">
             {album.title}
           </AppLink>
         </h2>
@@ -235,11 +235,11 @@ function LyricsIndex() {
     <div className="mx-auto w-full max-w-3xl space-y-10 px-6 py-6">
       {groups.map((g) => (
         <section key={g.key} className="space-y-3">
-          <h2 className="font-display text-xs uppercase tracking-[0.25em] text-violet">{g.title}</h2>
+          <h2 className="font-display text-xs uppercase tracking-[0.25em] text-accent-2">{g.title}</h2>
           <ul className="divide-y divide-line border-y border-line">
             {g.items.map((l) => (
               <li key={l.slug}>
-                <AppLink href={`/lyrics/${l.slug}`} className="flex items-baseline justify-between gap-4 py-3 hover:text-magenta">
+                <AppLink href={`/lyrics/${l.slug}`} className="flex items-baseline justify-between gap-4 py-3 hover:text-accent">
                   <span className="text-lg">{l.title}</span>
                   {l.track && <span className="text-sm tabular-nums text-dim">{String(l.track).padStart(2, "0")}</span>}
                 </AppLink>

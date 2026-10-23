@@ -40,7 +40,7 @@ export default async function LyricPage({ params }: Props) {
         }}
       />
       <LyricsBlock title={lyric.title} album={albumTitle(lyric.album)} sections={lyric.sections} />
-      <AppLink href="/lyrics" className="inline-block text-sm text-violet underline-offset-4 hover:underline">
+      <AppLink href="/lyrics" className="inline-block text-sm text-accent-2 underline-offset-4 hover:underline">
         All lyrics
       </AppLink>
     </Page>

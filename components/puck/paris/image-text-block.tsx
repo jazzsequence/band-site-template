@@ -63,14 +63,14 @@ export const imageTextBlock = {
           </div>
         ) : null}
         <div className="space-y-5">
-          {kicker ? <p className="font-gothic text-3xl text-magenta">{kicker}</p> : null}
+          {kicker ? <p className="font-gothic text-3xl text-accent">{kicker}</p> : null}
           {title ? (
-            <Title className="text-chrome font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.04em] md:text-6xl">
+            <Title className="text-metal font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-[-0.04em] md:text-6xl">
               {title}
             </Title>
           ) : null}
           {body ? (
-            <div className="space-y-4 text-lg leading-8 text-muted [&_a]:text-cyan [&_a]:underline [&_a]:underline-offset-4">
+            <div className="space-y-4 text-lg leading-8 text-muted [&_a]:text-accent-3 [&_a]:underline [&_a]:underline-offset-4">
               <Markdown>{body}</Markdown>
             </div>
           ) : null}

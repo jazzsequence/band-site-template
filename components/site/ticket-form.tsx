@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "../../design-system/components/Button";
 import { money, type Show } from "../../lib/site/tour";
 
-const field = "w-full border border-line bg-surface px-4 py-3 text-text focus:border-cyan";
+const field = "w-full border border-line bg-surface px-4 py-3 text-text focus:border-accent-3";
 
 /** Ticket state lives only in the URL of the confirmation page. Nothing is sent or stored. */
 export function TicketForm({ show }: { show: Show }) {

@@ -30,7 +30,7 @@ const heroAt = (width: number, height: number): StoryObj => ({
   parameters: { layout: "padded" },
   render: () => (
     <div style={{ overflow: "auto" }}>
-      <p style={{ margin: "0 0 8px", font: "12px monospace", color: "#8d8aa6" }}>{width} x {height}</p>
+      <p style={{ margin: "0 0 8px", font: "12px monospace", color: "var(--color-metal-lo)" }}>{width} x {height}</p>
       <iframe title={`Hero at ${width} x ${height}`} src="iframe.html?id=layout-header-hero-footer--hero-frame&viewMode=story" width={width} height={height} style={{ border: 0, outline: "1px solid #2a2840", display: "block" }} />
     </div>
   ),

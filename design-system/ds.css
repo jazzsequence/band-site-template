@@ -3,10 +3,12 @@
    Tailwind CSS @import, so the Storybook build shipped no font files and fell back to system fonts. */
 
 /*
- * PARIS design tokens. Dark only. Neon on near-black with a violet cast, taken from the
- * stage photography (magenta / violet / electric blue light on chrome and black leather),
- * plus a cold silver "chrome" neutral. Every text/background pair below clears WCAG AA;
- * ratios are noted against --color-surface (#0e0a18).
+ * Design tokens. Dark only. Colours are named by role (accent, accent-2, accent-3, metal), never by hue,
+ * so a band can re-theme the system by changing the values; components must not name a hue. The values
+ * below are the PARIS palette: neon on near-black with a violet cast, plus a cold silver metal neutral.
+ * __tests__/colour-token-roles.test.ts fails if a hue-named token or a literal from this palette appears
+ * outside the few allowlisted files. Every text/background pair below clears WCAG AA; ratios are noted against
+ * --color-surface (#0e0a18).
  */
 @theme {
   /* Surfaces */
@@ -20,14 +22,16 @@
   --color-muted: #b9aed6;     /* 9.4:1 */
   --color-dim: #8f84ad;       /* 5.7:1 — large or secondary text only */
 
-  /* Neon accents */
-  --color-magenta: #ff3fa4;   /* 6.0:1 */
-  --color-violet: #a98bff;    /* 7.3:1 */
-  --color-cyan: #3ef0ff;      /* 14.1:1 */
+  /* Accents, by role. accent is the primary (kickers, primary action), accent-2 links and labels,
+     accent-3 focus and secondary actions. Components never name a hue. */
+  --color-accent: #ff3fa4;    /* 6.0:1 */
+  --color-accent-2: #a98bff;  /* 7.3:1 */
+  --color-accent-3: #3ef0ff;  /* 14.1:1 */
 
-  /* Chrome (metallic neutral) */
-  --color-chrome-hi: #f1effa;
-  --color-chrome-lo: #8d8aa6;
+  /* Metal (metallic neutral). metal-mid is the gradient's bright third stop. */
+  --color-metal-hi: #f1effa;
+  --color-metal-lo: #8d8aa6;
+  --color-metal-mid: #d9d6ea;
 
   /* Headings. Deliberately not the wordmark face. */
   --font-display: "Encode Sans Expanded", system-ui, sans-serif;
@@ -38,8 +42,8 @@
   --font-gothic: "UnifrakturCook", serif;
 
   --radius-card: 0.25rem;
-  --shadow-glow-magenta: 0 0 24px rgb(255 63 164 / 0.45);
-  --shadow-glow-cyan: 0 0 24px rgb(62 240 255 / 0.35);
+  --shadow-glow-accent: 0 0 24px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  --shadow-glow-accent-3: 0 0 24px color-mix(in srgb, var(--color-accent-3) 35%, transparent);
 
   /* A short confirmation sliding up into place (the player bar's notice). Reduced motion turns it off in base.css. */
   --animate-notice-in: notice-in 0.2s ease-out;
@@ -57,19 +61,19 @@
 
 :root {
   color-scheme: dark;
-  --grad-neon: linear-gradient(110deg, #ff3fa4 0%, #a98bff 55%, #3ef0ff 100%);
-  --grad-chrome: linear-gradient(180deg, #f1effa 0%, #8d8aa6 55%, #d9d6ea 100%);
+  --grad-accent: linear-gradient(110deg, var(--color-accent) 0%, var(--color-accent-2) 55%, var(--color-accent-3) 100%);
+  --grad-metal: linear-gradient(180deg, var(--color-metal-hi) 0%, var(--color-metal-lo) 55%, var(--color-metal-mid) 100%);
 }
 
-/* Chrome-filled display type */
-.text-chrome {
-  background: var(--grad-chrome);
+/* Metal-filled display type */
+.text-metal {
+  background: var(--grad-metal);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-.text-neon {
-  background: var(--grad-neon);
+.text-accent-gradient {
+  background: var(--grad-accent);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

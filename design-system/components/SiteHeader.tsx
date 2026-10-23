@@ -47,7 +47,7 @@ export function SiteHeader({ current }: { current?: string }) {
         aria-expanded={open}
         aria-controls={navId}
         onClick={() => setOpen((o) => !o)}
-        className="grid size-11 place-items-center rounded-card border border-line text-text hover:border-magenta lg:hidden"
+        className="grid size-11 place-items-center rounded-card border border-line text-text hover:border-accent lg:hidden"
       >
         <svg viewBox="0 0 24 24" className="size-6 fill-none stroke-current stroke-2" aria-hidden>
           {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
@@ -63,9 +63,9 @@ export function SiteHeader({ current }: { current?: string }) {
                   href={href}
                   aria-current={active ? "page" : undefined}
                   onClick={() => setOpen(false)}
-                  className={`block py-3 hover:text-magenta lg:inline-block lg:py-2 ${
+                  className={`block py-3 hover:text-accent lg:inline-block lg:py-2 ${
                     active
-                      ? "border-l-2 border-magenta pl-3 text-text lg:border-b-2 lg:border-l-0 lg:pl-0"
+                      ? "border-l-2 border-accent pl-3 text-text lg:border-b-2 lg:border-l-0 lg:pl-0"
                       : "pl-[calc(0.75rem+2px)] text-muted lg:pl-0"
                   }`}
                 >

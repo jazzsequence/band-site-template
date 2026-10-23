@@ -47,7 +47,7 @@ function PrivacyFallback() {
             anyone. When you press it, your browser asks OpenStreetMap, run by the OpenStreetMap Foundation, for the map
             pictures it needs, so OpenStreetMap sees your IP address and which part of the map you are looking at, as any
             website you visit would. This site does not receive or keep any of that. OpenStreetMap&rsquo;s own{" "}
-            <a className="text-cyan underline underline-offset-4 hover:text-text" href="https://osmfoundation.org/wiki/Privacy_Policy">
+            <a className="text-accent-3 underline underline-offset-4 hover:text-text" href="https://osmfoundation.org/wiki/Privacy_Policy">
               privacy policy
             </a>{" "}
             covers what it does with it.

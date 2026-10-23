@@ -5,7 +5,7 @@
  * public/icons/   icon-192.png, icon-512.png, icon-maskable-512.png   (referenced by app/manifest.ts)
  * public/og-default.jpg   1200x630 social card
  *
- * The mark is a bold "P" in Unbounded (the wordmark face) on the site's near-black with a magenta bar.
+ * The mark is a bold "P" in Unbounded (the wordmark face) on the site's near-black with an accent bar.
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -21,8 +21,8 @@ const fontData = readFileSync(unbounded("unbounded-latin-wght-normal.woff2")).to
 const photo = readFileSync("public/images/paris-on-stage.jpg").toString("base64");
 
 const INK = "#07050d";
-const CHROME = "#f1effa";
-const MAGENTA = "#ff3fa4";
+const METAL_HI = "#f1effa";
+const ACCENT = "#ff3fa4";
 
 const fontFace = `@font-face { font-family: U; src: url(data:font/woff2;base64,${fontData}); font-weight: 200 900; }`;
 
@@ -31,8 +31,8 @@ const iconHtml = (size, { round, scale }) => `<!doctype html><meta charset="utf-
   html, body { margin: 0; background: transparent; }
   .icon { width: ${size}px; height: ${size}px; background: ${INK}; position: relative; overflow: hidden;
     display: grid; place-items: center; border-radius: ${round ? size * 0.2 : 0}px; }
-  .icon span { font: 800 ${size * scale}px/1 U; color: ${CHROME}; letter-spacing: -0.05em; transform: translate(-1%, -6%); }
-  .icon i { position: absolute; left: 0; right: 0; bottom: 0; height: ${size * 0.13}px; background: ${MAGENTA}; }
+  .icon span { font: 800 ${size * scale}px/1 U; color: ${METAL_HI}; letter-spacing: -0.05em; transform: translate(-1%, -6%); }
+  .icon i { position: absolute; left: 0; right: 0; bottom: 0; height: ${size * 0.13}px; background: ${ACCENT}; }
 </style><div class="icon"><span>P</span><i></i></div>`;
 
 const ogHtml = `<!doctype html><meta charset="utf-8"><style>
@@ -43,8 +43,8 @@ const ogHtml = `<!doctype html><meta charset="utf-8"><style>
   .card .shade { position: absolute; inset: 0;
     background: linear-gradient(90deg, rgba(7,5,13,.92) 0%, rgba(7,5,13,.55) 38%, rgba(7,5,13,0) 68%),
                 linear-gradient(0deg, rgba(7,5,13,.85) 0%, rgba(7,5,13,0) 40%); }
-  .card h1 { position: absolute; left: 72px; bottom: 64px; margin: 0; font: 800 168px/1 U; letter-spacing: -0.05em; color: ${CHROME}; }
-  .card .bar { position: absolute; left: 72px; bottom: 40px; width: 150px; height: 8px; background: ${MAGENTA}; }
+  .card h1 { position: absolute; left: 72px; bottom: 64px; margin: 0; font: 800 168px/1 U; letter-spacing: -0.05em; color: ${METAL_HI}; }
+  .card .bar { position: absolute; left: 72px; bottom: 40px; width: 150px; height: 8px; background: ${ACCENT}; }
 </style><div class="card"><img src="data:image/jpeg;base64,${photo}"><div class="shade"></div><h1>PARIS</h1><div class="bar"></div></div>`;
 
 const browser = await chromium.launch();
@@ -92,8 +92,8 @@ writeFileSync(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>PARIS</title>` +
     `<clipPath id="r"><rect width="512" height="512" rx="102"/></clipPath>` +
     `<g clip-path="url(#r)"><rect width="512" height="512" fill="${INK}"/>` +
-    `<path d="${glyph.toPathData(2)}" fill="${CHROME}"/>` +
-    `<rect y="445" width="512" height="67" fill="${MAGENTA}"/></g></svg>\n`,
+    `<path d="${glyph.toPathData(2)}" fill="${METAL_HI}"/>` +
+    `<rect y="445" width="512" height="67" fill="${ACCENT}"/></g></svg>\n`,
 );
 
 // PNG-in-ICO: header, directory entries, then the PNG payloads.
