@@ -44,6 +44,9 @@ const defaultRun: Runner = (command, args, cwd) => {
   if (r.status !== 0) throw new Error(`${command} ${args.join(" ")} failed with status ${r.status}`);
 };
 
+/** A package.json name from the Pantheon site or the band name: lowercase letters, digits and hyphens. */
+const packageName = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50).replace(/-+$/, "") || "band-site";
+
 const exists = (p: string) => fs.access(p).then(() => true, () => false);
 const read = (root: string, rel: string) => fs.readFile(path.join(root, rel), "utf8");
 
@@ -116,6 +119,25 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
     files.set(".github/workflows/sync-puck-registry.yml", activateExample(await read(root, "examples/workflows/sync-puck-registry.yml")));
   }
 
+  // package.json: the template's own name and description would otherwise ship in every band's repo.
+  if (await exists(path.join(root, "package.json"))) {
+    const pkg = JSON.parse(await read(root, "package.json")) as Record<string, unknown>;
+    pkg.name = packageName(site ?? answers.identity.name);
+    pkg.description = answers.identity.tagline;
+    files.set("package.json", `${JSON.stringify(pkg, null, 2)}\n`);
+  }
+
+  // CODEOWNERS names the template's author; point it at the repo's own owner when we know it.
+  const owner = answers.github?.owner;
+  const codeowners = ".github/CODEOWNERS";
+  if (owner && (await exists(path.join(root, codeowners)))) {
+    // Every owner handle on every non-comment line, so a line that lists several ends up naming the one owner.
+    files.set(
+      codeowners,
+      (await read(root, codeowners)).replace(/^(?!\s*#).*$/gm, (line) => line.replace(/(?<=\s)@[A-Za-z0-9-]+(?:\/[A-Za-z0-9._-]+)?(?=\s|$)/g, `@${owner}`)),
+    );
+  }
+
   // docs/ must stay out of git: the off-limits list would give its topics away.
   const gitignorePath = path.join(root, ".gitignore");
   const gitignore = (await exists(gitignorePath)) ? await fs.readFile(gitignorePath, "utf8") : "";
@@ -135,6 +157,7 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   if (!site) notes.push("No Pantheon site recorded: the promote and deployed-site workflows still use the placeholder name, and no secrets can be listed yet. Create the site, then re-run the hosting questions.");
   if (!answers.hosting?.p1SiteId) notes.push("No P1 site id recorded: the registry sync is not installed. Create the P1 site, then re-run the hosting questions.");
+  if (!owner) notes.push("No GitHub owner recorded: .github/CODEOWNERS still names the template's author. Edit it, or re-run with github.owner set.");
   if (!answers.audio?.baseUrl) notes.push("No audio host recorded: set NEXT_PUBLIC_AUDIO_BASE_URL (and the R2 secrets) when the bucket exists.");
   notes.push("The albums, shows, merch, lyrics, bio and press article are still the template's samples. Replace them (CONTENT.md says where); the tests and e2e checks that mention those samples need updating with them.");
 
