@@ -53,7 +53,7 @@ export function TourMap({
         ))}
       </ul>
       {shown ? (
-        <div ref={region} tabIndex={-1} role="region" aria-label={`Map: ${label}`} className="h-80 overflow-hidden rounded-card border border-line focus-visible:outline-2 focus-visible:outline-cyan sm:h-96">
+        <div ref={region} tabIndex={-1} role="region" aria-label={`Map: ${label}`} className="h-80 overflow-hidden rounded-card border border-line focus-visible:outline-2 focus-visible:outline-accent-3 sm:h-96">
           <Suspense fallback={<p className="p-4 text-sm text-muted">Loading map…</p>}>
             <Canvas points={points} workerUrl={workerUrl} />
           </Suspense>
