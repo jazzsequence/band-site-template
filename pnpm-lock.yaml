@@ -29,8 +29,8 @@ importers:
         specifier: ^0.20.1
         version: 0.20.1
       '@pantheon-systems/nextjs-cache-handler':
-        specifier: 0.13.0
-        version: 0.13.0(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        specifier: 0.13.1
+        version: 0.13.1(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@pantheon-systems/p1-media':
         specifier: ^0.5.0
         version: 0.5.0(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react@19.3.0)
@@ -1228,8 +1228,8 @@ packages:
     resolution: {integrity: sha512-B9DgSre/SAl99QMVSOCqA1oMt00+VqLW1oi82D0vdaeiZpX3jGmhtefNjsyuRFyAdSj83ZPmWA9dDpfLNjyK6w==}
     engines: {node: '>=24.0.0'}
 
-  '@pantheon-systems/nextjs-cache-handler@0.13.0':
-    resolution: {integrity: sha512-Oc8AHimC0VD3+X4mjPhotWnPUQnN7Xg2INU4TK6FbNNn8xHY6DpMjtY4CBNU+Rdh4FfyNEJKNDVDcaD5Zp+kSQ==}
+  '@pantheon-systems/nextjs-cache-handler@0.13.1':
+    resolution: {integrity: sha512-wngyH54JeO3ZFX/Om1aj+6OR2vyXRvXiLvYDNZP32EctBatftBXD0kw8TCe9Ij1e1NEMhzyF5tkxgjWPbaQ54Q==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       next: '>=14.0.0'
@@ -6374,7 +6374,7 @@ snapshots:
       partysocket: 1.1.10
       yjs: 13.6.33
 
-  '@pantheon-systems/nextjs-cache-handler@0.13.0(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@pantheon-systems/nextjs-cache-handler@0.13.1(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
       '@google-cloud/storage': 7.22.0
       next: 16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
