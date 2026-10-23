@@ -39,19 +39,19 @@ export default async function Bio() {
       <div className="grid items-start gap-10 md:grid-cols-[22rem_1fr]">
         <LightboxImage src="/images/paris-portrait.jpg" alt="PARIS" width={1024} height={1536} fetchPriority="high" className="w-full rounded-card border border-line" />
         <div className="space-y-6">
-          <p className="font-gothic text-3xl text-magenta">About</p>
-          <h1 className="text-chrome font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">
+          <p className="font-gothic text-3xl text-accent">About</p>
+          <h1 className="text-metal font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">
             PARIS
           </h1>
           <div className="space-y-4 text-lg leading-8 text-muted">
             <p>
               PARIS makes industrial pop that sounds expensive, intentional and quietly hostile to interpretation. The
               self-released{" "}
-              <AppLink className="text-cyan underline underline-offset-4 hover:text-text" href="/albums/ep">
+              <AppLink className="text-accent-3 underline underline-offset-4 hover:text-text" href="/albums/ep">
                 debut EP
               </AppLink>
               , led by &ldquo;Consent of the Quiet&rdquo; and &ldquo;Don&rsquo;t Ask What I Am,&rdquo; drew{" "}
-              <AppLink className="text-cyan underline underline-offset-4 hover:text-text" href="/press">
+              <AppLink className="text-accent-3 underline underline-offset-4 hover:text-text" href="/press">
                 national press
               </AppLink>{" "}
               and a following that arrived faster than anyone expected.
@@ -59,12 +59,12 @@ export default async function Bio() {
             <p>
               Based in the Bay Area, PARIS has been performing since 1996 and writes, performs and produces every record
               alone.{" "}
-              <AppLink className="text-cyan underline underline-offset-4 hover:text-text" href="/well-enough">
+              <AppLink className="text-accent-3 underline underline-offset-4 hover:text-text" href="/well-enough">
                 Well Enough
               </AppLink>
               , the full-length, came out in 1997 on PARIS&rsquo;s own label, Hostile Takeover, with distribution by
               Interscope Records.{" "}
-              <AppLink className="text-cyan underline underline-offset-4 hover:text-text" href="/albums/tribute">
+              <AppLink className="text-accent-3 underline underline-offset-4 hover:text-text" href="/albums/tribute">
                 Tribute
               </AppLink>
               , a collection of B-sides, followed. This fall PARIS takes the band across the West Coast, the Southwest and

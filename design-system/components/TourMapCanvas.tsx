@@ -63,9 +63,9 @@ export default function TourMapCanvas({ points, workerUrl }: { points: MapPoint[
         width: "18px",
         height: "18px",
         borderRadius: "9999px",
-        background: "var(--color-magenta)",
+        background: "var(--color-accent)",
         border: "2px solid var(--color-void)",
-        boxShadow: "0 0 12px var(--color-magenta)",
+        boxShadow: "0 0 12px var(--color-accent)",
       });
       const popup = new maplibregl.Popup({ offset: 14, closeButton: true }).setDOMContent(popupContent(p));
       new maplibregl.Marker({ element: pin }).setLngLat([p.lon, p.lat]).setPopup(popup).addTo(map);

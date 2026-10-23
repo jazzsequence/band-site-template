@@ -60,12 +60,12 @@ export function LightboxImage({ src, alt, className = "", ...imgProps }: Props) 
       >
         {open && (
           <div className="relative">
-            <img src={assetUrl(src)} alt={alt} className="max-h-[90vh] max-w-[94vw] rounded-card border border-line object-contain shadow-glow-magenta" />
+            <img src={assetUrl(src)} alt={alt} className="max-h-[90vh] max-w-[94vw] rounded-card border border-line object-contain shadow-glow-accent" />
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute -right-3 -top-3 grid size-11 place-items-center rounded-full border border-line bg-raised text-text hover:text-magenta"
+              className="absolute -right-3 -top-3 grid size-11 place-items-center rounded-full border border-line bg-raised text-text hover:text-accent"
             >
               <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2" aria-hidden>
                 <path d="M6 6l12 12M18 6L6 18" />

@@ -6,7 +6,7 @@ export function Wordmark({ size = "md", href }: { size?: "md" | "lg"; href?: str
     size === "lg" ? "text-5xl md:text-7xl" : "text-2xl"
   }`;
   return href ? (
-    <AppLink href={href} aria-label="PARIS, home" className={`${cls} hover:text-magenta`}>
+    <AppLink href={href} aria-label="PARIS, home" className={`${cls} hover:text-accent`}>
       PARIS
     </AppLink>
   ) : (

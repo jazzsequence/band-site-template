@@ -30,7 +30,7 @@ You are a principal engineer on this project. You have comprehensive knowledge o
    ```
    Bash({ command: 'date +%s' })
    Bash({ command: 'bash .githooks/lib/approval.sh fingerprint' })
-   Write({ file_path: "/Users/chris.reynolds/git/paris-site/reviewer-approved", content: "<timestamp> <fingerprint>" })
+   Write({ file_path: "/Users/chris.reynolds/git/band-site-template/reviewer-approved", content: "<timestamp> <fingerprint>" })
    ```
    The content is the Unix timestamp, one space, then the fingerprint exactly as the script printed it, on one
    line with no trailing newline. The fingerprint binds the approval to the exact content you reviewed: if

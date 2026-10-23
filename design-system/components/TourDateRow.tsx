@@ -17,8 +17,8 @@ export function TourDateRow({ month, day, year, city, venue, capacity, status = 
   return (
     <li className="grid grid-cols-[4.5rem_1fr] items-center gap-x-5 gap-y-3 border-b border-line py-5 md:grid-cols-[5rem_1fr_auto]">
       <time dateTime={`${year}-${month}-${day}`} className="text-center leading-none">
-        <span className="block font-display text-xs uppercase tracking-[0.25em] text-magenta">{month}</span>
-        <span className="text-chrome block font-display text-4xl font-bold">{day}</span>
+        <span className="block font-display text-xs uppercase tracking-[0.25em] text-accent">{month}</span>
+        <span className="text-metal block font-display text-4xl font-bold">{day}</span>
         <span className="block text-xs text-muted">{year}</span>
       </time>
       <div>

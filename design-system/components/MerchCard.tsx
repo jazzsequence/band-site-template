@@ -19,7 +19,7 @@ export function MerchCard({
       </div>
       <div className="flex items-baseline justify-between gap-3">
         <Heading className="font-display text-sm font-semibold uppercase tracking-wide">{name}</Heading>
-        <p className="tabular-nums text-cyan">{price}</p>
+        <p className="tabular-nums text-accent-3">{price}</p>
       </div>
     </div>
   );

@@ -29,23 +29,23 @@ importers:
         specifier: ^0.20.1
         version: 0.20.1
       '@pantheon-systems/nextjs-cache-handler':
-        specifier: 0.13.0
-        version: 0.13.0(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        specifier: 0.13.1
+        version: 0.13.1(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@pantheon-systems/p1-media':
         specifier: ^0.5.0
-        version: 0.5.0(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react@19.3.0)
+        version: 0.5.0(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react@19.3.0)
       '@pantheon-systems/p1-next-sdk':
         specifier: ^0.20.1
-        version: 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@pantheon-systems/pds-toolkit-react':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
+        specifier: 2.0.0-beta.8
+        version: 2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
       '@pantheon-systems/puck-css':
         specifier: ^0.20.1
-        version: 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
       '@tailwindcss/postcss':
         specifier: ^4.2.2
         version: 4.3.3
@@ -165,8 +165,8 @@ importers:
         specifier: ^8.3.4
         version: 8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
       vitest:
-        specifier: ^4.1.5
-        version: 4.1.11(@types/node@26.6.4)(happy-dom@20.14.6)(jsdom@29.1.1)(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+        specifier: ^5.0.3
+        version: 5.0.3(@types/node@26.6.4)(happy-dom@20.14.6)(jsdom@29.1.1)(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
 
 packages:
 
@@ -1228,8 +1228,8 @@ packages:
     resolution: {integrity: sha512-B9DgSre/SAl99QMVSOCqA1oMt00+VqLW1oi82D0vdaeiZpX3jGmhtefNjsyuRFyAdSj83ZPmWA9dDpfLNjyK6w==}
     engines: {node: '>=24.0.0'}
 
-  '@pantheon-systems/nextjs-cache-handler@0.13.0':
-    resolution: {integrity: sha512-Oc8AHimC0VD3+X4mjPhotWnPUQnN7Xg2INU4TK6FbNNn8xHY6DpMjtY4CBNU+Rdh4FfyNEJKNDVDcaD5Zp+kSQ==}
+  '@pantheon-systems/nextjs-cache-handler@0.13.1':
+    resolution: {integrity: sha512-wngyH54JeO3ZFX/Om1aj+6OR2vyXRvXiLvYDNZP32EctBatftBXD0kw8TCe9Ij1e1NEMhzyF5tkxgjWPbaQ54Q==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       next: '>=14.0.0'
@@ -1266,8 +1266,8 @@ packages:
   '@pantheon-systems/pds-design-tokens@2.0.0-beta.1':
     resolution: {integrity: sha512-JCnZjU0+2ryfbOD2iB+9mFu9sEzC1ZpDAZcE0d719psZAQkZdh4mSIVRdCECBk3iyEznrDdXY4T7+/dwodsJcQ==}
 
-  '@pantheon-systems/pds-toolkit-react@2.0.0-beta.7':
-    resolution: {integrity: sha512-OxIwI4VhYJLlvBQOrDWIOjTZG+nsvIK12vJCQVU4CgU0bwQyLXw2y9j9/PcTcBs9Y9l6cljdm0Rusp25HeZwAA==}
+  '@pantheon-systems/pds-toolkit-react@2.0.0-beta.8':
+    resolution: {integrity: sha512-6gWwWze8Yo6hU8pelTQ6rcuxUlg6xq/q8I6QIXsD8FKsbRkbltkC5dencQHAhGKkph1o5pO5b858vT/OpDJZ8A==}
     engines: {node: '>=18.0.0 <=24.x'}
     hasBin: true
     peerDependencies:
@@ -2199,11 +2199,8 @@ packages:
   '@vitest/expect@3.2.4':
     resolution: {integrity: sha512-Io0yyORnB6sikFlt8QW5K7slY4OjqNX9jmJQ02QDda8lyM6B5oNgVWoSoKPac8/kgnCUzuHQKrSLtu/uOqqrig==}
 
-  '@vitest/expect@4.1.11':
-    resolution: {integrity: sha512-VX2x5vNJXET47KAFzwERI+KRMtTTCSWTfSMKsW7JsUsXV4psq++e3DvZpuTDOpHcxytiDs6p2nhVb2tVDiiUYw==}
-
-  '@vitest/mocker@4.1.11':
-    resolution: {integrity: sha512-2XJVD55d1o5AZous5CCGKS74g/riOj9odEt2bQpCVZeblHyHdnMeFl4jl0XjU21stf4mbjUkew2eXQZt65g5CQ==}
+  '@vitest/mocker@5.0.3':
+    resolution: {integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==}
     peerDependencies:
       msw: ^2.4.9
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -2216,26 +2213,14 @@ packages:
   '@vitest/pretty-format@3.2.4':
     resolution: {integrity: sha512-IVNZik8IVRJRTr9fxlitMKeJeXFFFN0JaB9PHPGQ8NKQbGpfjlTx9zO4RefN8gp7eqjNy8nyK3NZmBzOPeIxtA==}
 
-  '@vitest/pretty-format@4.1.11':
-    resolution: {integrity: sha512-yiZzPbGTS9Sr/JpFl8zHrcIkAofNbFV6k21vIgQN/cY/oxZeXhJv5sc/MBJ5jFKWmWs+oJHw0UXLZjmf931+Vw==}
-
-  '@vitest/runner@4.1.11':
-    resolution: {integrity: sha512-LztvUgdwMNJMIkj3hQnnxiC2Xy1zNxq928W/xhjCLaNCzqTZOudjwbQf6v9IntZGPw132i2Lq2rgTRZHD3JHNw==}
-
-  '@vitest/snapshot@4.1.11':
-    resolution: {integrity: sha512-pN7ikn1ON7h8ee4gIAp4AzyK+zBtJPzVbqOgu5LCEh4VaJVbPQcgYQYJIMGQPXVeJJq1fnfazis7a5pFNPahog==}
-
   '@vitest/spy@3.2.4':
     resolution: {integrity: sha512-vAfasCOe6AIK70iP5UD11Ac4siNUNJ9i/9PZ3NKx07sG6sUxeag1LWdNrMWeKKYBLlzuK+Gn65Yd5nyL6ds+nw==}
 
-  '@vitest/spy@4.1.11':
-    resolution: {integrity: sha512-apNa/prQy2qCeywhnixOHPRCgGNhvg7T4Dapfl1GahLp/R+uhBm5cPyFoNVyqsNd2h1nJxL6BqqdIjiABL60YA==}
+  '@vitest/spy@5.0.3':
+    resolution: {integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==}
 
   '@vitest/utils@3.2.4':
     resolution: {integrity: sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA==}
-
-  '@vitest/utils@4.1.11':
-    resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
 
   '@webcontainer/env@1.1.1':
     resolution: {integrity: sha512-6aN99yL695Hi9SuIk1oC88l9o0gmxL1nGWWQ/kNy81HigJ0FoaoTXpytCj6ItzgyCEwA9kF1wixsTuv5cjsgng==}
@@ -2424,8 +2409,8 @@ packages:
   bignumber.js@9.3.1:
     resolution: {integrity: sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==}
 
-  body-parser@2.3.0:
-    resolution: {integrity: sha512-2cGmJupaNgg+QUwVLAucDuWuoMZ6EX9iHDRswZ5lsNYEmwPaRknMPCLZz07yTzVq/83p4o/wzbDZbBrTvGGTIw==}
+  body-parser@2.4.0:
+    resolution: {integrity: sha512-Ifk1KcLrxaGt1occQagQNFNNOqRt1LFuehEnHHzB8Z6cRgIxRU1TBaiIsUiCdA+gy5PL7Y1IX31DNKkRmxtXjQ==}
     engines: {node: '>=18'}
 
   brace-expansion@1.1.21:
@@ -3339,8 +3324,8 @@ packages:
     resolution: {integrity: sha512-/8UvqAPU9DGTI9k4mxtf49U37Isfwr8Uts96+SBHIkFxPJnHS0Ew4f00sM4Scd8V8EjM0jUNtVDdv1kPdt35lg==}
     engines: {node: '>= 4'}
 
-  immer@11.2.3:
-    resolution: {integrity: sha512-FbR9W6jf7+tvOCuDmOLJy3yStLCvoRDODRARzfeaWmn75+1fW4hFbMv5X5cWgEkxgWcC/eC5Nva00ZV1iv+0EA==}
+  immer@11.2.9:
+    resolution: {integrity: sha512-IQ4UEtXjZjyefyWjtLEDXUSrF6T2hwjKPi6BIJl3bY/2XXW24d6cNGdXJSBOA/+KNnuiXkZY6DR0C3efolhitA==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -4161,8 +4146,8 @@ packages:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
     engines: {node: '>=14.0.0'}
 
-  on-finished@2.4.1:
-    resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
+  on-finished@2.4.2:
+    resolution: {integrity: sha512-ATWUv387i+nLD49EiDoOft5scf32Vsdz3ktrQJG9bi7jRFmaXTssvyvj1EmeKVVgvesbqUtvQQvaS2TpTukAZQ==}
     engines: {node: '>= 0.8'}
 
   once@1.4.0:
@@ -4752,9 +4737,6 @@ packages:
     resolution: {integrity: sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ==}
     engines: {node: '>= 0.4'}
 
-  siginfo@2.0.0:
-    resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
-
   sonic-boom@4.2.1:
     resolution: {integrity: sha512-w6AxtubXa2wTXAUsZMMWERrsIRAdrK0Sc+FUytWvYAhBJLyuI4llrMIC1DtlNSdI99EI86KZum2MMq3EAZlF9Q==}
 
@@ -4776,9 +4758,6 @@ packages:
   split2@4.2.0:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
-
-  stackback@0.0.2:
-    resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
   statuses@2.0.2:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
@@ -4921,8 +4900,9 @@ packages:
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
-  tinybench@2.9.0:
-    resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
+  tinybench@6.2.2:
+    resolution: {integrity: sha512-nIZ2N2dFpjBsg2hgitKu7mA+FvsIJuGJOwysRngmVRRmWgR/UyPjwJj8c/fT/dhm8EkHnF5EOogRf+0Z2qrimA==}
+    engines: {node: '>=20.0.0'}
 
   tinyexec@1.3.1:
     resolution: {integrity: sha512-GCvB3aoys96IuDFBMcTB46JOR6mdMtAToqwiW8JlWhsoh1mhHi/xn9ss/Dg7N555GiJyEt2qzoG/NHCwM6h1EA==}
@@ -4937,10 +4917,6 @@ packages:
 
   tinyrainbow@2.0.0:
     resolution: {integrity: sha512-op4nsTR47R6p0vMUUoYl/a+ljLFVtlfaXkLQmqfLR1qHma1h/ysYk4hEXZ880bf2CYgTskvTa/e196Vd5dDQXw==}
-    engines: {node: '>=14.0.0'}
-
-  tinyrainbow@3.2.0:
-    resolution: {integrity: sha512-LgO3D9yZJjApUiuUfl9iFAwrtaX4+lok3wJIqttGoKCHlWUqHqbQpnxCf82L8FjgKsh4iGo78hqJwgL8F6To2A==}
     engines: {node: '>=14.0.0'}
 
   tinyspy@4.0.6:
@@ -5221,23 +5197,23 @@ packages:
       yaml:
         optional: true
 
-  vitest@4.1.11:
-    resolution: {integrity: sha512-fhACrNXUidIbGSBr5FlbuBkO7VWC1ZyLl0DO4CU2DrQoAPxX84Ysxs+HeGQpii5lZWV1Q4gBZTTu49mF+A6Edw==}
-    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
+  vitest@5.0.3:
+    resolution: {integrity: sha512-xMw97S3rjdtj5dkVat7jCsqWBpvchs3RlpQctUqwJD0KkERk40vz2fJ77lDwW/Vzh/pk18eItYAzkodhSes3jQ==}
+    engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
-      '@types/node': ^20.0.0 || ^22.0.0 || >=24.0.0
-      '@vitest/browser-playwright': 4.1.11
-      '@vitest/browser-preview': 4.1.11
-      '@vitest/browser-webdriverio': 4.1.11
-      '@vitest/coverage-istanbul': 4.1.11
-      '@vitest/coverage-v8': 4.1.11
-      '@vitest/ui': 4.1.11
+      '@types/node': ^22.0.0 || >=24.0.0
+      '@vitest/browser-playwright': 5.0.3
+      '@vitest/browser-preview': 5.0.3
+      '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
+      '@vitest/coverage-istanbul': 5.0.3
+      '@vitest/coverage-v8': 5.0.3
+      '@vitest/ui': 5.0.3
       happy-dom: '*'
       jsdom: '*'
-      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
+      vite: ^6.4.0 || ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       '@edge-runtime/vm':
         optional: true
@@ -5318,9 +5294,9 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  why-is-node-running@2.3.0:
-    resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
-    engines: {node: '>=8'}
+  why-is-node-running@3.2.1:
+    resolution: {integrity: sha512-Tb2FUhB4vUsGQlfSquQLYkApkuPAFQXGFzxWKHHumVz2dK+X1RUm/HnID4+TfIGYJ1kTcwOaCk/buYCEJr6YjQ==}
+    engines: {node: '>=20.11'}
     hasBin: true
 
   word-wrap@1.2.5:
@@ -6374,7 +6350,7 @@ snapshots:
       partysocket: 1.1.10
       yjs: 13.6.33
 
-  '@pantheon-systems/nextjs-cache-handler@0.13.0(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@pantheon-systems/nextjs-cache-handler@0.13.1(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
       '@google-cloud/storage': 7.22.0
       next: 16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -6382,11 +6358,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@pantheon-systems/p1-ai-chat@0.10.0(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@types/react@19.3.0)(react@19.3.0)':
+  '@pantheon-systems/p1-ai-chat@0.10.0(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@types/react@19.3.0)(react@19.3.0)':
     dependencies:
-      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
-      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
+      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
       react: 19.3.0
       react-markdown: 10.1.0(@types/react@19.3.0)(react@19.3.0)
       remark-breaks: 4.0.0
@@ -6397,19 +6373,19 @@ snapshots:
 
   '@pantheon-systems/p1-content-validator@2.5.0': {}
 
-  '@pantheon-systems/p1-media@0.5.0(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react@19.3.0)':
+  '@pantheon-systems/p1-media@0.5.0(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(react@19.3.0)':
     dependencies:
-      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
       react: 19.3.0
 
-  '@pantheon-systems/p1-next-sdk@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@pantheon-systems/p1-next-sdk@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@pantheon-systems/css-client': 0.20.1
-      '@pantheon-systems/p1-ai-chat': 0.10.0(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@types/react@19.3.0)(react@19.3.0)
-      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
-      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+      '@pantheon-systems/p1-ai-chat': 0.10.0(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@types/react@19.3.0)(react@19.3.0)
+      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
+      '@pantheon-systems/puck-css': 0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
       launchdarkly-js-client-sdk: 3.9.6
       next: 16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.1)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
@@ -6424,7 +6400,7 @@ snapshots:
 
   '@pantheon-systems/pds-design-tokens@2.0.0-beta.1': {}
 
-  '@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)':
+  '@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
@@ -6462,12 +6438,12 @@ snapshots:
       - redux
       - supports-color
 
-  '@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@pantheon-systems/puck-css@0.20.1(@pantheon-systems/pds-toolkit-react@2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1))(@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)))(@tanstack/react-query@5.104.2(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@pantheon-systems/css-client': 0.20.1
       '@pantheon-systems/p1-content-validator': 2.5.0
-      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.7(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
-      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+      '@pantheon-systems/pds-toolkit-react': 2.0.0-beta.8(@types/react@19.3.0)(prop-types@15.8.1)(react-dom@19.3.0(react@19.3.0))(react-is@18.3.1)(react@19.3.0)(redux@5.0.1)
+      '@puckeditor/core': 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
       '@tanstack/react-query': 5.104.2(react@19.3.0)
       fast-json-patch: 3.1.1(patch_hash=25ebefa74813316903ca26f95ca6582cd57b4433beab190214c8bcfae78b265e)
       ipaddr.js: 2.5.0
@@ -6489,7 +6465,7 @@ snapshots:
 
   '@preact/signals-core@1.14.4': {}
 
-  '@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))':
+  '@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(immer@11.2.9)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))':
     dependencies:
       '@dnd-kit/abstract': 0.4.0
       '@dnd-kit/dom': 0.4.0
@@ -6527,7 +6503,7 @@ snapshots:
       react: 19.3.0
       react-hotkeys-hook: 4.6.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       use-debounce: 9.0.4(react@19.3.0)
-      zustand: 5.0.15(@types/react@19.3.0)(immer@11.2.3)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
+      zustand: 5.0.15(@types/react@19.3.0)(immer@11.2.9)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0))
     transitivePeerDependencies:
       - '@floating-ui/dom'
       - '@types/react'
@@ -6737,7 +6713,7 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
-      immer: 11.2.3
+      immer: 11.2.9
       redux: 5.0.1
       redux-thunk: 3.1.0(redux@5.0.1)
       reselect: 5.2.0
@@ -7390,20 +7366,12 @@ snapshots:
       chai: 5.3.3
       tinyrainbow: 2.0.0
 
-  '@vitest/expect@4.1.11':
+  '@vitest/mocker@5.0.3(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))':
     dependencies:
-      '@standard-schema/spec': 1.1.0
-      '@types/chai': 5.2.3
-      '@vitest/spy': 4.1.11
-      '@vitest/utils': 4.1.11
-      chai: 6.3.0
-      tinyrainbow: 3.2.0
-
-  '@vitest/mocker@4.1.11(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))':
-    dependencies:
-      '@vitest/spy': 4.1.11
+      '@jridgewell/trace-mapping': 0.3.31
+      '@vitest/spy': 5.0.3
       estree-walker: 3.0.3
-      magic-string: 0.30.21
+      magic-string: 1.4.3
     optionalDependencies:
       vite: 8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
 
@@ -7411,39 +7379,17 @@ snapshots:
     dependencies:
       tinyrainbow: 2.0.0
 
-  '@vitest/pretty-format@4.1.11':
-    dependencies:
-      tinyrainbow: 3.2.0
-
-  '@vitest/runner@4.1.11':
-    dependencies:
-      '@vitest/utils': 4.1.11
-      pathe: 2.0.3
-
-  '@vitest/snapshot@4.1.11':
-    dependencies:
-      '@vitest/pretty-format': 4.1.11
-      '@vitest/utils': 4.1.11
-      magic-string: 0.30.21
-      pathe: 2.0.3
-
   '@vitest/spy@3.2.4':
     dependencies:
       tinyspy: 4.0.6
 
-  '@vitest/spy@4.1.11': {}
+  '@vitest/spy@5.0.3': {}
 
   '@vitest/utils@3.2.4':
     dependencies:
       '@vitest/pretty-format': 3.2.4
       loupe: 3.2.1
       tinyrainbow: 2.0.0
-
-  '@vitest/utils@4.1.11':
-    dependencies:
-      '@vitest/pretty-format': 4.1.11
-      convert-source-map: 2.0.0
-      tinyrainbow: 3.2.0
 
   '@webcontainer/env@1.1.1': {}
 
@@ -7642,14 +7588,14 @@ snapshots:
 
   bignumber.js@9.3.1: {}
 
-  body-parser@2.3.0:
+  body-parser@2.4.0:
     dependencies:
       bytes: 3.1.2
       content-type: 2.1.0
       debug: 4.4.3
       http-errors: 2.0.1
       iconv-lite: 0.7.3
-      on-finished: 2.4.1
+      on-finished: 2.4.2
       qs: 6.16.1
       raw-body: 3.0.2
       type-is: 2.1.0
@@ -8337,7 +8283,7 @@ snapshots:
   express@5.3.0:
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.3.0
+      body-parser: 2.4.0
       content-disposition: 2.0.1
       content-type: 2.1.0
       cookie: 0.7.2
@@ -8352,7 +8298,7 @@ snapshots:
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
       mime-types: 3.0.2
-      on-finished: 2.4.1
+      on-finished: 2.4.2
       once: 1.4.0
       parseurl: 1.3.3
       proxy-addr: 2.0.8
@@ -8412,7 +8358,7 @@ snapshots:
       debug: 4.4.3
       encodeurl: 2.0.0
       escape-html: 1.0.3
-      on-finished: 2.4.1
+      on-finished: 2.4.2
       parseurl: 1.3.3
       statuses: 2.0.2
     transitivePeerDependencies:
@@ -8776,7 +8722,7 @@ snapshots:
 
   ignore@7.0.12: {}
 
-  immer@11.2.3: {}
+  immer@11.2.9: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -9765,7 +9711,7 @@ snapshots:
 
   on-exit-leak-free@2.1.2: {}
 
-  on-finished@2.4.1:
+  on-finished@2.4.2:
     dependencies:
       ee-first: 1.1.1
 
@@ -10274,7 +10220,7 @@ snapshots:
       decimal.js-light: 2.5.1
       es-toolkit: 1.52.0
       eventemitter3: 5.0.4
-      immer: 11.2.3
+      immer: 11.2.9
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       react-is: 18.3.1
@@ -10496,7 +10442,7 @@ snapshots:
       http-errors: 2.0.1
       mime-types: 3.0.2
       ms: 2.1.3
-      on-finished: 2.4.1
+      on-finished: 2.4.2
       range-parser: 1.3.0
       statuses: 2.0.2
     transitivePeerDependencies:
@@ -10604,8 +10550,6 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  siginfo@2.0.0: {}
-
   sonic-boom@4.2.1:
     dependencies:
       atomic-sleep: 1.0.0
@@ -10619,8 +10563,6 @@ snapshots:
   split-on-first@3.0.0: {}
 
   split2@4.2.0: {}
-
-  stackback@0.0.2: {}
 
   statuses@2.0.2: {}
 
@@ -10793,7 +10735,7 @@ snapshots:
 
   tiny-invariant@1.3.3: {}
 
-  tinybench@2.9.0: {}
+  tinybench@6.2.2: {}
 
   tinyexec@1.3.1: {}
 
@@ -10805,8 +10747,6 @@ snapshots:
   tinyqueue@3.0.0: {}
 
   tinyrainbow@2.0.0: {}
-
-  tinyrainbow@3.2.0: {}
 
   tinyspy@4.0.6: {}
 
@@ -11096,28 +11036,22 @@ snapshots:
       jiti: 2.7.0
       tsx: 4.23.15
 
-  vitest@4.1.11(@types/node@26.6.4)(happy-dom@20.14.6)(jsdom@29.1.1)(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)):
+  vitest@5.0.3(@types/node@26.6.4)(happy-dom@20.14.6)(jsdom@29.1.1)(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)):
     dependencies:
-      '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
-      '@vitest/pretty-format': 4.1.11
-      '@vitest/runner': 4.1.11
-      '@vitest/snapshot': 4.1.11
-      '@vitest/spy': 4.1.11
-      '@vitest/utils': 4.1.11
+      '@types/chai': 5.2.3
+      '@vitest/mocker': 5.0.3(vite@8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+      chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
-      magic-string: 0.30.21
+      magic-string: 1.4.3
       obug: 2.2.1
-      pathe: 2.0.3
       picomatch: 4.0.7
       std-env: 4.3.0
-      tinybench: 2.9.0
+      tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      tinyrainbow: 3.2.0
       vite: 8.3.4(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
-      why-is-node-running: 2.3.0
+      why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 26.6.4
       happy-dom: 20.14.6
@@ -11201,10 +11135,7 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  why-is-node-running@2.3.0:
-    dependencies:
-      siginfo: 2.0.0
-      stackback: 0.0.2
+  why-is-node-running@3.2.1: {}
 
   word-wrap@1.2.5: {}
 
@@ -11248,10 +11179,10 @@ snapshots:
 
   zod@4.6.7: {}
 
-  zustand@5.0.15(@types/react@19.3.0)(immer@11.2.3)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)):
+  zustand@5.0.15(@types/react@19.3.0)(immer@11.2.9)(react@19.3.0)(use-sync-external-store@1.7.0(react@19.3.0)):
     optionalDependencies:
       '@types/react': 19.3.0
-      immer: 11.2.3
+      immer: 11.2.9
       react: 19.3.0
       use-sync-external-store: 1.7.0(react@19.3.0)
 

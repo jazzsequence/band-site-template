@@ -24,10 +24,10 @@
     "@fontsource/unifrakturcook": "^5.3.0",
     "@pantheon-systems/cpub-react-sdk": "^5.2.1",
     "@pantheon-systems/css-client": "^0.20.1",
-    "@pantheon-systems/nextjs-cache-handler": "0.13.0",
+    "@pantheon-systems/nextjs-cache-handler": "0.13.1",
     "@pantheon-systems/p1-media": "^0.5.0",
     "@pantheon-systems/p1-next-sdk": "^0.20.1",
-    "@pantheon-systems/pds-toolkit-react": "2.0.0-beta.7",
+    "@pantheon-systems/pds-toolkit-react": "2.0.0-beta.8",
     "@pantheon-systems/puck-css": "^0.20.1",
     "@puckeditor/core": "^0.23.0",
     "@tailwindcss/postcss": "^4.2.2",
@@ -71,7 +71,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.32.1",
     "vite": "^8.3.4",
-    "vitest": "^4.1.5"
+    "vitest": "^5.0.3"
   },
   "p1": {
     "templateVersion": "0.20.1"

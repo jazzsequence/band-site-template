@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 
 import { PlayerBar, type PlayerBarProps } from "../design-system/components/PlayerBar";
 
+// text-accent-2 and text-accent-3 are other roles; match the primary accent only.
+const ACCENT = /text-accent(?![\w-])/;
+
 const base: PlayerBarProps = { title: "Say when", album: "Well Enough", cover: "images/well-enough-cover.jpg", elapsed: "0:10", duration: "3:00", progress: 5 };
 const html = (props: Partial<PlayerBarProps>) => renderToStaticMarkup(<PlayerBar {...base} {...props} />);
 const noop = () => {};
@@ -31,7 +34,7 @@ describe("PlayerBar shuffle and repeat", () => {
   });
 
   it("an active mode is marked with the accent colour as well as its label", () => {
-    expect(html({ onShuffle: noop, shuffle: true })).toContain("text-magenta");
-    expect(html({ onRepeat: noop, repeat: "off" })).not.toContain("text-magenta");
+    expect(html({ onShuffle: noop, shuffle: true })).toMatch(ACCENT);
+    expect(html({ onRepeat: noop, repeat: "off" })).not.toMatch(ACCENT);
   });
 });

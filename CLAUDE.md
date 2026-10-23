@@ -148,13 +148,14 @@ Show map. The published P1 `/privacy` page is a separate copy: it got the same s
 
 ## CI / deployment (mirrors jazz-nextjs)
 
-- `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), Storybook build; then waits for dev / `pr-N` and checks 200. The check retries with a growing delay (5s up to 60s, about 5 minutes in all) because a new `pr-N` hostname can take minutes to resolve (curl reports `000` until it does); each request carries a cache-busting query string.
+- `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), all on the runner with placeholder credentials. There is no deployed-site check (a template has no site; it failed every PR). Sites built from the template may add one. Storybook is built only by `storybook-preview.yml` (every PR), not here.
 - `promote-pantheon.yml`: push to `test` or `live` branch tags `pantheon_test_N` / `pantheon_live_N`.
 - `sync-puck-registry.yml`: needs secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY`; skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry).
 - `storybook-preview.yml`: per-PR preview at `https://<owner>.github.io/paris-site/pr-N/` (gh-pages; needs
   Pages enabled, which needs a public repo or paid plan).
 - Repo secrets needed: `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret), plus the three above.
 - `dependabot.yml`: weekly (Monday) npm and GitHub Actions updates, minor and patch grouped, a 14-day cooldown (the "no release under two weeks old" rule; it applies to version updates only, security updates bypass it). TypeScript 7 and ESLint 10 are ignored, with the blockers copied from jazz-nextjs, which runs the same stack: not re-tested here, so lift an entry by trying the update on a PR environment. A `versions:` ignore also hides security-update PRs for that range, so keep Dependabot alerts enabled (a repo setting, not in this file). Dependabot PRs are ordinary PRs into `main`: squash-merge them. `@pantheon-systems/nextjs-cache-handler` is deliberately not ignored (owner's call: 0.11.0 works here); jazz-nextjs runs 0.11.0 with a bounded initialise and keeps live on 0.9.0 after 0.11.0 took its live site down on a large cache, whereas `cacheHandler.mjs` here is unbounded, so revisit if live shows restarts.
+- `examples/workflows/test-deployed-site.yml`: an inactive example (GitHub only runs `.github/workflows/`) of the check the template dropped: wait for Pantheon to build `pr-N`/`dev`, then expect 200. A site built from the template installs it once the Pantheon site and `PANTHEON_MACHINE_TOKEN` (Actions and Dependabot secrets) exist; the `/init-band` skill is meant to do this. Its header lists the steps. Add it as a required check only after it passes.
 
 ## Design approval workflow
 

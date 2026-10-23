@@ -20,7 +20,7 @@ export function TicketCard({ order, name, quantity, city, venue, date, doors }: 
       className="grid max-w-3xl grid-cols-1 overflow-hidden rounded-card border border-line bg-raised md:grid-cols-[1fr_14rem]"
     >
       <div className="relative space-y-4 p-6 md:p-8">
-        <span className="absolute inset-x-0 top-0 h-1 bg-[image:var(--grad-neon)]" aria-hidden />
+        <span className="absolute inset-x-0 top-0 h-1 bg-[image:var(--grad-accent)]" aria-hidden />
         <Wordmark />
         <div>
           <h2 className="font-display text-2xl font-extrabold uppercase leading-tight tracking-[-0.03em]">{venue}</h2>
@@ -33,15 +33,16 @@ export function TicketCard({ order, name, quantity, city, venue, date, doors }: 
           <div><dt className="text-dim uppercase tracking-widest text-xs">Admit</dt><dd>{quantity}</dd></div>
         </dl>
       </div>
-      <div className="flex flex-col items-center justify-center gap-3 border-t border-dashed border-line bg-chrome-hi p-6 text-void md:border-l md:border-t-0">
-        {/* Generated client-side from the order number; nothing is stored or sent anywhere. */}
+      <div className="flex flex-col items-center justify-center gap-3 border-t border-dashed border-line bg-metal-hi p-6 text-void md:border-l md:border-t-0">
+        {/* Generated client-side from the order number; nothing is stored or sent anywhere. Drawn in the panel's own
+            colours (currentColor on its background) because SVG attributes cannot read CSS variables. */}
         <QRCodeSVG
           value={`PARIS-TICKET:${order}`}
           size={144}
           level="M"
           marginSize={0}
-          bgColor="#f1effa"
-          fgColor="#07050d"
+          bgColor="transparent"
+          fgColor="currentColor"
           title={`Ticket QR code for order ${order}`}
         />
         <p className="font-display text-xs tracking-[0.2em]">{order}</p>

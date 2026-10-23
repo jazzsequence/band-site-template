@@ -17,7 +17,7 @@ export function AlbumCard({ title, year, cover, trackCount, featured, href = "#"
   return (
     <AppLink
       href={href}
-      className="group block overflow-hidden rounded-card border border-line bg-surface transition hover:border-magenta hover:shadow-glow-magenta"
+      className="group block overflow-hidden rounded-card border border-line bg-surface transition hover:border-accent hover:shadow-glow-accent"
     >
       <div className="relative aspect-square overflow-hidden">
         <img
@@ -30,7 +30,7 @@ export function AlbumCard({ title, year, cover, trackCount, featured, href = "#"
           className="size-full object-cover transition duration-500 group-hover:scale-105"
         />
         {featured && (
-          <span className="absolute left-3 top-3 bg-magenta px-2 py-1 font-display text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-void">
+          <span className="absolute left-3 top-3 bg-accent px-2 py-1 font-display text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-void">
             Latest
           </span>
         )}

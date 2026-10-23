@@ -8,9 +8,9 @@ const swatches = [
   ["text", "#f5f0ff", "Body text (17.5:1)"],
   ["muted", "#b9aed6", "Secondary text (9.4:1)"],
   ["dim", "#8f84ad", "Tertiary, large only (5.7:1)"],
-  ["magenta", "#ff3fa4", "Primary accent (6.0:1)"],
-  ["violet", "#a98bff", "Links, labels (7.3:1)"],
-  ["cyan", "#3ef0ff", "Focus, secondary actions (14.1:1)"],
+  ["accent", "#ff3fa4", "Primary accent (6.0:1)"],
+  ["accent-2", "#a98bff", "Links, labels (7.3:1)"],
+  ["accent-3", "#3ef0ff", "Focus, secondary actions (14.1:1)"],
 ] as const;
 
 const meta = { title: "Foundations/Color and type", parameters: { layout: "padded" } } satisfies Meta;
@@ -36,8 +36,8 @@ export const Palette: StoryObj = {
 export const Gradients: StoryObj = {
   render: () => (
     <div className="space-y-4">
-      <div className="h-16 rounded-card" style={{ background: "var(--grad-neon)" }} />
-      <div className="h-16 rounded-card" style={{ background: "var(--grad-chrome)" }} />
+      <div className="h-16 rounded-card" style={{ background: "var(--grad-accent)" }} />
+      <div className="h-16 rounded-card" style={{ background: "var(--grad-metal)" }} />
     </div>
   ),
 };
@@ -47,7 +47,7 @@ export const Typography: StoryObj = {
     <div className="space-y-8">
       <div>
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">Headings · Encode Sans Expanded 800, -0.04em</p>
-        <p className="text-chrome font-display text-6xl font-extrabold uppercase leading-none tracking-[-0.04em]">Well Enough</p>
+        <p className="text-metal font-display text-6xl font-extrabold uppercase leading-none tracking-[-0.04em]">Well Enough</p>
       </div>
       <div>
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">Wordmark · Unbounded, always capitals, -0.05em</p>
@@ -55,7 +55,7 @@ export const Typography: StoryObj = {
       </div>
       <div>
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">Accent · UnifrakturCook (kickers and flourishes only, never the PARIS name)</p>
-        <p className="font-gothic text-4xl text-magenta">On the road</p>
+        <p className="font-gothic text-4xl text-accent">On the road</p>
       </div>
       <div className="max-w-xl">
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">Body · Space Grotesk</p>
