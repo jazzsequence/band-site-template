@@ -46,6 +46,7 @@ describe("band.config.json", () => {
     expect(problems(unknown)).toContain("features.podcast is not a known feature");
     const mapOnly = clone();
     mapOnly.features.tour = false;
+    mapOnly.features.map = true;
     expect(problems(mapOnly)).toContain("features.map needs features.tour");
   });
 
