@@ -146,7 +146,7 @@ How this fits the rest of this file:
 Target is WCAG 2.2 AA. Three layers: `eslint-plugin-jsx-a11y` (recommended rules) on `design-system/`,
 `components/site/` and `app/(site)/`; the Storybook a11y addon (`test: "error"`); and `e2e/a11y.spec.ts`, which runs axe
 (wcag2a/2aa/21a/21aa/22aa + best-practice) on every public route at desktop and mobile sizes plus keyboard, skip-link,
-focus-ring and reduced-motion checks. When adding a route, add it to the `routes` list there. The 404 page goes through P1, so it is only checked with
+focus-ring and reduced-motion checks. When adding a route, add it to the `routes` list there. The e2e specs are feature-aware: they list every route but wrap those that belong to a switchable section in `when("<feature>", ...)` (or check `features.<feature>`) from `e2e/helpers/config.ts`, which reads `band.config.json`, so a band with sections off still passes; wrap a new route the same way. The 404 page goes through P1, so it is only checked with
 `A11Y_P1_ROUTES=1` and real credentials in `.env`. Each page needs exactly one
 h1; cards take `headingLevel="h2"` when they sit directly under it. Seeking uses a real `<input type="range">`.
 Not covered by automation: screen-reader pass, captions (songs rely on linked lyrics as the text alternative), and the
