@@ -1,17 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-const swatches = [
-  ["void", "#07050d", "Page background"],
-  ["surface", "#0e0a18", "Cards, header"],
-  ["raised", "#17112a", "Raised panels"],
-  ["line", "#2c2250", "Borders"],
-  ["text", "#f5f0ff", "Body text (17.5:1)"],
-  ["muted", "#b9aed6", "Secondary text (9.4:1)"],
-  ["dim", "#8f84ad", "Tertiary, large only (5.7:1)"],
-  ["accent", "#ff3fa4", "Primary accent (6.0:1)"],
-  ["accent-2", "#a98bff", "Links, labels (7.3:1)"],
-  ["accent-3", "#3ef0ff", "Focus, secondary actions (14.1:1)"],
-] as const;
+import config from "../band.config.json";
+import { contrastRatio } from "../lib/theme/contrast";
+import { MIN_RATIO, PALETTE_KEYS, checkPalette, resolvePalette, validatePalette, type Palette as PaletteMap, type PaletteKey } from "../lib/theme/palette";
+
+// The palette this story shows is the one the generator emits (band.config.json after the contrast gate),
+// so the swatches and ratios cannot drift from the real tokens.
+const { palette, adjustments } = resolvePalette(validatePalette(config.palette));
+
+const NOTES: Record<PaletteKey, string> = {
+  void: "Page background",
+  surface: "Cards, header",
+  raised: "Raised panels",
+  line: "Borders",
+  text: "Body text",
+  muted: "Secondary text",
+  dim: "Tertiary text",
+  accent: "Primary accent",
+  "accent-2": "Links, labels",
+  "accent-3": "Focus, secondary actions",
+  "metal-hi": "Metal, bright",
+  "metal-mid": "Metal, gradient mid",
+  "metal-lo": "Metal, dark",
+};
+
+const ratio = (a: string, b: string) => `${(Math.floor(contrastRatio(a, b) * 10) / 10).toFixed(1)}:1`;
 
 const meta = { title: "Foundations/Color and type", parameters: { layout: "padded" } } satisfies Meta;
 export default meta;
@@ -19,17 +32,94 @@ export default meta;
 export const Palette: StoryObj = {
   render: () => (
     <ul className="grid grid-cols-2 gap-4 md:grid-cols-5">
-      {swatches.map(([name, hex, note]) => (
+      {PALETTE_KEYS.map((name) => (
         <li key={name} className="overflow-hidden rounded-card border border-line">
-          <div className="h-20" style={{ background: hex }} />
+          <div className="h-20" style={{ background: `var(--color-${name})` }} />
           <div className="space-y-1 bg-surface p-3 text-sm">
             <p className="font-display text-xs uppercase tracking-widest">{name}</p>
-            <p className="tabular-nums text-muted">{hex}</p>
-            <p className="text-xs text-dim">{note}</p>
+            <p className="tabular-nums text-muted">{palette[name]}</p>
+            <p className="text-xs text-dim">
+              {NOTES[name]}
+              {name !== "void" && name !== "surface" && name !== "raised" && name !== "line" ? ` (${ratio(palette[name], palette.surface)} on surface)` : ""}
+            </p>
           </div>
         </li>
       ))}
     </ul>
+  ),
+};
+
+function PairTable({ pal }: { pal: PaletteMap }) {
+  const results = checkPalette(pal);
+  return (
+    <table className="w-full max-w-3xl text-left text-sm">
+      <caption className="mb-2 text-left text-xs uppercase tracking-widest text-dim">
+        Every pair the generator gates on, against WCAG AA ({MIN_RATIO}:1)
+      </caption>
+      <thead>
+        <tr className="text-xs uppercase tracking-widest text-dim">
+          <th scope="col" className="py-1 pr-4 font-normal">Text or fill</th>
+          <th scope="col" className="py-1 pr-4 font-normal">On</th>
+          <th scope="col" className="py-1 pr-4 font-normal">Ratio</th>
+          <th scope="col" className="py-1 font-normal">AA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((r) => (
+          <tr key={`${r.fg}-${r.bg}`} className="border-t border-line">
+            <td className="py-1 pr-4">
+              <span aria-hidden className="mr-2 inline-block size-3 border border-line align-middle" style={{ background: pal[r.fg] }} />
+              {r.fg}
+            </td>
+            <td className="py-1 pr-4 text-muted">{r.bg}</td>
+            <td className="py-1 pr-4 tabular-nums">{ratio(pal[r.fg], pal[r.bg])}</td>
+            <td className="py-1">{r.ok ? "Pass" : "Fail"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export const Contrast: StoryObj = {
+  name: "Contrast (active palette)",
+  render: () => (
+    <div className="space-y-4">
+      {adjustments.length > 0 ? (
+        <ul className="text-sm text-muted">
+          {adjustments.map((a) => (
+            <li key={a.key}>
+              {a.key} lifted from {a.from} to {a.to} ({a.reason})
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-sm text-muted">No colour needed adjusting: band.config.json passes as written.</p>
+      )}
+      <PairTable pal={palette} />
+    </div>
+  ),
+};
+
+// A deliberately dim palette, to show what the gate does to a colour that fails: same hue, lifted just enough.
+const dim = resolvePalette({ ...palette, accent: "#7a1450", "accent-3": "#1d6f78", dim: "#4a4468" });
+
+export const AdjustedExample: StoryObj = {
+  name: "Contrast (a failing palette, repaired)",
+  render: () => (
+    <div className="space-y-4">
+      <ul className="text-sm text-muted">
+        {dim.adjustments.map((a) => (
+          <li key={a.key} className="flex items-center gap-3">
+            <span aria-hidden className="inline-block size-4 border border-line" style={{ background: a.from }} />
+            <span aria-hidden>→</span>
+            <span aria-hidden className="inline-block size-4 border border-line" style={{ background: a.to }} />
+            {a.key}: {a.from} to {a.to} ({a.reason})
+          </li>
+        ))}
+      </ul>
+      <PairTable pal={dim.palette} />
+    </div>
   ),
 };
 
