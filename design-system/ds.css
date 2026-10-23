@@ -20,14 +20,23 @@
   --color-muted: #b9aed6;     /* 9.4:1 */
   --color-dim: #8f84ad;       /* 5.7:1 — large or secondary text only */
 
-  /* Neon accents */
-  --color-magenta: #ff3fa4;   /* 6.0:1 */
-  --color-violet: #a98bff;    /* 7.3:1 */
-  --color-cyan: #3ef0ff;      /* 14.1:1 */
+  /* Accents, by role. accent is the primary (kickers, primary action), accent-2 links and labels,
+     accent-3 focus and secondary actions. Components never name a hue. */
+  --color-accent: #ff3fa4;    /* 6.0:1 */
+  --color-accent-2: #a98bff;  /* 7.3:1 */
+  --color-accent-3: #3ef0ff;  /* 14.1:1 */
 
-  /* Chrome (metallic neutral) */
-  --color-chrome-hi: #f1effa;
-  --color-chrome-lo: #8d8aa6;
+  /* Metal (metallic neutral). metal-mid is the gradient's bright third stop. */
+  --color-metal-hi: #f1effa;
+  --color-metal-lo: #8d8aa6;
+  --color-metal-mid: #d9d6ea;
+
+  /* TEMPORARY aliases for the old hue names, removed once every file uses the roles. */
+  --color-magenta: var(--color-accent);
+  --color-violet: var(--color-accent-2);
+  --color-cyan: var(--color-accent-3);
+  --color-chrome-hi: var(--color-metal-hi);
+  --color-chrome-lo: var(--color-metal-lo);
 
   /* Headings. Deliberately not the wordmark face. */
   --font-display: "Encode Sans Expanded", system-ui, sans-serif;
@@ -38,8 +47,10 @@
   --font-gothic: "UnifrakturCook", serif;
 
   --radius-card: 0.25rem;
-  --shadow-glow-magenta: 0 0 24px rgb(255 63 164 / 0.45);
-  --shadow-glow-cyan: 0 0 24px rgb(62 240 255 / 0.35);
+  --shadow-glow-accent: 0 0 24px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  --shadow-glow-accent-3: 0 0 24px color-mix(in srgb, var(--color-accent-3) 35%, transparent);
+  --shadow-glow-magenta: var(--shadow-glow-accent);
+  --shadow-glow-cyan: var(--shadow-glow-accent-3);
 
   /* A short confirmation sliding up into place (the player bar's notice). Reduced motion turns it off in base.css. */
   --animate-notice-in: notice-in 0.2s ease-out;
@@ -57,19 +68,23 @@
 
 :root {
   color-scheme: dark;
-  --grad-neon: linear-gradient(110deg, #ff3fa4 0%, #a98bff 55%, #3ef0ff 100%);
-  --grad-chrome: linear-gradient(180deg, #f1effa 0%, #8d8aa6 55%, #d9d6ea 100%);
+  --grad-accent: linear-gradient(110deg, var(--color-accent) 0%, var(--color-accent-2) 55%, var(--color-accent-3) 100%);
+  --grad-metal: linear-gradient(180deg, var(--color-metal-hi) 0%, var(--color-metal-lo) 55%, var(--color-metal-mid) 100%);
+  --grad-neon: var(--grad-accent);
+  --grad-chrome: var(--grad-metal);
 }
 
-/* Chrome-filled display type */
+/* Metal-filled display type */
+.text-metal,
 .text-chrome {
-  background: var(--grad-chrome);
+  background: var(--grad-metal);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+.text-accent-gradient,
 .text-neon {
-  background: var(--grad-neon);
+  background: var(--grad-accent);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
