@@ -3,7 +3,9 @@
 #
 # Requires repo secrets CSS_BASE_URL, CSS_SITE_ID and CSS_REGISTRY_API_KEY
 # (a "Component registry sync" token; never reuse the site's read token).
-# Until they exist this workflow fails on pushes that touch the paths below.
+# Until all three exist the job logs a notice and skips, so a fresh copy of the
+# template (no P1 site yet) stays green. Once they are set it syncs for real and
+# a failure is a real failure.
 #
 # Triggers on push to any branch that touches puck.config.tsx or
 # components/puck/**. The sync script resolves the target branch from the
@@ -47,14 +49,33 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
+      # Secrets cannot be read in a job-level `if`, so test them here and gate the steps below on the result.
+      - name: Check credentials
+        id: creds
+        env:
+          CSS_BASE_URL: ${{ secrets.CSS_BASE_URL }}
+          CSS_SITE_ID: ${{ secrets.CSS_SITE_ID }}
+          CSS_REGISTRY_API_KEY: ${{ secrets.CSS_REGISTRY_API_KEY }}
+        run: |
+          if [ -n "$CSS_BASE_URL" ] && [ -n "$CSS_SITE_ID" ] && [ -n "$CSS_REGISTRY_API_KEY" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping registry sync: CSS_BASE_URL, CSS_SITE_ID and CSS_REGISTRY_API_KEY are not all set. Expected until this repo is connected to a P1 site."
+          fi
+      - if: steps.creds.outputs.configured == 'true'
+        uses: actions/checkout@v7
+      - if: steps.creds.outputs.configured == 'true'
+        uses: pnpm/action-setup@v6
+      - if: steps.creds.outputs.configured == 'true'
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - if: steps.creds.outputs.configured == 'true'
+        run: pnpm install --frozen-lockfile
       - name: Sync component registry
+        if: steps.creds.outputs.configured == 'true'
         run: pnpm sync:registry
         env:
           CSS_BASE_URL: ${{ secrets.CSS_BASE_URL }}

@@ -150,7 +150,7 @@ Show map. The published P1 `/privacy` page is a separate copy: it got the same s
 
 - `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), all on the runner with placeholder credentials. There is no deployed-site check (a template has no site; it failed every PR). Sites built from the template may add one. Storybook is built only by `storybook-preview.yml` (every PR), not here.
 - `promote-pantheon.yml`: push to `test` or `live` branch tags `pantheon_test_N` / `pantheon_live_N`.
-- `sync-puck-registry.yml`: needs secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY`; skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry).
+- `sync-puck-registry.yml`: needs secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY`; with any of them missing it logs a notice and skips (green), so a fresh copy of the template passes; skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry).
 - `storybook-preview.yml`: per-PR preview at `https://<owner>.github.io/paris-site/pr-N/` (gh-pages; needs
   Pages enabled, which needs a public repo or paid plan).
 - Repo secrets needed: `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret), plus the three above.
