@@ -210,9 +210,10 @@ for file in $(git diff --cached --name-only); do
     if [[ "$file" == ".env.example" ]]; then
         echo -e "${GREEN}✅ env.example found -- safe!"
         echo ""
+    else
+        echo -e "${RED}❌ BLOCKED: Attempting to commit sensitive file: $file${NC}"
+        exit 1
     fi
-    echo -e "${RED}❌ BLOCKED: Attempting to commit sensitive file: $file${NC}"
-    exit 1
   fi
 done
 echo -e "${GREEN}✅ No secrets${NC}"
