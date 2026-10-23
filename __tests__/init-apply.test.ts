@@ -9,7 +9,7 @@ import { suggestPalette } from "../lib/init/palette-suggest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // The files the init flow reads or rewrites. Each is reset to its template state in the copy, so these tests keep passing once the repo itself has been configured.
-const FILES = ["band.config.json", "README.md", ".gitignore", ".env.example", "content/p1-pages/home.json", ".github/workflows/promote-pantheon.yml", "examples/workflows/test-deployed-site.yml", "examples/workflows/sync-puck-registry.yml"];
+const FILES = ["band.config.json", "README.md", ".gitignore", ".env.example", "content/p1-pages/home.json", "package.json", ".github/workflows/promote-pantheon.yml", "examples/workflows/test-deployed-site.yml", "examples/workflows/sync-puck-registry.yml"];
 
 const text = (root: string, rel: string) => readFileSync(join(root, rel), "utf-8");
 const dirs: string[] = [];
@@ -25,6 +25,12 @@ function tempRepo() {
   config.setup = { initialized: false };
   delete config.hosting;
   writeFileSync(join(root, "band.config.json"), JSON.stringify(config, null, 2));
+  // A stand-in CODEOWNERS (the real one names whoever owns this repo now), and the package name reset to the template's.
+  mkdirSync(join(root, ".github"), { recursive: true });
+  writeFileSync(join(root, ".github/CODEOWNERS"), "# Design changes are approved by the repo owner.\n/.storybook/ @template-author\n/design-system/ @template-author\n/.github/ @template-author @second-owner\n");
+  const pkg = JSON.parse(text(root, "package.json"));
+  pkg.name = "band-site-template";
+  writeFileSync(join(root, "package.json"), JSON.stringify(pkg, null, 2));
   const promote = ".github/workflows/promote-pantheon.yml";
   writeFileSync(join(root, promote), text(root, promote).replace(/^(\s*PANTHEON_SITE_NAME:\s*).*$/m, "$1your-site-name"));
   return root;
@@ -48,6 +54,7 @@ const answers = (extra: Record<string, unknown> = {}) => ({
   features: { tour: true, merch: false, lyrics: true, map: true, press: false },
   audio: { baseUrl: "https://audio.neon-orchard.example.com" },
   hosting: { pantheonSite: "neon-orchard", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" },
+  github: { owner: "neon-owner" },
   ...extra,
 });
 
@@ -95,6 +102,32 @@ describe("applyInit", () => {
     const offHome = JSON.parse(text(off, "content/p1-pages/home.json"));
     expect(offHome.content.map((b: { type: string }) => b.type)).not.toContain("TourPreviewBlock");
     expect(offHome.content[0].props.actions.map((x: { href: string }) => x.href)).toEqual(["/listen"]);
+  });
+
+  it("renames the package and describes it as the band, so the template's name does not ship in every repo", async () => {
+    const root = tempRepo();
+    await applyInit({ root, answers: answers(), run, skipAssets: true });
+    expect(JSON.parse(text(root, "package.json"))).toMatchObject({ name: "neon-orchard", description: "Slow synths for fast nights." });
+    const noSite = tempRepo();
+    const a = answers({ hosting: undefined }) as Record<string, any>;
+    a.identity.name = "Cinder & Vale";
+    await applyInit({ root: noSite, answers: a, run, skipAssets: true });
+    expect(JSON.parse(text(noSite, "package.json")).name).toBe("cinder-vale");
+  });
+
+  it("points CODEOWNERS at the repo's owner, leaving comments alone, and says so when it does not know the owner", async () => {
+    const root = tempRepo();
+    await applyInit({ root, answers: answers(), run, skipAssets: true });
+    const owners = text(root, ".github/CODEOWNERS");
+    expect(owners).toContain("/design-system/ @neon-owner");
+    expect(owners).toContain("/.github/ @neon-owner @neon-owner");
+    expect(owners).not.toContain("@template-author");
+    expect(owners.split("\n")[0]).toBe("# Design changes are approved by the repo owner.");
+
+    const unknown = tempRepo();
+    const report = await applyInit({ root: unknown, answers: answers({ github: undefined }), run, skipAssets: true });
+    expect(text(unknown, ".github/CODEOWNERS")).toContain("@template-author");
+    expect(report.notes.join("\n")).toMatch(/No GitHub owner recorded/);
   });
 
   it("keeps the off-limits topics out of every file except docs/off-limits.md", async () => {

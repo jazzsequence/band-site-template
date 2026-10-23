@@ -26,6 +26,8 @@ export type Answers = {
   /** Where audio is served from (the custom domain on the R2 bucket), or absent to decide later. */
   audio?: { baseUrl?: string };
   hosting?: { pantheonSite?: string; p1SiteId?: string };
+  /** The GitHub user or org that owns the repo. CODEOWNERS is pointed at it so the template author is not asked to review a band's PRs. */
+  github?: { owner?: string };
 };
 
 export class AnswersError extends Error {
@@ -65,6 +67,11 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
   const features = section("features");
   const audio = root.audio === undefined ? {} : isObject(root.audio) ? root.audio : (problems.push("audio must be an object"), {});
   const hosting = root.hosting === undefined ? {} : isObject(root.hosting) ? root.hosting : (problems.push("hosting must be an object"), {});
+  const github = root.github === undefined ? {} : isObject(root.github) ? root.github : (problems.push("github must be an object"), {});
+  const owner = github.owner;
+  if (owner !== undefined && (typeof owner !== "string" || !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner))) {
+    problems.push("github.owner must be a GitHub user or organisation name (letters, digits, hyphens)");
+  }
 
   const offLimits = identity.offLimits;
   if (offLimits !== undefined) {
@@ -118,6 +125,7 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
       features: features as Answers["features"],
       ...(baseUrl ? { audio: { baseUrl: baseUrl as string } } : {}),
       ...(Object.keys(hosting).length ? { hosting: hosting as Answers["hosting"] } : {}),
+      ...(owner ? { github: { owner: owner as string } } : {}),
     },
     config,
     adjustments,

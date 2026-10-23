@@ -1,6 +1,8 @@
 {
   "name": "band-site-template",
   "version": "0.1.0",
+  "description": "A website for a band, real or fictional: Next.js 16 and P1 (Puck) on Pantheon.",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/copy-maplibre-worker.mjs && next build && pnpm copy-standalone",

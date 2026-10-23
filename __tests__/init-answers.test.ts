@@ -89,6 +89,14 @@ describe("parseAnswers", () => {
     expect(problems(a)).toContain("palette.accent is missing");
   });
 
+  it("validates the GitHub owner", () => {
+    const a = good() as Record<string, any>;
+    a.github = { owner: "neon-orchard" };
+    expect(parseAnswers(a, 2026).answers.github).toEqual({ owner: "neon-orchard" });
+    a.github = { owner: "not a login!" };
+    expect(problems(a)).toContain("github.owner must be a GitHub user or organisation name");
+  });
+
   it("rejects a bad off-limits list and a missing section", () => {
     const a = good() as Record<string, any>;
     a.identity.offLimits = ["ok", ""];
