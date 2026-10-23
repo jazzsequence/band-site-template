@@ -1,7 +1,8 @@
 # CLAUDE.md
 
+<!-- template:intro:start -->
 Band site template. Next.js 16 + P1 (Puck), deployed to Pantheon. Everything band-specific comes from `band.config.json` (identity, which
-sections exist, type choices, palette, the location of the local off-limits notes) plus content files under `data/` and `content/`.
+sections exist, type choices, palette, the location of the local off-limits notes, hosting) plus content files under `data/` and `content/`.
 It ships with a clearly fake placeholder band ("Your Band") that a new band overwrites; it came out of a production site, whose
 palette survives only as the generator's regression fixture.
 
@@ -9,8 +10,14 @@ palette survives only as the generator's regression fixture.
 The list lives in the gitignored file named by `editorial.offLimitsFile` in `band.config.json` (default `docs/off-limits.md`), never in a committed file,
 because the list itself would give the topics away. The reviewer checks every commit against it. Keep backstory out of everything committed.
 
-**Template status.** A repo made from this template starts with the placeholder band. If `band.config.json` still says `"name": "Your Band"`, the band has not been set
-up: ask the owner who the band is rather than editing around the placeholder (an `/init-band` skill that does this end to end is planned).
+## First run
+
+`band.config.json` has `"setup": { "initialized": false }` in the template. **If it is false, this repo is still the placeholder band: run the `/init-band` skill
+(`.claude/skills/init-band/`) before doing anything else, and do not edit around the placeholder.** It asks about the band in batches (identity, look,
+type, features and audio, hosting), proposes palettes with real contrast ratios, writes `band.config.json`, regenerates the theme, images and icons, writes the
+local off-limits notes, installs the example workflows, and rewrites this file for the band. Secrets are never collected in chat: it hands you commands that prompt
+for each value. It sets `setup.initialized` to true when it is done, and removes this section and the other template-only text from this file.
+<!-- template:intro:end -->
 
 ## Commit review (reviewer agent)
 
@@ -40,7 +47,7 @@ How this fits the rest of this file:
   Re-running the upstream `install.sh` will not overwrite the config or checklist, but will flag `reviewer.md` as locally modified (path edit).
 - Commit trailer stays `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` (the reviewer checks for a co-author line).
 - The hooks cap AI commits at 5 files and 500 inserted lines (lock files excluded), so split work into small logical commits within a PR.
-  Merge commits are exempt. Anything inherently larger (the band-content strip in this template's history was one) is the owner's to commit with `USER_COMMIT=1`; ask rather than work around it.
+  Merge commits are exempt. Anything inherently larger is the owner's to commit with `USER_COMMIT=1`; ask rather than work around it.
 - `docs/` is gitignored (local source material and the off-limits notes). Do not put anything that must be committed in it. Keep a backup of it
   outside the repo: it is the one place with material that exists nowhere else, and switching to a branch that tracked it would delete it.
 
@@ -61,7 +68,7 @@ How this fits the rest of this file:
 - **`band.config.json`:** validated once by `lib/band/config.ts` (`parseBandConfig`, hand-written, no schema dependency; it lists every problem at once) and exported as
   `band`, `features`, `typography`, `editorial`. The palette in the same file is validated separately by `lib/theme/palette.ts`. `band` is the name, tagline, description,
   genre, `fictional` flag, canonical `siteUrl` (`NEXT_PUBLIC_SITE_URL` overrides it per environment), footer year and optional imprint line, and social links. Never hard-code
-  a band name, genre or URL in a component; read it from here. Playwright specs cannot import the JSON module (its ESM loader rejects it): they read it through `e2e/helpers/config.ts`.
+  a band name, genre or URL in a component; read it from here. `setup.initialized` records that `/init-band` has run; `hosting.pantheonSite` and `hosting.p1SiteId` record where the site lives (neither is a secret; keys and tokens never go in the file). Playwright specs cannot import the JSON module (its ESM loader rejects it): they read it through `e2e/helpers/config.ts`.
 - **Features (`features.tour`, `merch`, `lyrics`, `map`, `press`).** An off section drops out of the header and footer, the sitemap and `llms.txt`, and its routes return 404
   (`tour` covers `/tour`, `/tickets/[id]`, `/ticket` and the home page's tour list; `lyrics` also stops tracks linking to lyrics; `press` covers `/press` and the footer press-kit link;
   `map` hides `TourMap` on the tour and ticket pages and needs `tour`). `/press/kit` and any other P1-only page are the owner's to publish or not in P1; the `[...puckPath]` catch-all
@@ -92,10 +99,12 @@ How this fits the rest of this file:
   `data/tour.json` and `data/merch.json` (fallbacks), `content/lyrics/*.md` (frontmatter `title`/`album`/`track`, `### Label` sections), `content/press/article.md`.
   To add a song: add it to `data/albums.json`, upload `<album>/<NN>-<slug>.m4a` to the bucket, add `content/lyrics/<slug>.md` if it has lyrics.
   P1 pages render inside the `(site)` layout (the catch-all lives under it). That layout supplies the header, footer and player, so a P1 page needs no header or footer block (an Article-only page like `/press` has both). The editor canvas has no layout, so `puckRoot.render` (`components/puck/root.tsx`) wraps the page in the real `SiteHeader` and `SiteFooter` there only (`puck.isEditing`), locked with `inert`, so pages can be built as they will look; on the public site the root adds nothing, so they never double up.
+<!-- template:placeholders:start -->
 - **Placeholders.** The seeded band, albums, shows, lyrics, merch and article are deliberately neutral. Images are solid-colour PNGs in the palette (`node scripts/make-placeholder-images.mjs`:
   cover, wide, merch, portrait); icons and the social card are drawn from the band name and palette (`node scripts/make-brand-assets.mjs`). Both read the generated theme, so run `pnpm theme` first
   after changing the palette. The seeded tour has one on-sale and one sold-out date so both ticket pages stay covered by tests; the ticket flow (`/tickets/[id]` -> `/ticket?...`) keeps all state in the URL and
   collects nothing. If the band is real, tour venues must be checked against a source before they are added; if it is fictional, say so in `band.fictional` and never present dates as real.
+<!-- template:placeholders:end -->
 - **Tour map (`TourMap` in the design system; MapLibre GL + OpenStreetMap raster tiles).** It starts as text (each venue and its
   address, no links out) and loads MapLibre and the tiles only when the visitor clicks "Show map", so by default nothing is requested and nothing
   about the visitor leaves the site. MapLibre 6 ships its web worker as two separate files that neither Turbopack nor Vite emits, so
@@ -159,20 +168,24 @@ Show map. A published P1 `/privacy` page is a separate copy, so any later change
 
 ## CI / deployment
 
-- `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), all on the runner with placeholder credentials. There is no deployed-site check (a template has no site; it failed every PR). Sites built from the template may add one. Storybook is built only by `storybook-preview.yml` (every PR), not here.
+- `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), all on the runner with placeholder credentials. Nothing here needs a Pantheon environment or secrets; the deployed-site check is its own workflow (below). Storybook is built only by `storybook-preview.yml` (every PR), not here.
 - `promote-pantheon.yml`: push to `test` or `live` branch tags `pantheon_test_N` / `pantheon_live_N`.
+<!-- template:workflow-sync:start -->
 - `examples/workflows/sync-puck-registry.yml`: inactive example (GitHub only runs `.github/workflows/`) of the headless registry sync. The template has no P1 site, so it would fail every push touching `components/puck/**`. A site built from the template installs it once it has its own P1 site and secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY` (per site, never another site's); the `/init-band` skill is meant to do this. Skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry). Until installed, sync with `pnpm sync:registry` locally or the P1 MCP `sync_components`.
+<!-- template:workflow-sync:end -->
 - `storybook-preview.yml`: per-PR preview at `https://<owner>.github.io/<repo>/pr-N/` (gh-pages; needs
   Pages enabled, which needs a public repo or paid plan).
-- Repo secrets (a site built from the template, not the template itself): `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret) for `promote-pantheon.yml` and the example deployed-site check, plus the three registry-sync secrets above when that example is installed. The template repo needs none; its CI runs on placeholders.
+- Repo secrets: `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret) for `promote-pantheon.yml` and the deployed-site check, plus the three registry-sync secrets when that workflow is installed. The always-on CI checks run on placeholders and need none.
 - `dependabot.yml`: weekly (Monday) npm and GitHub Actions updates, minor and patch grouped, a 14-day cooldown (the "no release under two weeks old" rule; it applies to version updates only, security updates bypass it). TypeScript 7 and ESLint 10 are ignored, with the blockers copied from a sister site on the same stack: not re-tested here, so lift an entry by trying the update on a PR environment. A `versions:` ignore also hides security-update PRs for that range, so keep Dependabot alerts enabled (a repo setting, not in this file). Dependabot PRs are ordinary PRs into `main`: squash-merge them. `@pantheon-systems/nextjs-cache-handler` is deliberately not ignored (owner's call). A sister site keeps live on 0.9.0 after 0.11.0 took its live site down on a large cache, whereas `cacheHandler.mjs` here has an unbounded initialise, so revisit if live shows restarts.
+<!-- template:workflow-deploy:start -->
 - `examples/workflows/test-deployed-site.yml`: an inactive example (GitHub only runs `.github/workflows/`) of the check the template dropped: wait for Pantheon to build `pr-N`/`dev`, then expect 200. A site built from the template installs it once the Pantheon site and `PANTHEON_MACHINE_TOKEN` (Actions and Dependabot secrets) exist; the `/init-band` skill is meant to do this. Its header lists the steps. Add it as a required check only after it passes.
+<!-- template:workflow-deploy:end -->
 
 ## Palette
 
 `band.config.json` is the source of truth for colour: 13 roles (`void`, `surface`, `raised`, `line`, `text`, `muted`, `dim`, `accent`, `accent-2`, `accent-3`,
 `metal-hi`, `metal-mid`, `metal-lo`) as `#rrggbb`. `pnpm theme` writes `design-system/theme.generated.css` (the `@theme` colour tokens, the glow shadows and the
-`--grad-accent`/`--grad-metal` gradients), which `ds.css` imports. Never edit the generated file; edit the config and regenerate. The template ships a neon-on-near-black default; the original site's palette is kept as the generator's regression fixture (`__tests__/fixtures/reference-palette.json`) and must come out unchanged.
+`--grad-accent`/`--grad-metal` gradients), which `ds.css` imports. Never edit the generated file; edit the config and regenerate. A reference palette (`__tests__/fixtures/reference-palette.json`) is the generator's regression fixture and must come out unchanged, whatever palette the band chooses.
 
 - **Accessibility gate (`lib/theme/palette.ts`).** Every text colour must reach WCAG AA (4.5:1) on all three surfaces, and `void` text on the fills that carry it (`accent`, `accent-3`,
   `metal-hi`). `dim` is held to 4.5:1 too, stricter than the 3:1 a secondary-text token could claim. A failing colour is lifted in OKLCH lightness (same hue, `lib/theme/contrast.ts`) and
