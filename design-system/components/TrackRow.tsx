@@ -29,7 +29,7 @@ export function TrackRow({ number, title, duration, hasAudio = true, lyricsHref,
         current ? "bg-raised" : ""
       }`}
     >
-      <span className={`font-display text-sm tabular-nums ${current ? "text-magenta" : "text-muted"}`}>
+      <span className={`font-display text-sm tabular-nums ${current ? "text-accent" : "text-muted"}`}>
         {String(number).padStart(2, "0")}
       </span>
       <div className="min-w-0">
@@ -38,7 +38,7 @@ export function TrackRow({ number, title, duration, hasAudio = true, lyricsHref,
       </div>
       <div className="flex items-center gap-4 text-sm">
         {lyricsHref && (
-          <AppLink href={lyricsHref} className="text-violet underline-offset-4 hover:underline">
+          <AppLink href={lyricsHref} className="text-accent-2 underline-offset-4 hover:underline">
             Lyrics
           </AppLink>
         )}
@@ -50,7 +50,7 @@ export function TrackRow({ number, title, duration, hasAudio = true, lyricsHref,
                 type="button"
                 onClick={onQueue}
                 aria-label={`Add ${title} to queue`}
-                className={`grid size-9 place-items-center hover:text-text ${justQueued ? "text-magenta" : "text-muted"}`}
+                className={`grid size-9 place-items-center hover:text-text ${justQueued ? "text-accent" : "text-muted"}`}
               >
                 <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2" aria-hidden>
                   {justQueued ? <path d="m5 12.5 4.5 4.5L19 7.5" /> : <path d="M3 6h12M3 12h8M3 18h8M18 10v8m-4-4h8" />}
@@ -61,7 +61,7 @@ export function TrackRow({ number, title, duration, hasAudio = true, lyricsHref,
               type="button"
               onClick={onPlay}
               aria-label={`${playing ? "Pause" : "Play"} ${title}`}
-              className="grid size-9 place-items-center rounded-full border border-cyan text-cyan hover:bg-cyan hover:text-void"
+              className="grid size-9 place-items-center rounded-full border border-accent-3 text-accent-3 hover:bg-accent-3 hover:text-void"
             >
               <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden>
                 {playing ? <path d="M7 5h4v14H7zm6 0h4v14h-4z" /> : <path d="M8 5v14l11-7z" />}

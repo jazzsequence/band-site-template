@@ -71,9 +71,9 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
         <p
           key={notice}
           aria-hidden
-          className="pointer-events-none absolute bottom-full left-1/2 mb-3 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 animate-notice-in items-center gap-2 border border-magenta bg-raised px-4 py-2 text-sm text-text shadow-glow-magenta"
+          className="pointer-events-none absolute bottom-full left-1/2 mb-3 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 animate-notice-in items-center gap-2 border border-accent bg-raised px-4 py-2 text-sm text-text shadow-glow-accent"
         >
-          <svg viewBox="0 0 24 24" className="size-4 shrink-0 fill-none stroke-magenta stroke-[2.5]">
+          <svg viewBox="0 0 24 24" className="size-4 shrink-0 fill-none stroke-accent stroke-[2.5]">
             <path d="m5 12.5 4.5 4.5L19 7.5" />
           </svg>
           <span className="truncate">{notice}</span>
@@ -94,7 +94,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
               onClick={onShuffle}
               aria-label="Shuffle"
               aria-pressed={shuffle}
-              className={`rounded-full p-1 hover:text-text ${shuffle ? "text-magenta" : "text-muted"}`}
+              className={`rounded-full p-1 hover:text-text ${shuffle ? "text-accent" : "text-muted"}`}
             >
               <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2" aria-hidden>
                 <path d="M3 7h3c2 0 3 1 4.5 3.5S14 15 16 15h5m0 0-3-3m3 3-3 3M3 17h3c1.4 0 2.4-.5 3.3-1.6M21 7h-5c-1.2 0-2.1.4-2.8 1.1m7.8-1.1-3-3m3 3-3 3" />
@@ -108,7 +108,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
             type="button"
             onClick={onToggle}
             aria-label={playing ? "Pause" : "Play"}
-            className="grid size-10 place-items-center rounded-full bg-magenta text-void shadow-glow-magenta"
+            className="grid size-10 place-items-center rounded-full bg-accent text-void shadow-glow-accent"
           >
             {playing ? (
               <svg viewBox="0 0 24 24" className="size-5 fill-current" aria-hidden><path d="M7 5h4v14H7zm6 0h4v14h-4z" /></svg>
@@ -124,13 +124,13 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
               type="button"
               onClick={onRepeat}
               aria-label={`Repeat: ${repeat === "one" ? "this track" : repeat === "all" ? "all" : "off"}`}
-              className={`relative rounded-full p-1 hover:text-text ${repeat === "off" ? "text-muted" : "text-magenta"}`}
+              className={`relative rounded-full p-1 hover:text-text ${repeat === "off" ? "text-muted" : "text-accent"}`}
             >
               <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2" aria-hidden>
                 <path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4m14-1v2a3 3 0 0 1-3 3H3" />
               </svg>
               {repeat === "one" && (
-                <span aria-hidden className="absolute -right-0.5 -top-0.5 grid size-3.5 place-items-center rounded-full bg-magenta text-[0.6rem] font-bold leading-none text-void">1</span>
+                <span aria-hidden className="absolute -right-0.5 -top-0.5 grid size-3.5 place-items-center rounded-full bg-accent text-[0.6rem] font-bold leading-none text-void">1</span>
               )}
             </button>
           )}
@@ -139,9 +139,9 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
           <span>{elapsed}</span>
           {/* A real range input (transparent, over the visual bar) so seeking works with a
               keyboard, touch and screen readers, not just a mouse. */}
-          <div className="relative flex h-6 flex-1 items-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-cyan">
+          <div className="relative flex h-6 flex-1 items-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-accent-3">
             <div className="h-2 w-full overflow-hidden rounded-full bg-line" aria-hidden>
-              <div className="h-full bg-[image:var(--grad-neon)]" style={{ width: `${progress}%` }} />
+              <div className="h-full bg-[image:var(--grad-accent)]" style={{ width: `${progress}%` }} />
             </div>
             <input
               type="range"
@@ -177,7 +177,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
             aria-expanded={open}
             aria-controls="player-queue"
             onClick={() => setOpen((o) => !o)}
-            className="inline-flex items-center gap-2 py-2 text-xs uppercase tracking-widest text-violet hover:underline"
+            className="inline-flex items-center gap-2 py-2 text-xs uppercase tracking-widest text-accent-2 hover:underline"
           >
             Queue
             <span className="tabular-nums text-muted">({queue.length})</span>
@@ -188,7 +188,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
               ref={panel}
               role="region"
               aria-label="Queue"
-              className="absolute bottom-full right-0 mb-3 max-h-[50vh] w-[min(24rem,calc(100vw-2rem))] overflow-y-auto border border-line bg-raised shadow-glow-magenta"
+              className="absolute bottom-full right-0 mb-3 max-h-[50vh] w-[min(24rem,calc(100vw-2rem))] overflow-y-auto border border-line bg-raised shadow-glow-accent"
             >
               {onClear && queue.length > 1 && (
                 <div className="flex items-center justify-between border-b border-line px-4 py-2">
@@ -196,7 +196,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
                   <button
                     type="button"
                     onClick={onClear}
-                    className="py-1 text-xs uppercase tracking-widest text-violet hover:underline"
+                    className="py-1 text-xs uppercase tracking-widest text-accent-2 hover:underline"
                   >
                     Clear queue
                   </button>
@@ -210,7 +210,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
                       aria-current={item.id === currentId ? "true" : undefined}
                       onClick={() => onSelect?.(item.id)}
                       className={`grid min-w-0 flex-1 grid-cols-[2rem_1fr] items-center gap-2 px-4 py-3 text-left hover:bg-surface ${
-                        item.id === currentId ? "text-magenta" : "text-text"
+                        item.id === currentId ? "text-accent" : "text-text"
                       }`}
                     >
                       <span className="text-xs tabular-nums">{String(i + 1).padStart(2, "0")}</span>
