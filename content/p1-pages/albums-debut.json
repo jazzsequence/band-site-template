@@ -1,0 +1,48 @@
+{
+  "path": "/albums/debut",
+  "root": {
+    "props": {
+      "title": "Debut Album",
+      "description": ""
+    }
+  },
+  "content": [
+    {
+      "type": "AlbumHeaderBlock",
+      "props": {
+        "id": "AlbumHeaderBlock-12",
+        "albumSlug": "debut",
+        "kicker": "",
+        "actions": [
+          {
+            "label": "All albums",
+            "href": "/albums",
+            "style": "outline"
+          }
+        ]
+      }
+    },
+    {
+      "type": "TrackListBlock",
+      "props": {
+        "id": "TrackListBlock-13",
+        "albumSlug": "debut",
+        "heading": "Track list"
+      }
+    },
+    {
+      "type": "ImageGalleryBlock",
+      "props": {
+        "id": "ImageGalleryBlock-14",
+        "columns": "2",
+        "items": [
+          {
+            "imageUrl": "/images/placeholder-wide.png",
+            "alt": "Placeholder back cover"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

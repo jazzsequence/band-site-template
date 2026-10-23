@@ -23,27 +23,24 @@ describe("lyrics", () => {
     expect(await getLyric("does-not-exist")).toBeUndefined();
   });
 
-  it("parses the Korean lyrics with their labelled sections", async () => {
-    const l = await getLyric("banmal");
-    expect(l).toMatchObject({ title: "반말", album: "unreleased", track: 4 });
-    expect(l?.sections.map((x) => x.label)).toEqual([
-      "Verse 1 (formal speech)", "Pre-Chorus", "Chorus", "Verse 2", "Pre-Chorus", "Chorus (repeat)", "Bridge (sung, still formal)",
-      "Final Chorus (casual speech, key up)", "Outro (a cappella)",
-    ]);
+  it("parses a seeded lyric with its labelled sections", async () => {
+    const l = await getLyric("first-song");
+    expect(l).toMatchObject({ title: "First Song", album: "debut", track: 1 });
+    expect(l?.sections.map((x) => x.label)).toEqual(["Verse 1", "Chorus"]);
   });
 
   it("loads every seeded lyric", async () => {
     const all = await getLyrics();
-    expect(all.length).toBeGreaterThanOrEqual(26);
+    expect(all.length).toBeGreaterThanOrEqual(3);
     expect(all.every((l) => l.sections.length > 0)).toBe(true);
   });
 });
 
 describe("catalog", () => {
   it("names audio files <NN>-<slug>.m4a", () => {
-    const t = { number: 3, slug: "dont-ask-what-i-am", title: "x" };
-    expect(audioFile(t)).toBe("03-dont-ask-what-i-am.m4a");
-    expect(audioKey("well-enough", t)).toBe("well-enough/03-dont-ask-what-i-am.m4a");
+    const t = { number: 3, slug: "third-song", title: "x" };
+    expect(audioFile(t)).toBe("03-third-song.m4a");
+    expect(audioKey("debut", t)).toBe("debut/03-third-song.m4a");
   });
 
   it("has a lyric for every track that claims one", async () => {
@@ -74,13 +71,12 @@ describe("tour", () => {
   });
 
   it("formats dates without timezone drift", () => {
-    expect(dateParts("1997-10-07")).toEqual({ month: "OCT", day: "7", year: 1997 });
-    expect(longDate("1997-10-07")).toBe("Tuesday, October 7, 1997");
+    expect(dateParts("2027-03-12")).toEqual({ month: "MAR", day: "12", year: 2027 });
+    expect(longDate("2027-03-12")).toBe("Friday, March 12, 2027");
   });
 
-  it("opens at Roderick's Chamber, then the Paramount in Oakland the following week", () => {
-    expect(shows[0].venue).toBe("Roderick's Chamber");
-    expect(shows[1].venue).toBe("Paramount Theatre");
-    expect(getShow(shows[1].id)?.city).toBe("Oakland, CA");
+  it("seeds one on-sale and one sold-out placeholder date, so both ticket pages can be exercised", () => {
+    expect(shows.map((s) => s.status)).toEqual(["on-sale", "sold-out"]);
+    expect(getShow(shows[1].id)?.venue).toBe("Placeholder Theatre");
   });
 });

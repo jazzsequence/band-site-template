@@ -1,4 +1,28 @@
 {
+  "band": {
+    "name": "Your Band",
+    "tagline": "One line that says what your band sounds like.",
+    "description": "A sentence or two about the band, used for search results and social cards.",
+    "genre": "Genre",
+    "fictional": false,
+    "siteUrl": "https://example.com",
+    "copyrightYear": 2026,
+    "social": []
+  },
+  "features": {
+    "tour": true,
+    "merch": true,
+    "lyrics": true,
+    "map": true,
+    "press": true
+  },
+  "typography": {
+    "wordmarkFace": false,
+    "accentFace": false
+  },
+  "editorial": {
+    "offLimitsFile": "docs/off-limits.md"
+  },
   "palette": {
     "void": "#07050d",
     "surface": "#0e0a18",

@@ -3,7 +3,7 @@
   "root": {
     "props": {
       "title": "Lyrics",
-      "description": "Every PARIS lyric, by album."
+      "description": "Every lyric, by album."
     }
   },
   "content": [

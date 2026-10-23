@@ -1,5 +1,8 @@
 # Editing site content
 
+The band itself (name, tagline, description, genre, footer line, social links, which sections exist, type choices and the colour palette) is
+`band.config.json`; after changing the palette run `pnpm theme`. Everything below is content.
+
 ## In P1 (no code change needed)
 
 Sign in at `/p1` and edit these pages in the visual editor. Changes go live when published.
@@ -9,7 +12,7 @@ Sign in at `/p1` and edit these pages in the visual editor. Changes go live when
 | `/` | The hero, the tour preview, the albums section | Hero, Tour preview, Section heading, Album grid |
 | `/tour` | Tour dates. Add, change or remove shows; each gets a ticket page automatically | Page heading, Tour dates |
 | `/listen` | The intro. The albums and their songs come from the catalog | Page heading, Album with tracks |
-| `/albums`, `/albums/<album>`, `/well-enough` | Headings and text around each album. Cover, year and songs come from the catalog | Album header, Track list, Album grid, Image gallery |
+| `/albums`, `/albums/<album>` | Headings and text around each album. Cover, year and songs come from the catalog | Album header, Track list, Album grid, Image gallery |
 | `/lyrics` | The intro. The list comes from the lyrics files | Page heading, Lyrics index |
 | `/press`, `/privacy` | The text, in Markdown | Article |
 | `/bio` | Bio text and photo | Image and text |
@@ -22,7 +25,7 @@ and the lyrics files. Add a song there (see "Adding a song" below) and it appear
 **Not in P1:** the per-song lyrics pages (`/lyrics/<song>`, one code route reading the Markdown files), the ticket
 checkout and e-ticket, and the error pages.
 
-`content/p1-pages/*.json` holds each page above exactly as it was designed. They are tested against the code versions in CI,
+`content/p1-pages/*.json` holds each page above as designed (the placeholder band's versions). They are tested against the code versions in CI,
 and are the copy to rebuild a page from if one is ever damaged.
 
 Notes:
@@ -41,7 +44,7 @@ Everything below is a file. Edit, commit, and open a PR.
 | Albums and track lists | `data/albums.json` | Each track needs `number`, `slug` and `title`. An album with no `year` is treated as unreleased and is labelled that way. An album with an empty `tracks` list shows a "nothing here yet" message. |
 | Audio | Cloudflare R2 bucket | Upload `<album-slug>/<NN>-<track-slug>.m4a`. The site lists the bucket every 5 minutes, so a new file appears without a deploy. A track with no file shows "Audio unavailable". |
 | Lyrics | `content/lyrics/<slug>.md` | Frontmatter: `title`, and optionally `album` (an album slug) and `track`. Each `### Label` line starts a section. A song with no `album` is listed under "More songs". |
-| Press interview | `content/press/interview.md` | Plain Markdown. |
+| Press article | `content/press/article.md` | Plain Markdown. |
 | Merch (fallback) | `data/merch.json` | `name`, `price`, `image`. |
 | Bio (fallback) | `app/(site)/bio/page.tsx` | Used only when the P1 page is unavailable. |
 | Images | `public/images/` | Reference as `/images/<file>`. |
@@ -56,9 +59,9 @@ Songs and lyrics are independent: lyrics with no audio, or audio with no lyrics,
 
 ## Images
 
-Keep images small: JPEG, at most 1600 px wide, ideally under 300 KB. The originals are large; resize before adding.
-Social and icon images are generated: `node scripts/make-brand-assets.mjs` rebuilds the icons, web manifest icons and
-the 1200x630 social card (`public/og-default.jpg`) from the wordmark font and the stage photo.
+Keep images small: JPEG, at most 1600 px wide, ideally under 300 KB. Resize before adding.
+The seeded images are solid-colour placeholders in the palette (`node scripts/make-placeholder-images.mjs`); replace them with real art.
+Icons and the 1200x630 social card (`public/og-default.png`) are generated from the band name and palette: `node scripts/make-brand-assets.mjs`.
 
 ## Standards and discovery
 

@@ -2,23 +2,25 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 
 import { Page } from "../../../components/site/section";
 import { StandardDocumentLink } from "../../../components/site/standard-document-link";
 import { P1Page } from "../../../components/site/p1-page";
+import { features } from "../../../lib/band/config";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
 export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({
-  title: "PARIS is Making Monsters Polite",
-  description: "The rising industrial pop artist discusses discomfort, power, and why explanation is a form of containment.",
+  title: "Press",
+  description: "Interviews and reviews.",
   path: "/press",
   type: "article",
 });
 
 async function PressFallback() {
-  const md = await fs.readFile(path.join(process.cwd(), "content", "press", "interview.md"), "utf8");
+  const md = await fs.readFile(path.join(process.cwd(), "content", "press", "article.md"), "utf8");
   return (
     <Page narrow>
       <StandardDocumentLink path="/press" />
@@ -36,6 +38,7 @@ async function PressFallback() {
 
 /** The published P1 page when there is one, otherwise the code version above. */
 export default async function PressRoute() {
+  if (!features.press) notFound();
   const doc = await getP1Page("/press");
   return doc ? <P1Page data={doc} path="/press" /> : <PressFallback />;
 }

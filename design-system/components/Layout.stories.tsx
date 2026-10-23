@@ -13,16 +13,16 @@ export const HeroFrame: StoryObj = {
   tags: ["!dev", "!autodocs"],
   render: () => (
     <Hero
-      image="images/paris-on-stage.jpg"
+      image="images/placeholder-wide.png"
       kicker="New album"
-      title="Well Enough"
-      blurb="The new album, out now on Hostile Takeover."
+      title="Debut Album"
+      blurb="The latest release."
     />
   ),
 };
 /**
- * The photo is a portrait cropped into a landscape frame, so the face lands in a different place at every width.
- * Review the hero at each of these before approving a change to it: the text card must not cover the face.
+ * A real photo is cropped into a landscape frame, so a face or focal point lands in a different place at every width.
+ * Review the hero at each of these before approving a change to it: the text card must not cover the subject.
  * Each story embeds the plain hero story in an iframe of the stated size, because the toolbar viewport only
  * applies in the Storybook manager and the page's media queries need a real viewport of that width.
  */

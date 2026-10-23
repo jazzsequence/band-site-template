@@ -8,17 +8,14 @@
  * so a band can re-theme the system by changing its palette; components must not name a hue.
  * The colour tokens, glows and gradients are generated into theme.generated.css from band.config.json
  * (`pnpm theme`), which also enforces WCAG AA on every text/background pair. Fonts, radius and motion
- * stay here. __tests__/colour-token-roles.test.ts fails if a hue-named token or an original-palette
- * literal appears outside the few allowlisted files.
+ * stay here, except --font-wordmark and --font-gothic, which are optional choices in band.config.json.
+ * __tests__/colour-token-roles.test.ts fails if a hue-named token or an original-palette literal appears
+ * outside the few allowlisted files.
  */
 @theme {
   /* Headings. Deliberately not the wordmark face. */
   --font-display: "Encode Sans Expanded", system-ui, sans-serif;
-  /* The PARIS wordmark only (Wordmark component). Nothing else uses this face. */
-  --font-wordmark: "Unbounded Variable", "Arial Black", sans-serif;
   --font-body: "Space Grotesk Variable", system-ui, sans-serif;
-  /* Accent only: kickers and flourishes. NEVER the PARIS name, which is always capitals in --font-wordmark. */
-  --font-gothic: "UnifrakturCook", serif;
 
   --radius-card: 0.25rem;
 

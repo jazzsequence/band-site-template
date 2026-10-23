@@ -3,7 +3,7 @@
   "root": {
     "props": {
       "title": "Albums",
-      "description": "The PARIS catalogue: albums, EP, B-sides and unreleased recordings."
+      "description": "Albums, EPs and unreleased recordings."
     }
   },
   "content": [

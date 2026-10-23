@@ -24,8 +24,8 @@ function policyErrors(page: Page) {
 }
 
 for (const [route, label, pins] of [
-  ["/tickets/sf-1997-10-07", "Where Roderick's Chamber is", 1],
-  ["/tour", "Tour map", 9],
+  ["/tickets/sample-city-2027-03-12", "Where Example Hall is", 1],
+  ["/tour", "Tour map", 2],
 ] as const) {
   test.describe(route, () => {
     test("asks nobody for a map until Show map is clicked", async ({ page }) => {

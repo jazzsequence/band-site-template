@@ -15,7 +15,7 @@ test.describe("below 1024px: hamburger menu", () => {
     await menuButton(page).click();
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "true");
     await expect(nav(page)).toBeVisible();
-    for (const name of ["Tour", "Listen", "Albums", "Lyrics", "Well Enough", "Press", "Bio", "Merch"]) {
+    for (const name of ["Tour", "Listen", "Albums", "Lyrics", "Press", "Bio", "Merch"]) {
       await expect(nav(page).getByRole("link", { name })).toBeVisible();
     }
   });
@@ -71,6 +71,6 @@ test.describe("1024px and up: inline links", () => {
     await page.goto("/");
     await expect(menuButton(page)).toBeHidden();
     await expect(nav(page)).toBeVisible();
-    await expect(nav(page).getByRole("link")).toHaveCount(8);
+    await expect(nav(page).getByRole("link")).toHaveCount(7);
   });
 });

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("p1_logged_in", "1"));
 });
 
-for (const route of ["/e2e-fixtures/home", "/e2e-fixtures/listen", "/e2e-fixtures/well-enough"]) {
+for (const route of ["/e2e-fixtures/home", "/e2e-fixtures/listen", "/e2e-fixtures/albums-debut"]) {
   test(`the editor pill does not overlap the header on ${route}`, async ({ page }) => {
     await page.goto(route);
     const pill = page.locator("[data-p1-widget] > button");

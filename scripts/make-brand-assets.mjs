@@ -3,9 +3,11 @@
  *
  * app/   icon.png, icon.svg, apple-icon.png, favicon.ico   (Next file conventions)
  * public/icons/   icon-192.png, icon-512.png, icon-maskable-512.png   (referenced by app/manifest.ts)
- * public/og-default.jpg   1200x630 social card
+ * public/og-default.png   1200x630 social card
  *
- * The mark is a bold "P" in Unbounded (the wordmark face) on the site's near-black with an accent bar.
+ * The mark is the band name's first letter in Unbounded on the site's darkest surface with an accent bar, and the
+ * card is the name on a surface gradient. Name and colours come from band.config.json and the generated theme
+ * (run `pnpm theme` first if you changed the palette), so a re-themed band gets matching assets.
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -18,11 +20,20 @@ const require = createRequire(import.meta.url);
 const unbounded = (file) =>
   path.join(path.dirname(require.resolve("@fontsource-variable/unbounded/package.json")), "files", file);
 const fontData = readFileSync(unbounded("unbounded-latin-wght-normal.woff2")).toString("base64");
-const photo = readFileSync("public/images/paris-on-stage.jpg").toString("base64");
 
-const INK = "#07050d";
-const METAL_HI = "#f1effa";
-const ACCENT = "#ff3fa4";
+const { band } = JSON.parse(readFileSync("band.config.json", "utf8"));
+const theme = readFileSync("design-system/theme.generated.css", "utf8");
+const token = (name) => theme.match(new RegExp(`--color-${name}: (#[0-9a-f]{6});`))?.[1] ?? (() => { throw new Error(`--color-${name} not found in theme.generated.css; run pnpm theme`); })();
+const INK = token("void");
+const SURFACE = token("surface");
+const RAISED = token("raised");
+const METAL_HI = token("metal-hi");
+const ACCENT = token("accent");
+const NAME = band.name;
+const INITIAL = [...NAME][0].toUpperCase();
+const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+// Unbounded is wide; shrink the card title so a long name still fits inside the margins.
+const TITLE_SIZE = Math.max(56, Math.min(168, Math.floor(1056 / ([...NAME].length * 0.9))));
 
 const fontFace = `@font-face { font-family: U; src: url(data:font/woff2;base64,${fontData}); font-weight: 200 900; }`;
 
@@ -33,19 +44,15 @@ const iconHtml = (size, { round, scale }) => `<!doctype html><meta charset="utf-
     display: grid; place-items: center; border-radius: ${round ? size * 0.2 : 0}px; }
   .icon span { font: 800 ${size * scale}px/1 U; color: ${METAL_HI}; letter-spacing: -0.05em; transform: translate(-1%, -6%); }
   .icon i { position: absolute; left: 0; right: 0; bottom: 0; height: ${size * 0.13}px; background: ${ACCENT}; }
-</style><div class="icon"><span>P</span><i></i></div>`;
+</style><div class="icon"><span>${esc(INITIAL)}</span><i></i></div>`;
 
 const ogHtml = `<!doctype html><meta charset="utf-8"><style>
   ${fontFace}
   html, body { margin: 0; }
-  .card { width: 1200px; height: 630px; position: relative; overflow: hidden; background: ${INK}; }
-  .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 6%; }
-  .card .shade { position: absolute; inset: 0;
-    background: linear-gradient(90deg, rgba(7,5,13,.92) 0%, rgba(7,5,13,.55) 38%, rgba(7,5,13,0) 68%),
-                linear-gradient(0deg, rgba(7,5,13,.85) 0%, rgba(7,5,13,0) 40%); }
-  .card h1 { position: absolute; left: 72px; bottom: 64px; margin: 0; font: 800 168px/1 U; letter-spacing: -0.05em; color: ${METAL_HI}; }
+  .card { width: 1200px; height: 630px; position: relative; overflow: hidden; background: linear-gradient(135deg, ${INK} 0%, ${SURFACE} 45%, ${RAISED} 100%); }
+  .card h1 { position: absolute; left: 72px; right: 72px; bottom: 64px; margin: 0; font: 800 ${TITLE_SIZE}px/1 U; letter-spacing: -0.05em; text-transform: uppercase; color: ${METAL_HI}; }
   .card .bar { position: absolute; left: 72px; bottom: 40px; width: 150px; height: 8px; background: ${ACCENT}; }
-</style><div class="card"><img src="data:image/jpeg;base64,${photo}"><div class="shade"></div><h1>PARIS</h1><div class="bar"></div></div>`;
+</style><div class="card"><h1>${esc(NAME)}</h1><div class="bar"></div></div>`;
 
 const browser = await chromium.launch();
 const shoot = async (html, w, h, selector) => {
@@ -53,7 +60,7 @@ const shoot = async (html, w, h, selector) => {
   await page.setContent(html);
   await page.evaluate(() => document.fonts.load("800 64px U"));
   await page.evaluate(() => document.fonts.ready);
-  const buf = await page.locator(selector).screenshot({ omitBackground: true, type: selector === ".card" ? "jpeg" : "png", ...(selector === ".card" ? { quality: 88 } : {}) });
+  const buf = await page.locator(selector).screenshot({ omitBackground: true, type: "png" });
   await page.close();
   return buf;
 };
@@ -67,7 +74,7 @@ writeFileSync("public/icons/icon-192.png", await icon(192));
 writeFileSync("public/icons/icon-512.png", await icon(512));
 // Maskable: full bleed, with the mark inside the central 80% safe zone.
 writeFileSync("public/icons/icon-maskable-512.png", await icon(512, { round: false, scale: 0.5 }));
-writeFileSync("public/og-default.jpg", await shoot(ogHtml, 1200, 630, ".card"));
+writeFileSync("public/og-default.png", await shoot(ogHtml, 1200, 630, ".card"));
 
 // SVG favicon: outline the glyph so it does not depend on the font being installed.
 // opentype.js reads WOFF but not WOFF2, so this uses the static 800 weight from @fontsource/unbounded.
@@ -78,7 +85,7 @@ const staticFont = path.join(
 const raw = readFileSync(staticFont);
 const font = opentype.parse(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
 const fontSize = 512 * 0.64;
-const glyph = font.getPath("P", 0, 0, fontSize);
+const glyph = font.getPath(INITIAL, 0, 0, fontSize);
 const box = glyph.getBoundingBox();
 // Centre horizontally, and sit slightly above centre to leave room for the bar (matches the PNGs).
 const dx = (512 - (box.x2 - box.x1)) / 2 - box.x1 - 512 * 0.01;
@@ -89,7 +96,7 @@ glyph.commands.forEach((c) => {
 });
 writeFileSync(
   "app/icon.svg",
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>PARIS</title>` +
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>${esc(NAME)}</title>` +
     `<clipPath id="r"><rect width="512" height="512" rx="102"/></clipPath>` +
     `<g clip-path="url(#r)"><rect width="512" height="512" fill="${INK}"/>` +
     `<path d="${glyph.toPathData(2)}" fill="${METAL_HI}"/>` +

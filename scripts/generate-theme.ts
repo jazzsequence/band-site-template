@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BandConfigError, typography } from "../lib/band/config";
 import { PaletteError, renderThemeCss, resolvePalette, validatePalette } from "../lib/theme/palette";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,7 +21,7 @@ try {
   const config = JSON.parse(readFileSync(path.join(root, "band.config.json"), "utf-8")) as { palette?: unknown };
   const { palette, adjustments } = resolvePalette(validatePalette(config.palette));
   for (const a of adjustments) console.warn(`adjusted ${a.key}: ${a.from} -> ${a.to} (${a.reason})`);
-  const css = renderThemeCss(palette);
+  const css = renderThemeCss(palette, typography);
 
   if (process.argv.includes("--check")) {
     let current = "";
@@ -38,6 +39,6 @@ try {
     console.log(`wrote design-system/theme.generated.css${adjustments.length ? ` (${adjustments.length} colour(s) adjusted for contrast)` : ""}`);
   }
 } catch (e) {
-  console.error(e instanceof PaletteError ? e.message : e);
+  console.error(e instanceof PaletteError || e instanceof BandConfigError ? e.message : e);
   process.exit(1);
 }

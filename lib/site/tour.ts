@@ -73,7 +73,7 @@ const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "
 const LONG_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-/** Parses the ISO string by hand: `new Date("1997-10-07")` is UTC and shifts a day in US timezones. */
+/** Parses the ISO string by hand: `new Date("2027-03-12")` is UTC and shifts a day in US timezones. */
 const parts = (iso: string) => {
   const [y, m, d] = iso.split("-").map(Number);
   return { year: y, month: m - 1, day: d, weekday: new Date(Date.UTC(y, m - 1, d)).getUTCDay() };

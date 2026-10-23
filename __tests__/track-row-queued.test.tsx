@@ -7,7 +7,7 @@ import { TrackRow } from "../design-system/components/TrackRow";
 const ACCENT = /text-accent(?![\w-])/;
 
 const row = (justQueued?: boolean) =>
-  renderToStaticMarkup(<TrackRow number={2} title="Second Shift" duration="3:10" onQueue={() => {}} justQueued={justQueued} />);
+  renderToStaticMarkup(<TrackRow number={2} title="Second Song" duration="3:10" onQueue={() => {}} justQueued={justQueued} />);
 
 describe("TrackRow just queued", () => {
   it("shows the plus until the track is added, then a check in the accent colour", () => {
@@ -21,7 +21,7 @@ describe("TrackRow just queued", () => {
   });
 
   it("keeps the same accessible name, so a screen reader is not told twice (the live region says it)", () => {
-    expect(row(true)).toContain('aria-label="Add Second Shift to queue"');
-    expect(row(false)).toContain('aria-label="Add Second Shift to queue"');
+    expect(row(true)).toContain('aria-label="Add Second Song to queue"');
+    expect(row(false)).toContain('aria-label="Add Second Song to queue"');
   });
 });

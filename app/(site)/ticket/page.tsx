@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { Page } from "../../../components/site/section";
 import { PrintButton } from "../../../components/site/print-button";
 import { ButtonLink } from "../../../design-system/components/Button";
 import { TicketCard } from "../../../design-system/components/TicketCard";
+import { features } from "../../../lib/band/config";
 import { getShowById } from "../../../lib/site/p1-content";
 import { longDate } from "../../../lib/site/tour";
 import { pageMetadata } from "../../../lib/site/seo";
@@ -15,6 +17,7 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) 
 
 /** The e-ticket is rendered entirely from the URL, so there is nothing to store or look up. */
 export default async function Ticket({ searchParams }: Props) {
+  if (!features.tour) notFound();
   const sp = await searchParams;
   const show = await getShowById(one(sp.show));
   const order = one(sp.order).replace(/[^A-Z0-9-]/gi, "").slice(0, 24);

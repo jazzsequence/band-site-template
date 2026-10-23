@@ -23,7 +23,7 @@ const origin = (url: string | undefined, fallback: string) => {
  * nonces means threading a nonce through the P1 middleware, which is not worth it for a site with no
  * user-supplied content or accounts. The CSP is production-only because the dev server needs eval.
  */
-const audioOrigin = origin(process.env.NEXT_PUBLIC_AUDIO_BASE_URL, "https://music.paris.jazzsequence.com");
+const audioOrigin = origin(process.env.NEXT_PUBLIC_AUDIO_BASE_URL, "https://audio.example.com");
 const p1Origin = origin(process.env.NEXT_PUBLIC_CSS_BASE_URL, "https://ccr.p1.pantheon.io");
 
 const csp = [

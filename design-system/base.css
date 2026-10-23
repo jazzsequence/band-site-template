@@ -1,7 +1,7 @@
 /*
  * Global element rules for the public site and Storybook: page colour, body font, focus ring, reduced motion.
  * Kept out of ds.css on purpose: ds.css is also loaded inside the P1 editor, and these rules would restyle
- * the editor's own interface. Import this only where the PARIS look should apply to the whole document.
+ * the editor's own interface. Import this only where the design system look should apply to the whole document.
  */
 @layer base {
   /* Honour the OS "reduce motion" setting: hover scales, glows and fades become instant. */

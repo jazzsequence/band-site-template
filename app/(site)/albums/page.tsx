@@ -8,7 +8,7 @@ import { P1Page } from "../../../components/site/p1-page";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
-export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Albums", description: "The PARIS catalogue: albums, EP, B-sides and unreleased recordings.", path: "/albums" });
+export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Albums", description: "Albums, EPs and unreleased recordings.", path: "/albums" });
 
 function AlbumsFallback() {
   return (
@@ -24,7 +24,7 @@ function AlbumsFallback() {
             trackCount={a.tracks.length}
             featured={a.featured}
             headingLevel="h2"
-            href={a.featured ? "/well-enough" : `/albums/${a.slug}`}
+            href={`/albums/${a.slug}`}
           />
         ))}
       </div>

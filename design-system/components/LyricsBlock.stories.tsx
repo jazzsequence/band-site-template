@@ -6,11 +6,11 @@ const meta = { title: "Components/LyricsBlock", component: LyricsBlock } satisfi
 export default meta;
 export const Default: StoryObj<typeof meta> = {
   args: {
-    title: "Consent of the Quiet",
-    album: "Well Enough",
+    title: "First Song",
+    album: "Debut Album",
     sections: [
-      { label: "Pre-Chorus", lines: ["Don’t scream", "They love you better when you don’t scream"] },
-      { label: "Chorus", lines: ["You didn’t rule us", "We let you", "You didn’t own us", "We bent"] },
+      { label: "Verse 1", lines: ["Placeholder line one", "Placeholder line two"] },
+      { label: "Chorus", lines: ["Placeholder chorus line one", "Placeholder chorus line two"] },
     ],
   },
 };
