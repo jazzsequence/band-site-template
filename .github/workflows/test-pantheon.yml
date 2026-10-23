@@ -1,7 +1,8 @@
 name: Test
 
 # Runs entirely on the runner: lint, typecheck, unit tests, a production build with placeholder
-# credentials, axe/keyboard e2e and a Storybook build. It needs no secrets and no Pantheon environment.
+# credentials and axe/keyboard e2e. It needs no secrets and no Pantheon environment. Storybook is built
+# by storybook-preview.yml on every PR, so it is not repeated here.
 # There is deliberately no "test the deployed site" job: a template has no site to deploy, and the
 # job would fail every PR. A site built from the template can add one back (wait for pr-N, check 200).
 
@@ -83,11 +84,6 @@ jobs:
           path: test-results/
           if-no-files-found: ignore
 
-      - name: Build Storybook
-        id: storybook
-        continue-on-error: true
-        run: pnpm build-storybook
-
       - name: Report status
         if: always()
         run: |
@@ -99,9 +95,8 @@ jobs:
             echo "- **Unit tests:** ${{ steps.unit-tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }}"
             echo "- **Build:** ${{ steps.build.outcome == 'success' && '✅ Passed' || '❌ Failed' }}"
             echo "- **Accessibility (axe, keyboard, focus):** ${{ steps.a11y.outcome == 'success' && '✅ Passed' || '❌ Failed' }}"
-            echo "- **Storybook build:** ${{ steps.storybook.outcome == 'success' && '✅ Passed' || '❌ Failed' }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Fail workflow if any checks failed
-        if: steps.lint.outcome != 'success' || steps.typecheck.outcome != 'success' || steps.unit-tests.outcome != 'success' || steps.build.outcome != 'success' || steps.a11y.outcome != 'success' || steps.storybook.outcome != 'success'
+        if: steps.lint.outcome != 'success' || steps.typecheck.outcome != 'success' || steps.unit-tests.outcome != 'success' || steps.build.outcome != 'success' || steps.a11y.outcome != 'success'
         run: exit 1
