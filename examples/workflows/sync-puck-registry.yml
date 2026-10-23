@@ -1,9 +1,14 @@
-# Optional: syncs this site's Puck component registry to the backend
-# headlessly on every push, without anyone needing to open the editor.
+# EXAMPLE, NOT ACTIVE. This file lives in examples/workflows/ so GitHub does not run it. The template has
+# no P1 site to sync to, so the workflow failed on every push that touched components/puck/**. A site built
+# from the template installs it once it has its own P1 site (the /init-band skill does this):
 #
-# Requires repo secrets CSS_BASE_URL, CSS_SITE_ID and CSS_REGISTRY_API_KEY
-# (a "Component registry sync" token; never reuse the site's read token).
-# Until they exist this workflow fails on pushes that touch the paths below.
+#   1. Copy it to .github/workflows/sync-puck-registry.yml.
+#   2. Add repo secrets CSS_BASE_URL, CSS_SITE_ID and CSS_REGISTRY_API_KEY for THAT site's P1 (a
+#      "Component registry sync" token; never reuse the site's read token, and never another site's values:
+#      the sync would write this repo's components into that site).
+#
+# Optional: syncs this site's Puck component registry to the backend headlessly on every push, without
+# anyone needing to open the editor. With the secrets missing it fails on pushes that touch the paths below.
 #
 # Triggers on push to any branch that touches puck.config.tsx or
 # components/puck/**. The sync script resolves the target branch from the
