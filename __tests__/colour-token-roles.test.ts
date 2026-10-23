@@ -33,7 +33,6 @@ const PALETTE_LITERAL = /#(?:ff3fa4|a98bff|3ef0ff|f1effa|8d8aa6|d9d6ea)\b|rgb\(\
 const PALETTE_LITERAL_ALLOWED: Record<string, string> = {
   "design-system/theme.generated.css": "generated from band.config.json",
   "band.config.json": "the palette values: the single source the theme CSS is generated from",
-  "design-system/Foundations.stories.tsx": "documents the swatches; replaced when the story renders the active palette",
   "scripts/make-brand-assets.mjs": "generates the favicon and social card, which cannot read CSS variables",
   "app/icon.svg": "generated brand asset",
   "e2e/hero-contrast.spec.ts": "measures contrast against the token values",

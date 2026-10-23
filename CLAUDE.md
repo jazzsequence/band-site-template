@@ -169,6 +169,8 @@ regression fixture: they must come out unchanged.
   `metal-hi`). `dim` is held to 4.5:1 too, stricter than the 3:1 a secondary-text token could claim. A failing colour is lifted in OKLCH lightness (same hue, `lib/theme/contrast.ts`) and
   reported on stderr; an unrepairable palette (for example a light surface, since the system is dark-only) is rejected with the reason and nothing is written. The generator never emits a failing
   palette. Note the generated file holds the adjusted values while the config keeps what the author wrote.
+- **Storybook.** Foundations > Color and type renders the active palette (swatches with ratios), a table of every gated pair, and a deliberately failing example showing what the lift does. They read
+  `band.config.json` through the same generator code, so they cannot drift from the real tokens.
 - **Staleness.** `__tests__/theme-palette.test.ts` fails if `theme.generated.css` is not what the config produces. `build` does not run the generator (production builds should not need `tsx`);
   `dev` and `storybook` do.
 - **Roles only.** Components use `accent`, `accent-2`, `accent-3` and `metal`, never a hue; `__tests__/colour-token-roles.test.ts` fails if a hue-named token returns or an original-palette literal
