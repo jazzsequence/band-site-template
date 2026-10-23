@@ -1,0 +1,17 @@
+{
+  "palette": {
+    "void": "#07050d",
+    "surface": "#0e0a18",
+    "raised": "#17112a",
+    "line": "#2c2250",
+    "text": "#f5f0ff",
+    "muted": "#b9aed6",
+    "dim": "#8f84ad",
+    "accent": "#ff3fa4",
+    "accent-2": "#a98bff",
+    "accent-3": "#3ef0ff",
+    "metal-hi": "#f1effa",
+    "metal-mid": "#d9d6ea",
+    "metal-lo": "#8d8aa6"
+  }
+}

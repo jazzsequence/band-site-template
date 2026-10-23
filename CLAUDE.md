@@ -42,12 +42,13 @@ How this fits the rest of this file:
 
 | Command | Purpose |
 |---|---|
-| `pnpm dev` | Dev server (needs `.env`, see `.env.example`). Like `build`, `storybook` and `build-storybook`, it first runs `scripts/copy-maplibre-worker.mjs` (see the tour map bullet) |
+| `pnpm dev` | Dev server (needs `.env`, see `.env.example`). Like `build`, `storybook` and `build-storybook`, it first runs `scripts/copy-maplibre-worker.mjs` (see the tour map bullet); `dev` and `storybook` also run `pnpm theme` first |
 | `pnpm lint` / `pnpm typecheck` / `pnpm test` | Required before presenting changes |
 | `pnpm build` | Production build; works with placeholder `NEXT_PUBLIC_CSS_SITE_ID` and `CSS_API_KEY`. First copies MapLibre's worker files into gitignored `public/maplibre/` |
 | `pnpm test:e2e` (alias `test:a11y`; `P1_LIVE=1` runs against live P1 content using the credentials in `.env`, default is repo-copy only) | Playwright: axe, keyboard, navigation and favicon checks against the standalone build (run `pnpm build` first; kill any stale server on :3100). Build and run with CI's placeholders and an unroutable base URL: `CSS_API_KEY=ci-placeholder CSS_API_KEY_LIVE= NEXT_PUBLIC_CSS_SITE_ID=00000000-0000-0000-0000-000000000000 NEXT_PUBLIC_CSS_BASE_URL=http://127.0.0.1:9 pnpm build`, then the same variables with `pnpm test:e2e` (see `test-pantheon.yml`). Never point a placeholder run at `ccr.p1.pantheon.io` (see "No P1 traffic from placeholders" under Architecture). A build that loads the real credentials from `.env` prerenders the published P1 pages, so the e2e run then tests those instead of the repo copies (seen on `/albums/ep`: album pages are prerendered at build and served until `revalidate = 300`) |
 | `pnpm storybook` / `pnpm build-storybook` | Design system (`design-system/`, config in `.storybook/`); copies MapLibre's worker into `public/maplibre/` first |
-| `pnpm sync:registry` | Push Puck registry to P1 (CI does this) |
+| `pnpm theme` | Generate `design-system/theme.generated.css` from the palette in `band.config.json` (see "Palette" under the design approval workflow). `--check` (`tsx scripts/generate-theme.ts --check`) fails if the committed file is stale |
+| `pnpm sync:registry` | Push Puck registry to P1 (needs `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY`; CI does it once the example workflow is installed) |
 
 ## Architecture decisions
 
@@ -66,7 +67,7 @@ How this fits the rest of this file:
   say the same as the code versions, have one h1, pass axe and load every image. Every design-system component must be mapped to a block or
   an exclusion reason in `__tests__/design-system-coverage.test.ts`. P1 has no
   templates/datasources here and the MCP cannot create them, so structured data lives in block array fields. Registry
-  sync: `pnpm sync:registry` (CI) or the P1 MCP `sync_components`; `fast-json-patch` is patched (`patches/`) because tsx
+  sync: `pnpm sync:registry` or the P1 MCP `sync_components` (CI does it on a site that has installed the example workflow); `fast-json-patch` is patched (`patches/`) because tsx
   otherwise loads its unshipped `index.ts`. Do NOT create P1 workstreams alongside code PRs (decided with the owner: two histories, ordering bugs, merged-workstream reuse). Code merges and deploys first; pages are then created directly in P1 by the owner's instruction. Never publish or edit live P1 content unprompted.
 - **`/press/kit` is P1-only:** created by the owner in P1 (Article-based, no `content/p1-pages` file and no code fallback), linked from the footer, listed in the sitemap and `llms.txt`, and checked by axe only with `A11Y_P1_ROUTES=1`. Without P1 it does not exist, so on live it must be published before a promotion.
 - **How P1 content reaches live:** there is one P1 site and every Pantheon environment reads it; only the API key differs (drafts key off live, published-only
@@ -150,12 +151,30 @@ Show map. The published P1 `/privacy` page is a separate copy: it got the same s
 
 - `test-pantheon.yml`: lint, typecheck, unit, build, accessibility (Playwright + axe), all on the runner with placeholder credentials. There is no deployed-site check (a template has no site; it failed every PR). Sites built from the template may add one. Storybook is built only by `storybook-preview.yml` (every PR), not here.
 - `promote-pantheon.yml`: push to `test` or `live` branch tags `pantheon_test_N` / `pantheon_live_N`.
-- `sync-puck-registry.yml`: needs secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY`; skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry).
+- `examples/workflows/sync-puck-registry.yml`: inactive example (GitHub only runs `.github/workflows/`) of the headless registry sync. The template has no P1 site, so it would fail every push touching `components/puck/**`. A site built from the template installs it once it has its own P1 site and secrets `CSS_BASE_URL`, `CSS_SITE_ID`, `CSS_REGISTRY_API_KEY` (per site, never another site's); the `/init-band` skill is meant to do this. Skipped for Dependabot pushes (its runs see only Dependabot secrets, and it never edits the registry). Until installed, sync with `pnpm sync:registry` locally or the P1 MCP `sync_components`.
 - `storybook-preview.yml`: per-PR preview at `https://<owner>.github.io/paris-site/pr-N/` (gh-pages; needs
   Pages enabled, which needs a public repo or paid plan).
-- Repo secrets needed: `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret), plus the three above.
+- Repo secrets (a site built from the template, not the template itself): `PANTHEON_MACHINE_TOKEN` (also as a Dependabot secret) for `promote-pantheon.yml` and the example deployed-site check, plus the three registry-sync secrets above when that example is installed. The template repo needs none; its CI runs on placeholders.
 - `dependabot.yml`: weekly (Monday) npm and GitHub Actions updates, minor and patch grouped, a 14-day cooldown (the "no release under two weeks old" rule; it applies to version updates only, security updates bypass it). TypeScript 7 and ESLint 10 are ignored, with the blockers copied from jazz-nextjs, which runs the same stack: not re-tested here, so lift an entry by trying the update on a PR environment. A `versions:` ignore also hides security-update PRs for that range, so keep Dependabot alerts enabled (a repo setting, not in this file). Dependabot PRs are ordinary PRs into `main`: squash-merge them. `@pantheon-systems/nextjs-cache-handler` is deliberately not ignored (owner's call: 0.11.0 works here); jazz-nextjs runs 0.11.0 with a bounded initialise and keeps live on 0.9.0 after 0.11.0 took its live site down on a large cache, whereas `cacheHandler.mjs` here is unbounded, so revisit if live shows restarts.
 - `examples/workflows/test-deployed-site.yml`: an inactive example (GitHub only runs `.github/workflows/`) of the check the template dropped: wait for Pantheon to build `pr-N`/`dev`, then expect 200. A site built from the template installs it once the Pantheon site and `PANTHEON_MACHINE_TOKEN` (Actions and Dependabot secrets) exist; the `/init-band` skill is meant to do this. Its header lists the steps. Add it as a required check only after it passes.
+
+## Palette
+
+`band.config.json` is the source of truth for colour: 13 roles (`void`, `surface`, `raised`, `line`, `text`, `muted`, `dim`, `accent`, `accent-2`, `accent-3`,
+`metal-hi`, `metal-mid`, `metal-lo`) as `#rrggbb`. `pnpm theme` writes `design-system/theme.generated.css` (the `@theme` colour tokens, the glow shadows and the
+`--grad-accent`/`--grad-metal` gradients), which `ds.css` imports. Never edit the generated file; edit the config and regenerate. The PARIS values in the config are the
+regression fixture: they must come out unchanged.
+
+- **Accessibility gate (`lib/theme/palette.ts`).** Every text colour must reach WCAG AA (4.5:1) on all three surfaces, and `void` text on the fills that carry it (`accent`, `accent-3`,
+  `metal-hi`). `dim` is held to 4.5:1 too, stricter than the 3:1 a secondary-text token could claim. A failing colour is lifted in OKLCH lightness (same hue, `lib/theme/contrast.ts`) and
+  reported on stderr; an unrepairable palette (for example a light surface, since the system is dark-only) is rejected with the reason and nothing is written. The generator never emits a failing
+  palette. Note the generated file holds the adjusted values while the config keeps what the author wrote.
+- **Storybook.** Foundations > Color and type renders the active palette (swatches with ratios), a table of every gated pair, and a deliberately failing example showing what the lift does. They read
+  `band.config.json` through the same generator code, so they cannot drift from the real tokens.
+- **Staleness.** `__tests__/theme-palette.test.ts` fails if `theme.generated.css` is not what the config produces. `build` does not run the generator (production builds should not need `tsx`);
+  `dev` and `storybook` do.
+- **Roles only.** Components use `accent`, `accent-2`, `accent-3` and `metal`, never a hue; `__tests__/colour-token-roles.test.ts` fails if a hue-named token returns or an original-palette literal
+  appears outside its justified allowlist.
 
 ## Design approval workflow
 
