@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { features } from "./helpers/config";
+
 /**
  * The P1 versions of the pages, rendered from content/p1-pages/*.json through the real P1 pipeline (the
  * test-only /e2e-fixtures route), checked against the code versions they replace. CI has no P1 credentials,
@@ -14,8 +16,8 @@ const PAIRS: [fixture: string, route: string][] = [
   ["albums-first-ep", "/albums/first-ep"],
   ["albums-debut", "/albums/debut"],
   ["albums-unreleased", "/albums/unreleased"],
-  ["lyrics", "/lyrics"],
-  ["press", "/press"],
+  ...(features.lyrics ? ([["lyrics", "/lyrics"]] as [string, string][]) : []),
+  ...(features.press ? ([["press", "/press"]] as [string, string][]) : []),
   ["privacy", "/privacy"],
 ];
 
@@ -71,6 +73,8 @@ test("catalog blocks are driven by the catalog, not typed text", async ({ page }
   await page.goto("/e2e-fixtures/albums-first-ep");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("First EP");
   await expect(page.getByRole("listitem").filter({ hasText: "Opening Track" })).toBeVisible();
-  await page.goto("/e2e-fixtures/lyrics");
-  expect(await page.getByRole("link", { name: /First Song/ }).count()).toBeGreaterThan(0);
+  if (features.lyrics) {
+    await page.goto("/e2e-fixtures/lyrics");
+    expect(await page.getByRole("link", { name: /First Song/ }).count()).toBeGreaterThan(0);
+  }
 });

@@ -1,11 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-import { band } from "./helpers/config";
+import { band, features, when } from "./helpers/config";
 
 /** Pages that render in a normal session; /ticket needs query parameters. */
 const pages = [
-  "/", "/albums", "/albums/first-ep", "/albums/unreleased", "/listen", "/lyrics", "/lyrics/first-song",
-  "/tour", "/tickets/sample-city-2027-03-12", "/ticket?show=sample-city-2027-03-12&name=Test&qty=1&order=PRS-TEST01", "/press", "/bio", "/merch", "/privacy",
+  "/", "/albums", "/albums/first-ep", "/albums/unreleased", "/listen", "/bio", "/privacy",
+  ...when("lyrics", "/lyrics", "/lyrics/first-song"),
+  ...when("tour", "/tour", "/tickets/sample-city-2027-03-12", "/ticket?show=sample-city-2027-03-12&name=Test&qty=1&order=PRS-TEST01"),
+  ...when("press", "/press"),
+  ...when("merch", "/merch"),
 ];
 
 test.describe("security headers", () => {
@@ -62,8 +65,8 @@ test.describe("discovery files", () => {
   test("sitemap lists pages, albums and lyrics but not the private ticket page", async ({ request }) => {
     const body = await (await request.get("/sitemap.xml")).text();
     expect(body).toContain("/albums/first-ep");
-    expect(body).toContain("/lyrics/first-song");
-    expect(body).toContain("/tickets/sample-city-2027-03-12");
+    if (features.lyrics) expect(body).toContain("/lyrics/first-song");
+    if (features.tour) expect(body).toContain("/tickets/sample-city-2027-03-12");
     expect(body).not.toMatch(/\/ticket<\/loc>/);
   });
 
