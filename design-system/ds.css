@@ -3,10 +3,12 @@
    Tailwind CSS @import, so the Storybook build shipped no font files and fell back to system fonts. */
 
 /*
- * PARIS design tokens. Dark only. Neon on near-black with a violet cast, taken from the
- * stage photography (magenta / violet / electric blue light on chrome and black leather),
- * plus a cold silver "chrome" neutral. Every text/background pair below clears WCAG AA;
- * ratios are noted against --color-surface (#0e0a18).
+ * Design tokens. Dark only. Colours are named by role (accent, accent-2, accent-3, metal), never by hue,
+ * so a band can re-theme the system by changing the values; components must not name a hue. The values
+ * below are the PARIS palette: neon on near-black with a violet cast, plus a cold silver metal neutral.
+ * __tests__/colour-token-roles.test.ts fails if a hue-named token or a literal from this palette appears
+ * outside the few allowlisted files. Every text/background pair below clears WCAG AA; ratios are noted against
+ * --color-surface (#0e0a18).
  */
 @theme {
   /* Surfaces */
@@ -31,13 +33,6 @@
   --color-metal-lo: #8d8aa6;
   --color-metal-mid: #d9d6ea;
 
-  /* TEMPORARY aliases for the old hue names, removed once every file uses the roles. */
-  --color-magenta: var(--color-accent);
-  --color-violet: var(--color-accent-2);
-  --color-cyan: var(--color-accent-3);
-  --color-chrome-hi: var(--color-metal-hi);
-  --color-chrome-lo: var(--color-metal-lo);
-
   /* Headings. Deliberately not the wordmark face. */
   --font-display: "Encode Sans Expanded", system-ui, sans-serif;
   /* The PARIS wordmark only (Wordmark component). Nothing else uses this face. */
@@ -49,8 +44,6 @@
   --radius-card: 0.25rem;
   --shadow-glow-accent: 0 0 24px color-mix(in srgb, var(--color-accent) 45%, transparent);
   --shadow-glow-accent-3: 0 0 24px color-mix(in srgb, var(--color-accent-3) 35%, transparent);
-  --shadow-glow-magenta: var(--shadow-glow-accent);
-  --shadow-glow-cyan: var(--shadow-glow-accent-3);
 
   /* A short confirmation sliding up into place (the player bar's notice). Reduced motion turns it off in base.css. */
   --animate-notice-in: notice-in 0.2s ease-out;
@@ -70,20 +63,16 @@
   color-scheme: dark;
   --grad-accent: linear-gradient(110deg, var(--color-accent) 0%, var(--color-accent-2) 55%, var(--color-accent-3) 100%);
   --grad-metal: linear-gradient(180deg, var(--color-metal-hi) 0%, var(--color-metal-lo) 55%, var(--color-metal-mid) 100%);
-  --grad-neon: var(--grad-accent);
-  --grad-chrome: var(--grad-metal);
 }
 
 /* Metal-filled display type */
-.text-metal,
-.text-chrome {
+.text-metal {
   background: var(--grad-metal);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-.text-accent-gradient,
-.text-neon {
+.text-accent-gradient {
   background: var(--grad-accent);
   -webkit-background-clip: text;
   background-clip: text;
