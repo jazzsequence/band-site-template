@@ -153,7 +153,7 @@ All Section A items must pass. All applicable Section B items must pass.
 2. Write the flag as your **last** action, with the Write tool (not a shell redirect; `Write(*)` is allow-listed, so no prompt):
    ```
    Write({
-     file_path: "/Users/chris.reynolds/git/paris-site/reviewer-approved",
+     file_path: "/Users/chris.reynolds/git/band-site-template/reviewer-approved",
      content: "<timestamp> <fingerprint>"
    })
    ```
@@ -163,7 +163,7 @@ All Section A items must pass. All applicable Section B items must pass.
    rejected as the pre-binding format, and a mistyped value is rejected too, so a slip fails closed.
 3. Respond: `✅ APPROVED — approval flag written. Main agent may now commit without restaging.`
 
-**Only the reviewer agent writes `/Users/chris.reynolds/git/paris-site/reviewer-approved`. The main agent must not write it.**
+**Only the reviewer agent writes `/Users/chris.reynolds/git/band-site-template/reviewer-approved`. The main agent must not write it.**
 The integrity of the two-factor system depends on this separation.
 
 ### Transparency
