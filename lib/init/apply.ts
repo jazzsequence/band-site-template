@@ -89,8 +89,16 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   const home = "content/p1-pages/home.json";
   if (await exists(path.join(root, home))) {
-    const doc = JSON.parse(await read(root, home)) as { root?: { props?: Record<string, unknown> } };
+    type Block = { type: string; props: Record<string, unknown> & { actions?: { href?: string }[] } };
+    const doc = JSON.parse(await read(root, home)) as { root?: { props?: Record<string, unknown> }; content?: Block[] };
     doc.root = { ...doc.root, props: { ...doc.root?.props, title: answers.identity.name, description: answers.identity.description } };
+    if (!answers.features.tour) {
+      // The fixture is the home page as designed and must say what the code version says (e2e compares them), so it drops
+      // the tour list and the hero's Tour dates button when that section is off, as the code version does.
+      doc.content = (doc.content ?? [])
+        .filter((b) => b.type !== "TourPreviewBlock")
+        .map((b) => (b.type === "HeroBlock" ? { ...b, props: { ...b.props, actions: (b.props.actions ?? []).filter((a) => a.href !== "/tour") } } : b));
+    }
     files.set(home, `${JSON.stringify(doc, null, 2)}\n`);
   }
 

@@ -41,6 +41,8 @@ async function HomeFallback() {
         kicker="New album"
         title={latest.title}
         blurb="The latest release."
+        // The hero's default buttons include Tour dates, which is a 404 when the tour section is off.
+        actions={features.tour ? undefined : [{ label: "Listen", href: "/listen" }]}
       />
       <Page>
         {features.tour && (

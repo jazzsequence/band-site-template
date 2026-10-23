@@ -81,6 +81,22 @@ describe("applyInit", () => {
     expect(report.written).toContain("band.config.json");
   });
 
+  it("drops the tour list and the hero's Tour dates button from the home fixture when the tour is off, and keeps them when it is on", async () => {
+    const on = tempRepo();
+    await applyInit({ root: on, answers: answers(), run, skipAssets: true });
+    const onHome = JSON.parse(text(on, "content/p1-pages/home.json"));
+    expect(onHome.content.map((b: { type: string }) => b.type)).toContain("TourPreviewBlock");
+    expect(onHome.content[0].props.actions.map((a: { href: string }) => a.href)).toContain("/tour");
+
+    const off = tempRepo();
+    const a = answers() as Record<string, any>;
+    a.features = { tour: false, merch: true, lyrics: true, map: false, press: true };
+    await applyInit({ root: off, answers: a, run, skipAssets: true });
+    const offHome = JSON.parse(text(off, "content/p1-pages/home.json"));
+    expect(offHome.content.map((b: { type: string }) => b.type)).not.toContain("TourPreviewBlock");
+    expect(offHome.content[0].props.actions.map((x: { href: string }) => x.href)).toEqual(["/listen"]);
+  });
+
   it("keeps the off-limits topics out of every file except docs/off-limits.md", async () => {
     const root = tempRepo();
     await applyInit({ root, answers: answers(), run, skipAssets: true });
