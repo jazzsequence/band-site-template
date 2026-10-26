@@ -2,7 +2,7 @@
 
 A website for a band, real or fictional, that you can have running end to end without writing code: tour dates and
 tickets, music with a persistent player, lyrics, albums, press, bio and merch. Built with Next.js 16, edited in
-[P1](https://content.pantheon.io) (Pantheon Content Publisher) with Puck, and hosted on Pantheon. Dark theme only,
+[P1](https://content.pantheon.io) with Puck, and hosted on Pantheon. Dark theme only,
 WCAG 2.2 AA, no cookies, no analytics.
 
 Everything about the band lives in one file, `band.config.json`: its name, which sections exist, its type choices and its
