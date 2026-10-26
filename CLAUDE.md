@@ -44,7 +44,7 @@ How this fits the rest of this file:
   `.githooks/`, `.reviewer-config.sh`, and the checklist at `.claude/REVIEWER_CHECKLIST.md` (moved out of the gitignored `docs/`).
   The checklist's "Project-specific checks" section holds this repo's rules: the editorial rule (against the local off-limits list), the design-system gate (story at the
   relevant sizes, flagged for the owner's Storybook approval), docs/a11y, and P1 content and key rules. Edit it when a rule changes.
-  Re-running the upstream `install.sh` will not overwrite the config or checklist, but will flag `reviewer.md` as locally modified (path edit).
+  Re-running the upstream `install.sh` will not overwrite the config or checklist, but will flag `reviewer.md` as locally modified (it writes the approval flag to `<repo root>/reviewer-approved`, derived from the working directory, where the upstream copy has the installing machine's absolute path; a path like that is wrong in every other checkout, and `__tests__/no-absolute-paths.test.ts` fails if one comes back).
 - Commit trailer stays `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` (the reviewer checks for a co-author line).
 - The hooks cap AI commits at 5 files and 500 inserted lines (lock files excluded), so split work into small logical commits within a PR.
   Merge commits are exempt. Anything inherently larger is the owner's to commit with `USER_COMMIT=1`; ask rather than work around it.

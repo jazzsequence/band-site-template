@@ -155,17 +155,19 @@ All Section A items must pass. All applicable Section B items must pass.
 2. Write the flag as your **last** action, with the Write tool (not a shell redirect; `Write(*)` is allow-listed, so no prompt):
    ```
    Write({
-     file_path: "/Users/chris.reynolds/git/band-site-template/reviewer-approved",
+     file_path: "<repo root>/reviewer-approved",
      content: "<timestamp> <fingerprint>"
    })
    ```
+   `<repo root>` is the absolute path of this repository's root (your primary working directory, the folder that contains `.githooks/`); the
+   Write tool needs an absolute path, and the hook only reads `reviewer-approved` at that root.
    One line: the timestamp, a single space, the fingerprint as printed, no trailing newline.
    The fingerprint binds the approval to the exact staged content, so staging or
    unstaging anything after you write it invalidates the flag. A bare timestamp is
    rejected as the pre-binding format, and a mistyped value is rejected too, so a slip fails closed.
 3. Respond: `✅ APPROVED — approval flag written. Main agent may now commit without restaging.`
 
-**Only the reviewer agent writes `/Users/chris.reynolds/git/band-site-template/reviewer-approved`. The main agent must not write it.**
+**Only the reviewer agent writes `reviewer-approved` (at the repository root). The main agent must not write it.**
 The integrity of the two-factor system depends on this separation.
 
 ### Transparency
