@@ -102,7 +102,7 @@ How this fits the rest of this file:
   P1 pages render inside the `(site)` layout (the catch-all lives under it). That layout supplies the header, footer and player, so a P1 page needs no header or footer block (an Article-only page like `/press` has both). The editor canvas has no layout, so `puckRoot.render` (`components/puck/root.tsx`) wraps the page in the real `SiteHeader` and `SiteFooter` there only (`puck.isEditing`), locked with `inert`, so pages can be built as they will look; on the public site the root adds nothing, so they never double up.
 <!-- template:placeholders:start -->
 - **Placeholders.** The seeded band, albums, shows, lyrics, merch and article are deliberately neutral. Images are solid-colour PNGs in the palette (`node scripts/make-placeholder-images.mjs`:
-  cover, wide, merch, portrait); icons and the social card are drawn from the band name and palette (`node scripts/make-brand-assets.mjs`). Both read the generated theme, so run `pnpm theme` first
+  cover, wide, merch, portrait); icons and the social card are drawn from the band name and palette, in the wordmark face (or the display face as typed) from its static Fontsource files, so `pnpm install` must have run (`node scripts/make-brand-assets.mjs`). Both read the generated theme, so run `pnpm theme` first
   after changing the palette. The seeded tour has one on-sale and one sold-out date so both ticket pages stay covered by tests; the ticket flow (`/tickets/[id]` -> `/ticket?...`) keeps all state in the URL and
   collects nothing. If the band is real, tour venues must be checked against a source before they are added; if it is fictional, say so in `band.fictional` and never present dates as real.
 <!-- template:placeholders:end -->

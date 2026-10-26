@@ -58,7 +58,7 @@ Recorded by \`/init-band\` on ${date}. Change them in \`band.config.json\` (then
 - Secrets are never in files; see "Secrets on Pantheon" below for how each is set.`;
 
   const placeholders = `- **Placeholder content.** The albums, shows, lyrics, merch, bio and press article are still the template's neutral samples until the band replaces them (\`CONTENT.md\` says where).
-  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette
+  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette, in the wordmark face (or the display face as typed) from its static Fontsource files, so \`pnpm install\` must have run
   (\`node scripts/make-brand-assets.mjs\`). Both read the generated theme, so run \`pnpm theme\` first after changing the palette. The seeded tour has one on-sale and one sold-out date
   so both ticket pages stay covered by tests; the ticket flow (\`/tickets/[id]\` -> \`/ticket?...\`) keeps all state in the URL and collects nothing.${id.fictional ? " Tour dates are fictional and must never be presented as real." : " Real tour venues must be checked against a source before they are added."}`;
 
