@@ -15,6 +15,7 @@ import { AnswersError, parseAnswers } from "./answers";
 import { renderClaudeMd } from "./claude-md";
 import { fontFileProblems, syncFontPackages, type PackageJson } from "./font-packages";
 import { lookupFont, type FontInfo } from "./fonts";
+import { withoutTour, type Block } from "./p1-pages";
 import { renderReadme } from "./readme";
 import { secretsChecklist, type SecretStep } from "./checklist";
 import { resolveTypeAnswers } from "./type-answers";
@@ -134,15 +135,12 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   const home = "content/p1-pages/home.json";
   if (await exists(path.join(root, home))) {
-    type Block = { type: string; props: Record<string, unknown> & { actions?: { href?: string }[] } };
     const doc = JSON.parse(await read(root, home)) as { root?: { props?: Record<string, unknown> }; content?: Block[] };
     doc.root = { ...doc.root, props: { ...doc.root?.props, title: answers.identity.name, description: answers.identity.description } };
     if (!answers.features.tour) {
       // The fixture is the home page as designed and must say what the code version says (e2e compares them), so it drops
       // the tour list and the hero's Tour dates button when that section is off, as the code version does.
-      doc.content = (doc.content ?? [])
-        .filter((b) => b.type !== "TourPreviewBlock")
-        .map((b) => (b.type === "HeroBlock" ? { ...b, props: { ...b.props, actions: (b.props.actions ?? []).filter((a) => a.href !== "/tour") } } : b));
+      doc.content = withoutTour(doc.content ?? []);
     }
     files.set(home, `${JSON.stringify(doc, null, 2)}\n`);
   }
