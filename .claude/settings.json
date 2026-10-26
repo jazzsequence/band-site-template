@@ -6,8 +6,7 @@
       "Bash(date*)",
       "Write(*)",
       "Agent(subagent_type=reviewer)",
-      "Bash(bash .githooks/lib/approval.sh fingerprint)",
-      "Bash(printf * > /Users/chris.reynolds/git/band-site-template/reviewer-approved)"            
+      "Bash(bash .githooks/lib/approval.sh fingerprint)"
     ]
   },
   "hooks": {
