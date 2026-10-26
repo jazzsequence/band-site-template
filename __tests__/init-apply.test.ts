@@ -96,6 +96,15 @@ describe("applyInit", () => {
     expect(report.written).toContain("band.config.json");
   });
 
+  it("applies the skill's own example answers, so the example cannot drift from what apply accepts", async () => {
+    const example = JSON.parse(readFileSync(join(repo, ".claude/skills/init-band/answers.example.json"), "utf-8"));
+    const root = tempRepo();
+    const report = await apply({ root, answers: example, run, skipAssets: true });
+    const config = JSON.parse(text(root, "band.config.json"));
+    expect(config).toMatchObject({ band: { name: "Neon Orchard" }, setup: { initialized: true }, typography: { display: { id: "playfair-display" }, wordmark: { id: "unbounded", uppercase: true }, kicker: null } });
+    expect(report.written).toContain("package.json");
+  });
+
   it("drops the tour list and the hero's Tour dates button from the home fixture when the tour is off, and keeps them when it is on", async () => {
     const on = tempRepo();
     await apply({ root: on, answers: answers(), run, skipAssets: true });
