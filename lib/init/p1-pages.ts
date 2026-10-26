@@ -152,6 +152,20 @@ export function buildP1Pages(input: P1PageInput): P1PageSpec[] {
   return pages;
 }
 
+/** Why pages cannot be built for this repo yet, or null when they can. */
+export function p1PagesProblem(config: { setup?: { initialized?: boolean }; hosting?: { p1SiteId?: string } }): string | null {
+  if (!config.setup?.initialized) return "This repo is still the placeholder band: run /init-band first, and replace the sample albums, shows and copy with the band's own.";
+  if (!config.hosting?.p1SiteId) return "No P1 site is recorded (hosting.p1SiteId in band.config.json): create or choose the band's P1 site and re-run the hosting questions first.";
+  return null;
+}
+
+/** The pages as the person reads them before saying yes: where each goes, what is on it, and what is still theirs to supply. */
+export function describeP1Pages(siteId: string, pages: P1PageSpec[]): string {
+  const rows = pages.map((p) => `  ${p.documentPath.padEnd(24)} ${p.title}  [${p.components.map((c) => c.type.replace(/Block$/, "")).join(", ")}]`);
+  const notes = pages.flatMap((p) => p.notes.map((n) => `- ${p.path}: ${n}`));
+  return [`P1 site ${siteId}: ${pages.length} pages to create (document path, title, blocks)`, ...rows, ...(notes.length ? ["", "Still yours to supply:", ...notes] : [])].join("\n");
+}
+
 /** Loads what buildP1Pages needs from a repo checkout. */
 export function readRepoContent(root: string, bio?: string): P1PageInput {
   const read = (rel: string) => readFileSync(path.join(root, rel), "utf8");

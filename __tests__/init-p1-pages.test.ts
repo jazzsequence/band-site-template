@@ -3,7 +3,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 
-import { buildP1Pages, readRepoContent, withoutTour, type Block, type P1PageInput, type PageDoc } from "../lib/init/p1-pages";
+import { buildP1Pages, describeP1Pages, p1PagesProblem, readRepoContent, withoutTour, type Block, type P1PageInput, type PageDoc } from "../lib/init/p1-pages";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel: string) => readFileSync(resolve(root, rel), "utf-8");
@@ -100,6 +100,26 @@ describe("buildP1Pages", () => {
         expect(registered.has(c.type), `${c.type} is not registered in puck.config.tsx`).toBe(true);
       }
     }
+  });
+});
+
+describe("p1PagesProblem", () => {
+  it("refuses a repo that is still the placeholder band, or has no P1 site recorded", () => {
+    expect(p1PagesProblem({ setup: { initialized: false }, hosting: { p1SiteId: "abc12345" } })).toMatch(/still the placeholder band/);
+    expect(p1PagesProblem({})).toMatch(/still the placeholder band/);
+    expect(p1PagesProblem({ setup: { initialized: true }, hosting: {} })).toMatch(/hosting\.p1SiteId/);
+    expect(p1PagesProblem({ setup: { initialized: true }, hosting: { p1SiteId: "abc12345" } })).toBeNull();
+  });
+});
+
+describe("describeP1Pages", () => {
+  it("lists where each page goes and what is on it, and what is still the person's to supply", () => {
+    const text = describeP1Pages("site-1", buildP1Pages(input()));
+    expect(text).toContain("P1 site site-1: 11 pages to create");
+    expect(text).toMatch(/^ {2}albums\/embers\s+Embers {2}\[AlbumHeader, TrackList, ImageGallery\]$/m);
+    expect(text).toMatch(/^ {2}\/ {24}Cinder & Vale {2}\[Hero, TourPreview, AlbumGrid\]$/m);
+    expect(text).toContain("Still yours to supply:\n- /bio: The bio page carries only the band description");
+    expect(describeP1Pages("site-1", buildP1Pages(input({ bio: "Text." })))).not.toContain("Still yours to supply");
   });
 });
 

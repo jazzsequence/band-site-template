@@ -7,6 +7,8 @@
  *   check-palette <file.json>               gate a palette file; exit 1 if it is rejected
  *   font-info <name> [--role display|body|wordmark|kicker]
  *                                           look a font up in Fontsource: how it ships, its licence, where to see it, and notes for the role
+ *   p1-pages [--bio <file.md>] [--json]
+ *                                           the P1 pages for this band, built from its content (nothing is created: the skill sends them to P1)
  *   apply <answers.json> [--force] [--skip-assets]
  *                                           write the band's config, notes, docs, workflows and assets; print the secrets to set
  *
@@ -21,8 +23,9 @@ import { applyInit } from "../lib/init/apply";
 import { AnswersError } from "../lib/init/answers";
 import { paletteReport } from "../lib/init/palette-report";
 import { describeFont, FontLookupError, lookupFont } from "../lib/init/fonts";
+import { buildP1Pages, describeP1Pages, p1PagesProblem, readRepoContent } from "../lib/init/p1-pages";
 import { formatChecklist } from "../lib/init/checklist";
-import { band, setup } from "../lib/band/config";
+import { band, hosting, setup } from "../lib/band/config";
 import { FONT_ROLES, type FontRole } from "../lib/theme/fonts";
 import { validatePalette } from "../lib/theme/palette";
 
@@ -82,6 +85,14 @@ async function main() {
       }
       return;
     }
+    case "p1-pages": {
+      const problem = p1PagesProblem({ setup, hosting });
+      if (problem) fail(problem);
+      const bioFile = flag("bio");
+      const pages = buildP1Pages(readRepoContent(root, bioFile ? readFileSync(path.resolve(bioFile), "utf-8") : undefined));
+      console.log(has("json") ? JSON.stringify({ siteId: hosting.p1SiteId, pages }, null, 2) : describeP1Pages(hosting.p1SiteId as string, pages));
+      return;
+    }
     case "apply": {
       const report = await applyInit({ root, answers: readJson(rest[0]), force: has("force"), skipAssets: has("skip-assets") });
       console.log(`Wrote ${report.written.length} files:\n${report.written.map((f) => `  ${f}`).join("\n")}`);
@@ -92,7 +103,7 @@ async function main() {
       return;
     }
     default:
-      fail("Usage: tsx scripts/init-band.ts status | suggest-palette --hue N | check-palette <file> | font-info <name> | apply <answers.json> [--force] [--skip-assets]");
+      fail("Usage: tsx scripts/init-band.ts status | suggest-palette --hue N | check-palette <file> | font-info <name> | p1-pages [--bio <file>] [--json] | apply <answers.json> [--force] [--skip-assets]");
   }
 }
 

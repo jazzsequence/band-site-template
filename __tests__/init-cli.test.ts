@@ -63,6 +63,18 @@ describe("scripts/init-band.ts", () => {
     expect(r.err).toContain("is not a font name");
   });
 
+  it("p1-pages refuses to build pages for a repo that is still the placeholder band", () => {
+    const initialized = JSON.parse(cli("status").out).initialized;
+    const r = cli("p1-pages");
+    if (!initialized) {
+      expect(r.code).toBe(1);
+      expect(r.err).toContain("still the placeholder band");
+    } else {
+      // A repo that has been set up has a P1 site or says it has none.
+      expect([0, 1]).toContain(r.code);
+    }
+  });
+
   it("apply explains a missing answers file and an invalid one, and changes nothing", () => {
     expect(cli("apply", join(dir, "nope.json")).err).toContain("Could not read");
     const invalid = join(dir, "invalid.json");
