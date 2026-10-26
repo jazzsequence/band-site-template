@@ -214,7 +214,7 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
   if (!answers.hosting?.p1SiteId) notes.push("No P1 site id recorded: the registry sync is not installed. Create the P1 site, then re-run the hosting questions.");
   if (!owner) notes.push("No GitHub owner recorded: .github/CODEOWNERS still names the template's author. Edit it, or re-run with github.owner set.");
   if (!answers.audio?.baseUrl) notes.push("No audio host recorded: set NEXT_PUBLIC_AUDIO_BASE_URL (and the R2 secrets) when the bucket exists.");
-  notes.push("The albums, shows, merch, lyrics, bio and press article are still the template's samples. Replace them (CONTENT.md says where); the tests and e2e checks that mention those samples need updating with them.");
+  notes.push("The albums, shows, merch, lyrics, bio and press article are still the template's samples. Replace them (CONTENT.md says where); the tests and e2e checks that mention those samples need updating with them. Then run /init-p1-pages to create the site's P1 pages as drafts (it never publishes).");
 
   return { written: [...files.keys()], adjustments, installed, secrets: secretsChecklist(answers), notes };
 }
