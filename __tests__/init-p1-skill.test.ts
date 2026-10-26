@@ -51,7 +51,7 @@ describe("the /init-p1-pages skill", () => {
     expect(skill.indexOf("create_page")).toBeGreaterThan(skill.indexOf("## Step 5"));
     expect(skill.indexOf("## Step 4")).toBeLessThan(skill.indexOf("## Step 5"));
     expect(section("## Step 4", "## Step 5")).toContain("Nothing is published");
-    expect(section("## Step 4", "## Step 5")).toContain("`/privacy`, is a test");
+    expect(section("## Step 4", "## Step 5")).toContain("`/privacy` (or the page named as the test), is a test");
   });
 
   it("tests the draft assumption on a harmless page and waits for the person to confirm before creating the rest", () => {
@@ -59,6 +59,7 @@ describe("the /init-p1-pages skill", () => {
     expect(step5).toContain("give no way to read a page's published state");
     expect(step5).toContain("First, the test page");
     expect(step5).toContain("same as the repo's own privacy page");
+    expect(step5).toContain("never `/bio`, `/tour` or `/merch`");
     expect(step5).toContain("Continue only when they confirm it is not live");
     expect(step5.indexOf("Continue only when they confirm")).toBeLessThan(step5.indexOf("Then the rest"));
     expect(section("## Step 6", "## Quick reference")).toContain("say what you checked, not more");

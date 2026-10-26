@@ -45,13 +45,13 @@ Read-only: `list_documents` on the `main` workstream. Compare paths after normal
 
 ## Step 4: the yes
 
-Say it in one message: "I will create these N draft pages on `main` of the P1 site `<id>`: <the list>. Nothing is published. The first, `/privacy`, is a test: I will stop after it and ask you to confirm in P1 that it is not live before I create the rest. Say yes to create them." Wait for a yes to that list.
+Say it in one message: "I will create these N draft pages on `main` of the P1 site `<id>`: <the list>. Nothing is published. The first, `/privacy` (or the page named as the test), is a test: I will stop after it and ask you to confirm in P1 that it is not live before I create the rest. Say yes to create them." Wait for a yes to that list.
 
 ## Step 5: create, one at a time
 
 That pages created on `main` are drafts rests on what CLAUDE.md says, and the P1 tools give no way to read a page's published state, so test it before relying on it.
 
-**First, the test page.** Create `/privacy` first: its content is the same as the repo's own privacy page, so if drafts turned out not to be drafts, nothing a visitor sees would change. (If `/privacy` already exists, use the first page in the Create group and say that it is the test.) Then:
+**First, the test page.** Create `/privacy` first: its content is the same as the repo's own privacy page, so if drafts turned out not to be drafts, nothing a visitor sees would change. (If `/privacy` already exists, use another page whose content equals the repo's version, such as `/albums` or `/lyrics`, never `/bio`, `/tour` or `/merch`, which differ, and say which page is the test.) Then:
 
 1. `list_documents` again: the new page must appear. That shows drafts are listed on `main`, which step 3's comparison relies on. If it does not appear, stop.
 2. Ask the person to open the site in the P1 dashboard and tell you whether that page is shown as unpublished. **Continue only when they confirm it is not live.** If it is live, or they cannot tell, stop, say so, and create nothing else.
