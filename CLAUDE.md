@@ -221,7 +221,17 @@ The flow, and why each step is the way it is:
 
 Squashing either design-flow leg is what produced repeated conflicts on the apply merge (#44 to #45, #47 to #48).
 
-Type: headings use Encode Sans Expanded 800 at about -0.04em (`--font-display`) and body copy Space Grotesk. The wordmark face (Unbounded, capitals,
--0.05em) and the blackletter accent for kickers (UnifrakturCook) are optional choices in `band.config.json` (`typography.wordmarkFace`,
-`typography.accentFace`); when off, those roles fall back to the display face, so components never need to know which was chosen. Where a wordmark face
-is chosen it is for the name only, in flat colour; never set the name in the blackletter face.
+Type: `band.config.json` `typography` names a face for each role: `display` (headings, buttons, labels: tight, extra-bold), `body`, and optionally `wordmark` (the band
+name only, in flat colour, tight, capitals if `uppercase`) and `kicker` (the small labels above headings and flourishes, never the name). The template's are Encode Sans Expanded
+and Space Grotesk, with the other two off. When `wordmark` or `kicker` is off, that role uses the display face, so components never name a face: they use `font-display`,
+`font-body`, `font-wordmark` and `font-kicker`, and `__tests__/colour-token-roles.test.ts` fails on a face named by its style (the blackletter-named utility this replaced).
+
+- **Where the faces come from.** Each is a Fontsource package (`@fontsource/<id>`, or `@fontsource-variable/<id>` when the family has a weight axis), self-hosted. That is what keeps the CSP at
+  `font-src 'self'` and the site free of third-party requests (a font CDN would tell it which visitor loaded which page). `pnpm theme` writes the stacks into `theme.generated.css` and the imports
+  into `design-system/fonts.ts`; never edit either by hand. A static face ships the available weight nearest each one the components use (600/700/800 for `display`, 400 to 700 for `body`), so a
+  single-weight display font is fine (`font-synthesis-weight: none` on the display roles stops a faked bold). `typography` records Fontsource's facts about each face (id, family, category,
+  variable, weights) so nothing needs the network after setup.
+- **Custom fonts (licensed files, a foundry, anything not in Fontsource) are a design PR after setup**, not a setup option: the font files and a licence come from the owner, and a new face
+  changes the design system, so it goes through the design approval workflow above (`design-fonts-<name>` from a freshly pulled `main`, Storybook at the relevant sizes). Until then the config
+  names the nearest Fontsource face as a stand-in. The PR adds a face kind for local files to `lib/theme/fonts.ts` (files under `design-system/fonts/`, imported from the generated `fonts.ts`),
+  keeps them same-origin, and checks that the licence allows web embedding.

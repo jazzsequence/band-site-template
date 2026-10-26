@@ -7,6 +7,8 @@ import { setup } from "../lib/band/config";
 import { parseAnswers } from "../lib/init/answers";
 import { renderClaudeMd } from "../lib/init/claude-md";
 import { suggestPalette } from "../lib/init/palette-suggest";
+import { DEFAULT_TYPOGRAPHY } from "../lib/theme/fonts";
+import { FULL_TYPOGRAPHY } from "./fixtures/typography";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -24,7 +26,7 @@ const { answers } = parseAnswers(
       siteUrl: "https://neon-orchard.example.com",
     },
     look: { palette: suggestPalette({ hue: 150 }) },
-    type: { wordmarkFace: true, accentFace: false },
+    type: FULL_TYPOGRAPHY,
     features: { tour: true, merch: false, lyrics: true, map: true, press: false },
     audio: { baseUrl: "https://audio.neon-orchard.example.com" },
     hosting: { pantheonSite: "neon-orchard", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" },
@@ -75,7 +77,7 @@ describe("renderClaudeMd", () => {
     expect(out).toContain("Recorded by `/init-band` on 2026-10-23.");
     expect(out).toContain("**Sections on:** Tour and tickets, Lyrics, Tour map.");
     expect(out).toContain("**Off:** Merch, Press");
-    expect(out).toContain("wordmark face on (Unbounded, capitals)");
+    expect(out).toContain("headings in Encode Sans Expanded, body in Space Grotesk (variable); the wordmark in Unbounded (variable), capitals; kickers in UnifrakturCook");
     expect(out).toContain("Pantheon site `neon-orchard`");
     expect(out).toContain("served from https://audio.neon-orchard.example.com");
   });
@@ -112,7 +114,7 @@ describe("renderClaudeMd", () => {
       {
         identity: { name: "Bare", tagline: "t", description: "d", genre: "g", fictional: false, siteUrl: "https://bare.example.com" },
         look: { palette: suggestPalette({ hue: 20 }) },
-        type: { wordmarkFace: false, accentFace: false },
+        type: DEFAULT_TYPOGRAPHY,
         features: { tour: false, merch: false, lyrics: false, map: false, press: false },
       },
       2026,

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import config from "../band.config.json";
 import { typography } from "../lib/band/config";
 import { contrastRatio } from "../lib/theme/contrast";
+import { pickWeights, WANTED_WEIGHTS } from "../lib/theme/fonts";
 import { MIN_RATIO, PALETTE_KEYS, checkPalette, resolvePalette, validatePalette, type Palette as PaletteMap, type PaletteKey } from "../lib/theme/palette";
 import { Wordmark } from "./components/Wordmark";
 
@@ -134,27 +135,34 @@ export const Gradients: StoryObj = {
   ),
 };
 
+// What a face is called in the captions: its name and the weights the site ships (a variable face ships its whole range).
+const faceNote = (role: "display" | "body" | "wordmark" | "kicker") => {
+  const face = typography[role];
+  if (!face) return null;
+  return `${face.family}${face.variable ? ", variable" : `, ${pickWeights(face.weights, WANTED_WEIGHTS[role]).join("/")}`}`;
+};
+
 export const Typography: StoryObj = {
   render: () => (
     <div className="space-y-8">
       <div>
-        <p className="mb-1 text-xs uppercase tracking-widest text-dim">Headings · Encode Sans Expanded 800, -0.04em</p>
+        <p className="mb-1 text-xs uppercase tracking-widest text-dim">Headings · {faceNote("display")}, -0.04em (typography.display in band.config.json)</p>
         <p className="text-metal font-display text-6xl font-extrabold uppercase leading-none tracking-[-0.04em]">Placeholder heading</p>
       </div>
       <div>
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">
-          Wordmark · {typography.wordmarkFace ? "Unbounded, capitals, -0.05em" : "the display face, as typed"} (typography.wordmarkFace in band.config.json)
+          Wordmark · {typography.wordmark ? `${faceNote("wordmark")}${typography.wordmark.uppercase ? ", capitals" : ""}, -0.05em` : "the display face, as typed"} (typography.wordmark in band.config.json)
         </p>
         <Wordmark size="lg" />
       </div>
       <div>
         <p className="mb-1 text-xs uppercase tracking-widest text-dim">
-          Kickers · {typography.accentFace ? "UnifrakturCook, for kickers and flourishes only" : "the display face"} (typography.accentFace in band.config.json)
+          Kickers · {typography.kicker ? `${faceNote("kicker")}, for kickers and flourishes only` : "the display face"} (typography.kicker in band.config.json)
         </p>
-        <p className="font-gothic text-4xl text-accent">On the road</p>
+        <p className="font-kicker text-4xl text-accent">On the road</p>
       </div>
       <div className="max-w-xl">
-        <p className="mb-1 text-xs uppercase tracking-widest text-dim">Body · Space Grotesk</p>
+        <p className="mb-1 text-xs uppercase tracking-widest text-dim">Body · {faceNote("body")} (typography.body in band.config.json)</p>
         <p className="text-lg leading-8">Placeholder body copy sits at 18px on a 32px line. Replace this sentence with a longer one to judge line length and rhythm.</p>
       </div>
     </div>
