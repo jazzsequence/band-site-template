@@ -74,6 +74,8 @@ describe("the /init-band skill", () => {
     expect(step3).toMatch(/do not look for a CDN link/);
     const step8 = skill.slice(skill.indexOf("## Step 8"), skill.indexOf("## Quick reference"));
     expect(step8).toContain("design-fonts-<name>");
+    expect(step8).toContain("`/init-p1-pages`");
+    expect(step8).toContain("Do not run it now");
     expect(step8).toContain("what licence they come under");
     expect(step8).toContain("wait for a yes");
   });

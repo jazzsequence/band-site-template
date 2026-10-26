@@ -15,6 +15,7 @@ import { AnswersError, parseAnswers } from "./answers";
 import { renderClaudeMd } from "./claude-md";
 import { fontFileProblems, syncFontPackages, type PackageJson } from "./font-packages";
 import { lookupFont, type FontInfo } from "./fonts";
+import { withoutTour, type Block } from "./p1-pages";
 import { renderReadme } from "./readme";
 import { secretsChecklist, type SecretStep } from "./checklist";
 import { resolveTypeAnswers } from "./type-answers";
@@ -134,15 +135,12 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   const home = "content/p1-pages/home.json";
   if (await exists(path.join(root, home))) {
-    type Block = { type: string; props: Record<string, unknown> & { actions?: { href?: string }[] } };
     const doc = JSON.parse(await read(root, home)) as { root?: { props?: Record<string, unknown> }; content?: Block[] };
     doc.root = { ...doc.root, props: { ...doc.root?.props, title: answers.identity.name, description: answers.identity.description } };
     if (!answers.features.tour) {
       // The fixture is the home page as designed and must say what the code version says (e2e compares them), so it drops
       // the tour list and the hero's Tour dates button when that section is off, as the code version does.
-      doc.content = (doc.content ?? [])
-        .filter((b) => b.type !== "TourPreviewBlock")
-        .map((b) => (b.type === "HeroBlock" ? { ...b, props: { ...b.props, actions: (b.props.actions ?? []).filter((a) => a.href !== "/tour") } } : b));
+      doc.content = withoutTour(doc.content ?? []);
     }
     files.set(home, `${JSON.stringify(doc, null, 2)}\n`);
   }
@@ -216,7 +214,7 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
   if (!answers.hosting?.p1SiteId) notes.push("No P1 site id recorded: the registry sync is not installed. Create the P1 site, then re-run the hosting questions.");
   if (!owner) notes.push("No GitHub owner recorded: .github/CODEOWNERS still names the template's author. Edit it, or re-run with github.owner set.");
   if (!answers.audio?.baseUrl) notes.push("No audio host recorded: set NEXT_PUBLIC_AUDIO_BASE_URL (and the R2 secrets) when the bucket exists.");
-  notes.push("The albums, shows, merch, lyrics, bio and press article are still the template's samples. Replace them (CONTENT.md says where); the tests and e2e checks that mention those samples need updating with them.");
+  notes.push("The albums, shows, merch, lyrics, bio and press article are still the template's samples. Replace them (CONTENT.md says where); the tests and e2e checks that mention those samples need updating with them. Then run /init-p1-pages to create the site's P1 pages as drafts (it never publishes).");
 
   return { written: [...files.keys()], adjustments, installed, secrets: secretsChecklist(answers), notes };
 }

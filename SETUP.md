@@ -90,7 +90,10 @@ of each page if P1 is unreachable, so CI and outages keep working.
    500 on purpose rather than fall back to it.
 3. **Register the blocks** once the secrets exist: push a change under `components/puck/` (the registry workflow does it) or run
    `pnpm sync:registry` with the three registry variables set.
-4. **Publish pages in P1.** There is one P1 site and every Pantheon environment reads it; only the key differs, so content does not
+4. **Create the pages, then publish them.** Once the band's own albums, shows, merch and copy are in the repo, run the `/init-p1-pages` skill:
+   it builds every page from the repo and creates them in P1 as drafts, after you have said yes to the exact list. It never publishes; it creates
+   `/privacy` first as a test page and asks you to confirm in the P1 dashboard that it is not live. Then review each page at `/p1` and publish
+   it yourself. There is one P1 site and every Pantheon environment reads it; only the key differs, so content does not
    move between environments. **Publishing a page in P1 is the go-live step.** Use a P1 workstream to preview changes without
    publishing. Do not create workstreams alongside code pull requests.
 

@@ -28,6 +28,9 @@ checkout and e-ticket, and the error pages.
 `content/p1-pages/*.json` holds each page above as designed (the placeholder band's versions). They are tested against the code versions in CI,
 and are the copy to rebuild a page from if one is ever damaged.
 
+The `/init-p1-pages` skill creates all of these pages in P1 from your own content once it is in (drafts only; publishing is yours): the albums and
+tour dates from `data/`, the press article from `content/press/article.md`, and a bio from text you give it.
+
 Notes:
 - **Tour dates:** each show has an optional **URL id**. Set it once and never change it, because ticket links use it. If left empty it is made from the city and date.
 - **Always one h1:** every page needs exactly one. Use a Page heading block, or set an Image and text block's title to h1.
