@@ -46,6 +46,12 @@ describe("the /init-band skill", () => {
     const step7 = skill.slice(skill.indexOf("## Step 7"), skill.indexOf("## Step 8"));
     expect(step7).toContain("explicit yes to that exact action");
     expect(step7).toContain("Do not push a commit");
+    // The person is guided to the credentials first, with the two traps, and never asked to paste a value.
+    expect(step7).toContain("Get it:");
+    expect(step7).toContain("SETUP.md section 0a");
+    expect(step7).toContain("expires after 90 days");
+    expect(step7).toContain("default location");
+    expect(step7).toContain("Never ask them to paste a value here");
   });
 
   it("keeps drafted public copy clear of the local off-limits list, and stops when the repo cannot be identified", () => {

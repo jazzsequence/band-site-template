@@ -10,6 +10,34 @@ commands for the secrets; this explains the rest and why.
 - Tools: Node per `.nvmrc`, pnpm, the [GitHub CLI](https://cli.github.com) (`gh auth login`), [Terminus](https://docs.pantheon.io/terminus)
   (`terminus auth:login`), and [Claude Code](https://claude.com/claude-code) for `/init-band`.
 
+## 0a. Credentials: where each one comes from
+
+`/init-band` prints a command for every secret, with a "Get it" line under it, but it cannot create the tokens for you. Most are shown
+**once**, when you create them: have the terminal open, create the token, and paste it straight into the hidden prompt (never into the chat).
+Make anything you are missing first.
+
+- **GitHub CLI, signed in:** `gh auth login`. Setting repository secrets needs the `repo` scope and access to this repository's secrets. If
+  `GITHUB_TOKEN` is set in your shell, `gh` uses it instead of your login, and a fine-grained token then needs permission to write secrets.
+- **Pantheon token → `PANTHEON_MACHINE_TOKEN`** (a GitHub Actions secret **and** a Dependabot secret). Dashboard > Personal Settings > Personal
+  Access Tokens > Add token ([docs](https://docs.pantheon.io/personal-access-tokens)); it is shown once. Sign Terminus in with
+  `terminus auth:login` (it points you at the same page). **A new token expires 90 days after it is created**; from then on `terminus auth:login`
+  fails, so the promote workflow and the deployed-site check fail until you replace it in both places: `gh secret set PANTHEON_MACHINE_TOKEN`
+  and `gh secret set PANTHEON_MACHINE_TOKEN --app dependabot`. Put the date in your calendar. (An older machine token does not expire.)
+- **P1 site id → `NEXT_PUBLIC_CSS_SITE_ID`** (and `hosting.p1SiteId`; not secret). In the P1 dashboard at content.pantheon.io: shown when the
+  site is created, and the last part of the site's dashboard URL.
+- **P1 tokens, three of them.** In the P1 dashboard, generate a token for the site and choose its scope; each is shown once. The drafts token
+  (scope "All content including drafts") is `CSS_API_KEY` on dev and test; a second, published-content-only token is `CSS_API_KEY_LIVE` on live;
+  a third with the registry-sync scope (`write:registry`, no read access) is the `CSS_REGISTRY_API_KEY` GitHub secret. The dashboard names the
+  scopes: pick the one that matches each description. Never reuse one token for another job.
+- **Audio, in Cloudflare R2.** Create the bucket in the **default location**: the site lists it at `<account>.r2.cloudflarestorage.com`, so a
+  bucket in a jurisdiction (EU, FedRAMP) would list as empty and every track would show "Audio unavailable".
+  - `NEXT_PUBLIC_AUDIO_BASE_URL` is the bucket's **custom domain**: R2 > the bucket > Settings > Custom Domains > Add (the domain must be a zone in
+    the same Cloudflare account). The `r2.dev` URL is for development only and is rate-limited.
+  - `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY`: R2 object storage > Overview > Account Details > API Tokens > Manage > Create Account API
+    token, permission **Object Read only**, scoped to this bucket. Both are shown once, together
+    ([docs](https://developers.cloudflare.com/r2/api/tokens/)).
+  - `R2_ACCOUNT_ID`: in the Cloudflare dashboard press Ctrl/Cmd+K and search "Copy account ID". `R2_BUCKET` is the bucket's name.
+
 ## 1. Create the repository and set it up for CI
 
 Create a repository from the template and clone it. Then, in the repository's GitHub settings:
@@ -49,7 +77,7 @@ of each page if P1 is unreachable, so CI and outages keep working.
 
 1. **Create a P1 site** in the P1 dashboard (or ask Claude to list sites through the P1 MCP; it will not create one without an
    explicit yes). Note its **site id**: it goes in `band.config.json` (`hosting.p1SiteId`) and in `NEXT_PUBLIC_CSS_SITE_ID`.
-2. **Create three API keys**, each for one job. Never reuse one for another:
+2. **Create three API keys** (see step 0a for where), each for one job. Never reuse one for another:
 
    | Variable | Where | Scope |
    |---|---|---|
@@ -103,7 +131,7 @@ The checks that run on every pull request need none. The rest:
 
 Set `PANTHEON_MACHINE_TOKEN` **both** as an Actions secret and as a **Dependabot** secret (`gh secret set NAME --app dependabot`):
 Dependabot runs see only Dependabot secrets, so without the second copy every Dependabot pull request fails the deployed-site check.
-The registry sync skips Dependabot runs on purpose.
+The registry sync skips Dependabot runs on purpose. The token expires after 90 days (step 0a): replace both copies before it does.
 
 ## 6. Audio
 
@@ -131,6 +159,8 @@ you want are published, and `robots.txt` will allow indexing on live only (every
 |---|---|
 | Storybook preview job fails at the push with `GH013 ... Required status check "..." is expected` | A ruleset covers `gh-pages`. Exclude it (step 1). |
 | Storybook preview link returns 404 | Pages is not enabled, or the site has not yet updated (about a minute). |
+| `Promote to Pantheon Environment` or `Test deployed site` fails at the Terminus login, about 90 days after setup | The Pantheon token expired. Create a new one and replace both copies (step 0a). |
+| Every track shows "Audio unavailable" though the files are in the bucket | An `R2_*` variable is missing or wrong, the token cannot read the bucket, or the bucket is in a jurisdiction (the site uses the default R2 endpoint). See step 0a. |
 | Every Dependabot pull request fails `Test deployed site` | `PANTHEON_MACHINE_TOKEN` is not a Dependabot secret. |
 | Sign-in or `/p1` returns 500 "Server configuration error" | `NEXT_PUBLIC_CSS_BASE_URL` is blank. |
 | Live fails with a 500 | `CSS_API_KEY_LIVE` is not set (deliberate: live refuses to run rather than use the drafts key). Set it and rebuild. |
