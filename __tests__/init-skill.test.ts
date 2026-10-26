@@ -60,8 +60,10 @@ describe("the /init-band skill", () => {
     expect(skill).toContain("isTemplate");
   });
 
-  it("ships example answers that the real parser accepts", () => {
+  it("ships example answers that the real parser accepts, including the owner CODEOWNERS is pointed at", () => {
     expect(() => parseAnswers(example, 2026)).not.toThrow();
+    expect(parseAnswers(example, 2026).answers.github?.owner).toBeTruthy();
+    expect(skill).toContain("github.owner");
     expect(skill).toContain("answers.example.json");
   });
 });

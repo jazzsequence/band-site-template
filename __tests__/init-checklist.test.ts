@@ -116,6 +116,7 @@ describe("renderReadme", () => {
     expect(text).toContain("fictional act");
     expect(text).toContain("`neon-orchard`");
     expect(text).toContain("https://neon-orchard.example.com");
+    expect(text).toContain("[SETUP.md](SETUP.md)");
     expect(text).not.toContain("Band site template");
     expect(renderReadme(make({ identity: { ...make().identity, fictional: false } }))).not.toContain("fictional act");
   });

@@ -23,6 +23,7 @@ ${id.fictional ? "_This is a fictional act; nothing here is a real band, show or
 | \`pnpm theme\` | Regenerate the theme after changing the palette in \`band.config.json\` |
 | \`pnpm storybook\` | The design system |
 
+- **Hosting, secrets and the first deploy** are in [SETUP.md](SETUP.md).
 - **The band itself** (name, tagline, sections, type, palette, hosting) is \`band.config.json\`.
 - **Content** (albums, tour dates, merch, lyrics, press) is files in \`data/\` and \`content/\`, plus pages edited in P1: see [CONTENT.md](CONTENT.md).
 - **Architecture, workflows and the reasons behind them** are in [CLAUDE.md](CLAUDE.md).
