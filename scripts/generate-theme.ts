@@ -1,5 +1,6 @@
 /**
- * Generates design-system/theme.generated.css from band.config.json's palette.
+ * Generates design-system/theme.generated.css (colours and font stacks) and design-system/fonts.ts (the font files to
+ * load) from band.config.json.
  *
  * Usage: tsx scripts/generate-theme.ts [--check]
  *
@@ -11,33 +12,40 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BandConfigError, typography } from "../lib/band/config";
+import { renderFontsModule } from "../lib/theme/fonts";
 import { PaletteError, renderThemeCss, resolvePalette, validatePalette } from "../lib/theme/palette";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const target = path.join(root, "design-system/theme.generated.css");
+// Each generated file and what it should contain.
+const targets = (css: string) => [
+  { file: "design-system/theme.generated.css", text: css },
+  { file: "design-system/fonts.ts", text: renderFontsModule(typography) },
+];
 
 try {
   const config = JSON.parse(readFileSync(path.join(root, "band.config.json"), "utf-8")) as { palette?: unknown };
   const { palette, adjustments } = resolvePalette(validatePalette(config.palette));
   for (const a of adjustments) console.warn(`adjusted ${a.key}: ${a.from} -> ${a.to} (${a.reason})`);
-  const css = renderThemeCss(palette);
+  const outputs = targets(renderThemeCss(palette, typography));
 
   if (process.argv.includes("--check")) {
-    let current = "";
-    try {
-      current = readFileSync(target, "utf-8");
-    } catch {
-      // A missing file is stale too.
-    }
-    if (current !== css) {
-      console.error("design-system/theme.generated.css is out of date with band.config.json. Run `pnpm theme`.");
+    const stale = outputs.filter(({ file, text }) => {
+      try {
+        return readFileSync(path.join(root, file), "utf-8") !== text;
+      } catch {
+        return true; // A missing file is stale too.
+      }
+    });
+    if (stale.length) {
+      console.error(`Out of date with band.config.json: ${stale.map((o) => o.file).join(", ")}. Run \`pnpm theme\`.`);
       process.exit(1);
     }
   } else {
-    writeFileSync(target, css);
-    console.log(`wrote design-system/theme.generated.css${adjustments.length ? ` (${adjustments.length} colour(s) adjusted for contrast)` : ""}`);
+    for (const { file, text } of outputs) writeFileSync(path.join(root, file), text);
+    console.log(`wrote ${outputs.map((o) => o.file).join(" and ")}${adjustments.length ? ` (${adjustments.length} colour(s) adjusted for contrast)` : ""}`);
   }
 } catch (e) {
-  console.error(e instanceof PaletteError ? e.message : e);
+  console.error(e instanceof PaletteError || e instanceof BandConfigError ? e.message : e);
   process.exit(1);
 }

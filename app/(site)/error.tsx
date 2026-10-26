@@ -7,7 +7,7 @@ import { Button, ButtonLink } from "../../design-system/components/Button";
 export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <Page narrow>
-      <p className="font-gothic text-3xl text-accent">500</p>
+      <p className="font-kicker text-3xl text-accent">500</p>
       <h1 className="text-metal font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">
         Something broke
       </h1>

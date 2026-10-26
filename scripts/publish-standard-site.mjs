@@ -14,29 +14,32 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { AtpAgent } from "@atproto/api";
 
 const dry = process.argv.includes("--dry-run");
-const siteUrl = (process.env.SITE_URL ?? "https://paris.jazzsequence.com").replace(/\/$/, "");
+const { band, features } = JSON.parse(readFileSync(new URL("../band.config.json", import.meta.url), "utf8"));
+const siteUrl = (process.env.SITE_URL ?? band.siteUrl).replace(/\/$/, "");
 const file = new URL("../data/standard-site.json", import.meta.url);
 const config = JSON.parse(readFileSync(file, "utf8"));
 
 const publication = {
   $type: "site.standard.publication",
   url: siteUrl,
-  name: "PARIS",
-  description: "Tour dates, music, lyrics and the album Well Enough.",
+  name: band.name,
+  description: band.description,
 };
 
-// Pages that are long-form documents. Add entries here to publish more.
-const documents = [
-  {
-    path: "/press",
-    record: {
-      $type: "site.standard.document",
-      title: "PARIS is Making Monsters Polite",
-      path: "/press",
-      publishedAt: new Date().toISOString(),
-    },
-  },
-];
+// Pages that are long-form documents. Add entries here to publish more; set the title to match the page.
+const documents = features.press
+  ? [
+      {
+        path: "/press",
+        record: {
+          $type: "site.standard.document",
+          title: "Press",
+          path: "/press",
+          publishedAt: new Date().toISOString(),
+        },
+      },
+    ]
+  : [];
 
 if (dry) {
   console.log(JSON.stringify({ publication, documents }, null, 2));

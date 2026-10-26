@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { langOf } from "../lang";
 import { assetUrl } from "../asset";
 
 export type PlayerBarProps = {
@@ -21,7 +20,7 @@ export type PlayerBarProps = {
   /** What happens at the end of a track: nothing, the whole queue again, or this track again. The button shows only when `onRepeat` is given and cycles through the modes. */
   repeat?: RepeatMode;
   onRepeat?: () => void;
-  /** A brief confirmation shown above the bar, such as "Added Say when to the queue". The owner of the state clears it after a few seconds. It is for sighted users only; announce the same words in a live region. */
+  /** A brief confirmation shown above the bar, such as "Added First Song to the queue". The owner of the state clears it after a few seconds. It is for sighted users only; announce the same words in a live region. */
   notice?: string;
   /** Called with a 0-100 position when the progress bar is clicked. */
   onSeek?: (percent: number) => void;
@@ -82,7 +81,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
       <div className="flex min-w-0 items-center gap-3">
         <img src={assetUrl(cover)} alt="" width={48} height={48} className="size-12 rounded-card object-cover" />
         <div className="min-w-0">
-          <p lang={langOf(title)} className="truncate text-sm font-semibold">{title}</p>
+          <p className="truncate text-sm font-semibold">{title}</p>
           <p className="truncate text-xs text-muted">{album}</p>
         </div>
       </div>
@@ -215,7 +214,7 @@ export function PlayerBar({ title, album, cover, elapsed, duration, progress, pl
                     >
                       <span className="text-xs tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                       <span className="min-w-0">
-                        <span lang={langOf(item.title)} className="block truncate text-sm font-semibold">{item.title}</span>
+                        <span className="block truncate text-sm font-semibold">{item.title}</span>
                         {item.subtitle && <span className="block truncate text-xs text-muted">{item.subtitle}</span>}
                       </span>
                     </button>

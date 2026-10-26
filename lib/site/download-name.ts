@@ -1,9 +1,12 @@
+import { band } from "../band/config";
+
 /**
- * File name offered when a track is downloaded: "PARIS - <title>.m4a". Keeps any script (so a Korean
- * title stays Korean) and drops only punctuation that is unsafe or noisy in a file name. The previous
- * `\w` pattern is ASCII-only and removed non-Latin titles entirely, leaving "PARIS - .m4a".
+ * Drops the characters that are unsafe or noisy in a file name and keeps any script, so a non-Latin title stays as
+ * written. An ASCII-only `\w` pattern would remove non-Latin titles entirely and leave nothing but the band name.
  */
+export const fileSafe = (text: string) => text.replace(/[^\p{L}\p{N} .'’-]/gu, "").trim();
+
+/** File name offered when a track is downloaded: "<band name> - <title>.m4a". */
 export function downloadFilename(title: string, extension: string): string {
-  const clean = title.replace(/[^\p{L}\p{N} .'’-]/gu, "").trim();
-  return `PARIS - ${clean}${extension}`;
+  return `${fileSafe(band.name)} - ${fileSafe(title)}${extension}`;
 }

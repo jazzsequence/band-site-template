@@ -2,22 +2,25 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
+import { features } from "../../lib/band/config";
 import { AppLink } from "./AppLink";
 import { Wordmark } from "./Wordmark";
 
-const links = [
-  ["Tour", "/tour"],
-  ["Listen", "/listen"],
-  ["Albums", "/albums"],
-  ["Lyrics", "/lyrics"],
-  ["Well Enough", "/well-enough"],
-  ["Press", "/press"],
-  ["Bio", "/bio"],
-  ["Merch", "/merch"],
+/** The sections a band can switch off in band.config.json drop out of the navigation. */
+export const navLinks = [
+  ["Tour", "/tour", features.tour],
+  ["Listen", "/listen", true],
+  ["Albums", "/albums", true],
+  ["Lyrics", "/lyrics", features.lyrics],
+  ["Press", "/press", features.press],
+  ["Bio", "/bio", true],
+  ["Merch", "/merch", features.merch],
 ] as const;
 
+const links = navLinks.filter(([, , on]) => on).map(([label, href]) => [label, href] as const);
+
 /**
- * Below 1024px the eight links collapse behind a menu button, because they cannot fit beside the wordmark.
+ * Below 1024px the links collapse behind a menu button, because they cannot fit beside the wordmark.
  * The button is a real disclosure (aria-expanded, aria-controls), the list is hidden from assistive
  * technology while closed, Escape closes it and returns focus, and choosing a link closes it.
  */

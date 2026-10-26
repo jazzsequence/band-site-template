@@ -1,4 +1,4 @@
-# Dependency updates, mirroring jazz-nextjs (weekly, grouped minor/patch, Monday).
+# Dependency updates (weekly, grouped minor/patch, Monday).
 # Dependabot PRs are ordinary PRs into main: the owner reviews and squash-merges them.
 version: 2
 
@@ -14,7 +14,7 @@ updates:
     # Security updates ignore the cooldown.
     cooldown:
       default-days: 14
-    # Blocked majors. Each one was observed in jazz-nextjs, which runs the same Next.js on Pantheon stack. They have
+    # Blocked majors. Each one was observed on a sister site running the same Next.js on Pantheon stack. They have
     # not been re-tested here, so lift an entry by trying the update on a PR environment. Each is scoped to the one
     # known-bad line, so the next line still opens a PR. NOTE: a `versions:` ignore also suppresses security-update PRs
     # inside that range; Dependabot alerts still fire and are the signal that survives, so keep them enabled.

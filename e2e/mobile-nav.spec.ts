@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { features, when } from "./helpers/config";
+
 const nav = (page: import("@playwright/test").Page) => page.getByRole("navigation", { name: "Primary" });
 const menuButton = (page: import("@playwright/test").Page) => page.getByRole("button", { name: "Menu" });
 
@@ -15,7 +17,7 @@ test.describe("below 1024px: hamburger menu", () => {
     await menuButton(page).click();
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "true");
     await expect(nav(page)).toBeVisible();
-    for (const name of ["Tour", "Listen", "Albums", "Lyrics", "Well Enough", "Press", "Bio", "Merch"]) {
+    for (const name of ["Listen", "Albums", "Bio", ...when("tour", "Tour"), ...when("lyrics", "Lyrics"), ...when("press", "Press"), ...when("merch", "Merch")]) {
       await expect(nav(page).getByRole("link", { name })).toBeVisible();
     }
   });
@@ -35,8 +37,8 @@ test.describe("below 1024px: hamburger menu", () => {
     await page.goto("/");
     await page.evaluate(() => ((window as unknown as Record<string, unknown>).__noReload = true));
     await menuButton(page).click();
-    await nav(page).getByRole("link", { name: "Tour" }).click();
-    await expect(page).toHaveURL(/\/tour$/);
+    await nav(page).getByRole("link", { name: "Albums" }).click();
+    await expect(page).toHaveURL(/\/albums$/);
     await expect(nav(page)).toBeHidden();
     expect(await page.evaluate(() => (window as unknown as Record<string, unknown>).__noReload)).toBe(true);
   });
@@ -51,9 +53,9 @@ test.describe("below 1024px: hamburger menu", () => {
   });
 
   test("the current page is marked in the open menu", async ({ page }) => {
-    await page.goto("/tour");
+    await page.goto("/albums");
     await menuButton(page).click();
-    await expect(nav(page).getByRole("link", { name: "Tour" })).toHaveAttribute("aria-current", "page");
+    await expect(nav(page).getByRole("link", { name: "Albums" })).toHaveAttribute("aria-current", "page");
   });
 
   test("the open menu has no accessibility violations", async ({ page }) => {
@@ -71,6 +73,6 @@ test.describe("1024px and up: inline links", () => {
     await page.goto("/");
     await expect(menuButton(page)).toBeHidden();
     await expect(nav(page)).toBeVisible();
-    await expect(nav(page).getByRole("link")).toHaveCount(8);
+    await expect(nav(page).getByRole("link")).toHaveCount(3 + [features.tour, features.lyrics, features.press, features.merch].filter(Boolean).length);
   });
 });

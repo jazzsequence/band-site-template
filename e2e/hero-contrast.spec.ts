@@ -1,6 +1,8 @@
 import sharp from "sharp";
 import { expect, test } from "@playwright/test";
 
+import { token } from "./helpers/config";
+
 /**
  * Text over the hero photo can't be checked by axe (it can't see through an image). This renders the page
  * with the text hidden, samples the pixels that were behind each piece of text, and computes the WCAG
@@ -10,7 +12,8 @@ import { expect, test } from "@playwright/test";
 const SIZES: [number, number][] = [[360, 640], [390, 844], [430, 932], [768, 1024], [1024, 768], [1280, 720], [1440, 900], [1920, 1080]];
 const NEED = { kicker: 3, title: 3, blurb: 4.5 } as const; // large text 3:1, body text 4.5:1
 const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const TEXT: Record<string, number[]> = { kicker: hex("#ff3fa4"), title: hex("#8d8aa6") }; // title is a chrome gradient: its darkest stop is the worst case
+// The title is a metal gradient: its darkest stop is the worst case.
+const TEXT: Record<string, number[]> = { kicker: hex(token("accent")), title: hex(token("metal-lo")) };
 
 const lum = ([r, g, b]: number[]) => {
   const f = (c: number) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
@@ -34,8 +37,8 @@ test("text over the hero photo meets contrast at every screen size", async ({ pa
     const boxes = await page.evaluate(() => {
       const hero = document.querySelector("section")!;
       const els: Record<string, Element | undefined> = {
-        kicker: hero.querySelector("p.font-gothic") ?? undefined,
-        blurb: [...hero.querySelectorAll("p")].find((e) => !e.classList.contains("font-gothic")),
+        kicker: hero.querySelector("p.font-kicker") ?? undefined,
+        blurb: [...hero.querySelectorAll("p")].find((e) => !e.classList.contains("font-kicker")),
         title: hero.querySelector("h1") ?? undefined,
       };
       const out: Record<string, { x: number; y: number; w: number; h: number; color: string }> = {};
@@ -70,26 +73,30 @@ test("text over the hero photo meets contrast at every screen size", async ({ pa
 });
 
 /**
- * The hero photo is a portrait cropped into a landscape frame, so on laptop-sized screens the face sits right
- * where a block of text wants to go. This works out where the face lands from the image's own crop (object-cover,
- * 50% / 6%) and asserts the card and text stay clear of it.
+ * A hero photo is cropped into a landscape frame, so on some screens its subject can sit right where a block of
+ * text wants to go. This works out where the subject lands from the image's own crop (object-cover, 50% / 6%)
+ * and asserts the card and text stay clear of it.
+ *
+ * Set HERO_PHOTO to the real photo's pixel size and FACE to the region the text must never cover (fractions of
+ * the photo, for example forehead to chin). The values below fit the neutral placeholder image.
  */
-const FACE = { x0: 0.38, x1: 0.62, y0: 0.13, y1: 0.29 }; // fractions of the photo: forehead to chin
+const HERO_PHOTO = { width: 1600, height: 900 };
+const FACE = { x0: 0.62, x1: 0.8, y0: 0.15, y1: 0.4 };
 const FACE_SIZES: [number, number][] = [[768, 1024], [1024, 768], [1100, 700], [1180, 820], [1280, 720], [1280, 800], [1366, 768], [1440, 900], [1536, 864], [1920, 1080]];
 
-test("the hero text never covers the face", async ({ page }) => {
+test("the hero text never covers the photo's subject", async ({ page }) => {
   for (const [w, h] of FACE_SIZES) {
     await page.setViewportSize({ width: w, height: h });
     await page.goto("/");
     await page.waitForSelector("section h1");
     await page.evaluate(() => Promise.all([...document.images].map((i) => (i.complete ? 1 : new Promise((r) => (i.onload = i.onerror = r))))));
 
-    const { face, covers } = await page.evaluate((f) => {
+    const { face, covers } = await page.evaluate(({ f, photo }) => {
       const hero = document.querySelector("section")!;
       const img = hero.querySelector("img")!.getBoundingClientRect();
-      const scale = Math.max(img.width / 1024, img.height / 1536);
-      const rw = 1024 * scale;
-      const rh = 1536 * scale;
+      const scale = Math.max(img.width / photo.width, img.height / photo.height);
+      const rw = photo.width * scale;
+      const rh = photo.height * scale;
       const ox = img.left + (img.width - rw) * 0.5;
       const oy = img.top + (img.height - rh) * 0.06;
       const face = { l: ox + rw * f.x0, r: ox + rw * f.x1, t: oy + rh * f.y0, b: oy + rh * f.y1 };
@@ -104,11 +111,11 @@ test("the hero text never covers the face", async ({ page }) => {
       };
       const rects = boxed ? [card.getBoundingClientRect()] : [...card.querySelectorAll("p, h1, a")].map(rect);
       return { face, covers: rects.map((r) => ({ l: r.left, r: r.right, t: r.top, b: r.bottom })) };
-    }, FACE);
+    }, { f: FACE, photo: HERO_PHOTO });
 
     for (const c of covers) {
       const overlaps = c.l < face.r && c.r > face.l && c.t < face.b && c.b > face.t;
-      expect(overlaps, `${w}x${h}: hero text box ${JSON.stringify(c)} overlaps the face ${JSON.stringify(face)}`).toBe(false);
+      expect(overlaps, `${w}x${h}: hero text box ${JSON.stringify(c)} overlaps the subject region ${JSON.stringify(face)}`).toBe(false);
     }
   }
 });

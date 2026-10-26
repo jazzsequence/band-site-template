@@ -2,8 +2,8 @@
   "path": "/",
   "root": {
     "props": {
-      "title": "PARIS",
-      "description": "PARIS: tour dates, music, lyrics and the new album Well Enough."
+      "title": "Your Band",
+      "description": "A sentence or two about the band, used for search results and social cards."
     }
   },
   "content": [
@@ -11,10 +11,10 @@
       "type": "HeroBlock",
       "props": {
         "id": "HeroBlock-1",
-        "imageUrl": "/images/paris-on-stage.jpg",
+        "imageUrl": "/images/placeholder-wide.png",
         "kicker": "New album",
-        "title": "Well Enough",
-        "blurb": "The new album, out now on Hostile Takeover.",
+        "title": "Debut Album",
+        "blurb": "The latest release.",
         "actions": [
           {
             "label": "Tour dates",

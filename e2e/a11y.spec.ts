@@ -1,31 +1,32 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { features, when } from "./helpers/config";
+
 /** Every public route, with one representative dynamic page of each kind. */
 const routes = [
   "/",
   "/albums",
-  "/albums/tribute",
-  "/albums/ep",
+  "/albums/debut",
+  "/albums/first-ep",
   "/albums/unreleased",
   "/listen",
-  "/lyrics",
-  "/lyrics/say-when",
-  "/lyrics/seniority",
-  "/lyrics/banmal", // Korean text
-  "/well-enough",
-  "/tour",
-  "/tickets/sf-1997-10-07",
-  "/tickets/seattle-1997-10-23", // sold-out variant
-  "/ticket?show=sf-1997-10-07&name=Test%20Name&qty=2&order=PRS-TEST01",
-  "/ticket", // missing-details variant
-  "/press",
+  ...when("lyrics", "/lyrics", "/lyrics/first-song", "/lyrics/second-song"),
+  ...when(
+    "tour",
+    "/tour",
+    "/tickets/sample-city-2027-03-12",
+    "/tickets/sample-town-2027-03-14", // sold-out variant
+    "/ticket?show=sample-city-2027-03-12&name=Test%20Name&qty=2&order=PRS-TEST01",
+    "/ticket", // missing-details variant
+  ),
+  ...when("press", "/press"),
   "/bio",
-  "/merch",
+  ...when("merch", "/merch"),
   "/privacy",
   // Unknown URLs go through the P1 catch-all, which needs real P1 credentials; CI has none.
   // P1-only pages have no repo copy, so CI (placeholder credentials) cannot render them.
-  ...(process.env.A11Y_P1_ROUTES ? ["/press/kit", "/this-page-does-not-exist"] : []),
+  ...(process.env.A11Y_P1_ROUTES ? [...when("press", "/press/kit"), "/this-page-does-not-exist"] : []),
 ];
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
@@ -60,7 +61,8 @@ test("the skip link is the first focusable element and moves focus to main conte
 });
 
 test("the ticket form is operable by keyboard and labelled", async ({ page }) => {
-  await page.goto("/tickets/sf-1997-10-07");
+  test.skip(!features.tour, "the tour section is switched off");
+  await page.goto("/tickets/sample-city-2027-03-12");
   await page.getByLabel("Name on ticket").fill("Test Name");
   await page.getByLabel("Tickets").selectOption("2");
   await page.getByRole("button", { name: "Complete purchase" }).press("Enter");
@@ -69,7 +71,7 @@ test("the ticket form is operable by keyboard and labelled", async ({ page }) =>
 });
 
 test("focus indicators are visible on interactive elements", async ({ page }) => {
-  await page.goto("/tour");
+  await page.goto("/albums");
   await page.keyboard.press("Tab"); // skip link
   await page.keyboard.press("Tab"); // wordmark
   const outline = await page.evaluate(() => {

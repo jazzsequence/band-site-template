@@ -10,7 +10,7 @@
     {
       "type": "AlbumHeaderBlock",
       "props": {
-        "id": "AlbumHeaderBlock-16",
+        "id": "AlbumHeaderBlock-18",
         "albumSlug": "unreleased",
         "kicker": "",
         "actions": [
@@ -25,7 +25,7 @@
     {
       "type": "TrackListBlock",
       "props": {
-        "id": "TrackListBlock-17",
+        "id": "TrackListBlock-19",
         "albumSlug": "unreleased",
         "heading": "Track list"
       }

@@ -3,18 +3,20 @@ import AxeBuilder from "@axe-core/playwright";
 
 import { expect, test } from "@playwright/test";
 
+import { when } from "./helpers/config";
+
 // Read as a file: Playwright's ESM loader rejects a bare JSON import.
 const merchCount: number = (JSON.parse(readFileSync("data/merch.json", "utf8")) as unknown[]).length;
 
 const opener = (page: import("@playwright/test").Page, name: RegExp) => page.getByRole("button", { name });
 
 test("album cover opens larger, and Escape closes it and returns focus", async ({ page }) => {
-  await page.goto("/albums/ep");
-  const button = opener(page, /View larger: EP cover art/);
+  await page.goto("/albums/first-ep");
+  const button = opener(page, /View larger: First EP cover art/);
   await button.click();
-  const dialog = page.getByRole("dialog", { name: "EP cover art" });
+  const dialog = page.getByRole("dialog", { name: "First EP cover art" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("img", { name: "EP cover art" })).toBeVisible();
+  await expect(dialog.getByRole("img", { name: "First EP cover art" })).toBeVisible();
   await expect(dialog.getByRole("button", { name: "Close" })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
@@ -22,8 +24,8 @@ test("album cover opens larger, and Escape closes it and returns focus", async (
 });
 
 test("it opens from the keyboard and traps focus inside", async ({ page }) => {
-  await page.goto("/albums/ep");
-  const button = opener(page, /View larger: EP cover art/);
+  await page.goto("/albums/first-ep");
+  const button = opener(page, /View larger: First EP cover art/);
   await button.focus();
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog");
@@ -34,7 +36,7 @@ test("it opens from the keyboard and traps focus inside", async ({ page }) => {
 });
 
 test("the Close button and the backdrop both close it", async ({ page }) => {
-  await page.goto("/albums/ep");
+  await page.goto("/albums/first-ep");
   await opener(page, /View larger/).first().click();
   await page.getByRole("button", { name: "Close" }).click();
   await expect(page.getByRole("dialog")).toBeHidden();
@@ -44,7 +46,7 @@ test("the Close button and the backdrop both close it", async ({ page }) => {
 });
 
 test("the page behind does not scroll while it is open, and scrolls again after", async ({ page }) => {
-  await page.goto("/albums/ep");
+  await page.goto("/albums/first-ep");
   await opener(page, /View larger/).first().click();
   expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
   await page.keyboard.press("Escape");
@@ -53,7 +55,7 @@ test("the page behind does not scroll while it is open, and scrolls again after"
 });
 
 test("the open lightbox has no accessibility violations", async ({ page }) => {
-  await page.goto("/albums/ep");
+  await page.goto("/albums/first-ep");
   await opener(page, /View larger/).first().click();
   const { violations } = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
@@ -63,12 +65,11 @@ test("the open lightbox has no accessibility violations", async ({ page }) => {
 
 test("images across the site open in a lightbox", async ({ page }) => {
   for (const [route, count] of [
-    ["/well-enough", 3],
-    ["/albums/ep", 3],
-    ["/albums/tribute", 3],
-    ["/listen", 4],
+    ["/albums/debut", 2],
+    ["/albums/first-ep", 1],
+    ["/listen", 3],
     ["/bio", 1],
-    ["/merch", merchCount],
+    ...when("merch", ["/merch", merchCount] as const),
   ] as const) {
     await page.goto(route);
     await expect(opener(page, /View larger/), route).toHaveCount(count);

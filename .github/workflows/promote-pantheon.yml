@@ -23,7 +23,7 @@ permissions:
   contents: write  # Required to create and push tags
 
 env:
-  PANTHEON_SITE_NAME: paris-site
+  PANTHEON_SITE_NAME: your-site-name
 
 jobs:
   promote:

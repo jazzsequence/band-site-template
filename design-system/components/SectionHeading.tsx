@@ -11,7 +11,7 @@ export function SectionHeading({
   return (
     <header className="space-y-2">
       {kicker && (
-        <p className="font-gothic text-2xl text-accent">
+        <p className="font-kicker text-2xl text-accent">
           {kicker}
         </p>
       )}

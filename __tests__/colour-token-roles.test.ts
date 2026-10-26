@@ -13,6 +13,8 @@ import { describe, expect, it } from "vitest";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const HUES = "magenta|violet|cyan|chrome-hi|chrome-lo";
+// Typefaces are named by role too: font-kicker, never font-gothic (the face is the band's choice, so it may not be blackletter).
+const FACE_NAMED = /(?:--font|\bfont)-gothic\b/;
 // Tokens and utilities named after a hue: --color-magenta, --shadow-glow-cyan, --grad-neon,
 // text-violet, hover:bg-cyan, [&_a]:text-cyan, .text-chrome, .text-neon.
 const HUE_NAMED = new RegExp(
@@ -32,10 +34,9 @@ const PALETTE_LITERAL = /#(?:ff3fa4|a98bff|3ef0ff|f1effa|8d8aa6|d9d6ea)\b|rgb\(\
 // Files allowed to hold palette literals, and why. Hue-named tokens are never allowed anywhere.
 const PALETTE_LITERAL_ALLOWED: Record<string, string> = {
   "design-system/theme.generated.css": "generated from band.config.json",
+  "__tests__/fixtures/reference-palette.json": "the reference palette, kept as the generator's regression fixture",
   "band.config.json": "the palette values: the single source the theme CSS is generated from",
-  "scripts/make-brand-assets.mjs": "generates the favicon and social card, which cannot read CSS variables",
-  "app/icon.svg": "generated brand asset",
-  "e2e/hero-contrast.spec.ts": "measures contrast against the token values",
+  "app/icon.svg": "generated brand asset (scripts/make-brand-assets.mjs), carries the resolved colours",
 };
 
 const SELF = "__tests__/colour-token-roles.test.ts";
@@ -98,15 +99,23 @@ describe("tracked files use colour roles", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("names no typeface by style", () => {
+    expect("font-gothic text-3xl").toMatch(FACE_NAMED);
+    expect("--font-gothic: x").toMatch(FACE_NAMED);
+    expect("font-kicker").not.toMatch(FACE_NAMED);
+    const offenders = files.filter((f) => FACE_NAMED.test(read(f)));
+    expect(offenders).toEqual([]);
+  });
+
   it("writes no original-palette literal outside the allowlist", () => {
     const offenders = files.filter((f) => !(f in PALETTE_LITERAL_ALLOWED) && PALETTE_LITERAL.test(read(f)));
     expect(offenders).toEqual([]);
   });
 
-  it("keeps the allowlist honest: every entry still exists and still holds a literal", () => {
-    for (const f of Object.keys(PALETTE_LITERAL_ALLOWED)) {
-      expect(files, `${f} is allowlisted but not tracked`).toContain(f);
-      expect(read(f), `${f} no longer holds a palette literal; drop it from the allowlist`).toMatch(PALETTE_LITERAL);
-    }
+  it("keeps the allowlist honest: every entry still exists, and the fixture still holds the reference palette", () => {
+    for (const f of Object.keys(PALETTE_LITERAL_ALLOWED)) expect(files, `${f} is allowlisted but not tracked`).toContain(f);
+    // band.config.json, the generated theme and the icon hold the band's own palette, which stops matching the reference one
+    // once a band sets up its own colours, so only the fixture is required to hold it.
+    expect(read("__tests__/fixtures/reference-palette.json")).toMatch(PALETTE_LITERAL);
   });
 });

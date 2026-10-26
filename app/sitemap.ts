@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { features } from "../lib/band/config";
 import { albums } from "../lib/site/catalog";
 import { getLyrics } from "../lib/site/lyrics";
 import { SITE_URL } from "../lib/site/seo";
@@ -7,20 +8,18 @@ import { getShows } from "../lib/site/p1-content";
 
 /** Every indexable public page. `/ticket` is excluded: it renders a private e-ticket from its URL. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [lyrics, shows] = await Promise.all([getLyrics(), getShows()]);
+  const [lyrics, shows] = await Promise.all([features.lyrics ? getLyrics() : [], features.tour ? getShows() : []]);
   const paths = [
     "/",
-    "/tour",
+    ...(features.tour ? ["/tour"] : []),
     "/listen",
     "/albums",
-    "/well-enough",
-    "/lyrics",
-    "/press",
-    "/press/kit",
+    ...(features.lyrics ? ["/lyrics"] : []),
+    ...(features.press ? ["/press", "/press/kit"] : []),
     "/bio",
-    "/merch",
+    ...(features.merch ? ["/merch"] : []),
     "/privacy",
-    ...albums.filter((a) => !a.featured).map((a) => `/albums/${a.slug}`),
+    ...albums.map((a) => `/albums/${a.slug}`),
     ...lyrics.map((l) => `/lyrics/${l.slug}`),
     ...shows.map((s) => `/tickets/${s.id}`),
   ];

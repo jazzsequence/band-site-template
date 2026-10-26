@@ -6,13 +6,13 @@ const meta = {
   title: "Components/TicketCard",
   component: TicketCard,
   args: {
-    order: "PRS-0097-4821",
-    name: "Alex Rivera",
+    order: "BAND-0001-4821",
+    name: "Sample Fan",
     quantity: 2,
-    city: "San Francisco, CA",
-    venue: "Roderick's Chamber",
-    date: "Fri, Nov 14, 1997",
-    doors: "9:00 PM",
+    city: "Sample City, CA",
+    venue: "Example Hall",
+    date: "Fri, Mar 12, 2027",
+    doors: "8:00 PM",
   },
 } satisfies Meta<typeof TicketCard>;
 export default meta;

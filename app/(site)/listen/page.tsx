@@ -10,7 +10,7 @@ import { P1Page } from "../../../components/site/p1-page";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
-export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Listen", description: "Stream and download PARIS: every album, the EP, B-sides and unreleased recordings.", path: "/listen" });
+export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Listen", description: "Stream and download every album, EP and unreleased recording.", path: "/listen" });
 export const revalidate = 300;
 
 async function ListenFallback() {
@@ -23,7 +23,7 @@ async function ListenFallback() {
           <div className="space-y-3">
             <LightboxImage src={album.cover} alt={`${album.title} cover art`} width={1024} height={1024} loading="lazy" decoding="async" className="w-full rounded-card border border-line" />
             <h2 className="font-display text-2xl font-extrabold uppercase tracking-[-0.03em]">
-              <AppLink href={album.featured ? "/well-enough" : `/albums/${album.slug}`} className="hover:text-accent">
+              <AppLink href={`/albums/${album.slug}`} className="hover:text-accent">
                 {album.title}
               </AppLink>
             </h2>

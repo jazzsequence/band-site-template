@@ -2,11 +2,11 @@
 
 import { usePathname } from "next/navigation";
 
-import { SiteHeader } from "../../design-system/components/SiteHeader";
+import { navLinks, SiteHeader } from "../../design-system/components/SiteHeader";
 
 export function Header() {
   const path = usePathname();
-  const current = ["/tour", "/listen", "/albums", "/lyrics", "/well-enough", "/press", "/bio", "/merch"].find(
+  const current = navLinks.map(([, href]) => href as string).find(
     (p) => path === p || path.startsWith(`${p}/`),
   );
   return (

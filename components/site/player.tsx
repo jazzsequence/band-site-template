@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
+import { band } from "../../lib/band/config";
 import { PlayerBar, type RepeatMode } from "../../design-system/components/PlayerBar";
 import { neighbour, NEXT_REPEAT, playOrder, rankAfter, repeatLabel, rerank } from "../../lib/site/player-order";
 
@@ -168,7 +169,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     if (!current || !("mediaSession" in navigator)) return;
     navigator.mediaSession.metadata = new MediaMetadata({
       title: current.title,
-      artist: "PARIS",
+      artist: band.name,
       album: current.album,
       artwork: [{ src: current.cover }],
     });

@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { band, features, token } from "./helpers/config";
+
 /**
  * The audio player lives in the site layout, so it only survives navigation if links are client-side.
  * A full page load throws the document away, which stops playback. These tests plant a marker on
@@ -27,24 +29,24 @@ async function navigateWithoutReload(page: import("@playwright/test").Page, star
 test("header links navigate without reloading the page", async ({ page, isMobile }) => {
   test.skip(isMobile === true, "covered by the desktop project; layout differs only in wrapping");
   await navigateWithoutReload(page, "/", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Albums" }).click(), /\/albums$/);
-  await navigateWithoutReload(page, "/albums", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Tour" }).click(), /\/tour$/);
+  await navigateWithoutReload(page, "/albums", () => page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Listen" }).click(), /\/listen$/);
 });
 
 test("album cards and buttons navigate without reloading the page", async ({ page }) => {
-  await navigateWithoutReload(page, "/albums", () => page.getByRole("link", { name: /^Tribute/ }).click(), /\/albums\/tribute$/);
-  await navigateWithoutReload(page, "/", () => page.getByRole("link", { name: "All dates" }).click(), /\/tour$/);
-  await navigateWithoutReload(page, "/lyrics", () => page.getByRole("link", { name: /Say when/ }).first().click(), /\/lyrics\/say-when$/);
+  await navigateWithoutReload(page, "/albums", () => page.getByRole("link", { name: /^First EP/ }).click(), /\/albums\/first-ep$/);
+  if (features.tour) await navigateWithoutReload(page, "/", () => page.getByRole("link", { name: "All dates" }).click(), /\/tour$/);
+  if (features.lyrics) await navigateWithoutReload(page, "/lyrics", () => page.getByRole("link", { name: /First Song/ }).first().click(), /\/lyrics\/first-song$/);
 });
 
 test("the wordmark link goes home without reloading", async ({ page }) => {
-  await navigateWithoutReload(page, "/bio", () => page.getByRole("link", { name: "PARIS, home" }).click(), /\/$/);
+  await navigateWithoutReload(page, "/bio", () => page.getByRole("link", { name: `${band.name}, home` }).click(), /\/$/);
 });
 
 test("the site has a favicon, an apple touch icon and a theme colour", async ({ page, request }) => {
   await page.goto("/");
   await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon/);
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#07050d");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", token("void"));
   const ico = await request.get("/favicon.ico");
   expect(ico.status()).toBe(200);
   expect(ico.headers()["content-type"]).toMatch(/icon/);

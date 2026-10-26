@@ -5,20 +5,20 @@ import { normalizeShows, showId } from "../lib/site/tour";
 
 describe("showId", () => {
   it("keeps an explicit id so existing ticket links survive edits", () => {
-    expect(showId({ id: "sf-1997-10-07", city: "San Francisco, CA", date: "1997-10-07" })).toBe("sf-1997-10-07");
+    expect(showId({ id: "sample-city-2027-03-12", city: "Sample City, CA", date: "2027-03-12" })).toBe("sample-city-2027-03-12");
   });
   it("derives a stable id for new dates", () => {
-    expect(showId({ city: "Salt Lake City, UT", date: "1997-11-06" })).toBe("salt-lake-city-1997-11-06");
+    expect(showId({ city: "Salt Lake City, UT", date: "2027-04-06" })).toBe("salt-lake-city-2027-04-06");
   });
 });
 
 describe("normalizeShows (untrusted editor input)", () => {
-  const good = { date: "1997-10-18", city: "Oakland, CA", venue: "Paramount Theatre", doors: "7:00 PM", price: 28.5, status: "on-sale", lat: 37.8, lon: -122.27 };
+  const good = { date: "2027-03-18", city: "Sample Town, OR", venue: "Placeholder Theatre", doors: "7:00 PM", price: 28.5, status: "on-sale", lat: 37.8, lon: -122.27 };
 
   it("sorts by date and fills ids", () => {
-    const rows = normalizeShows([{ ...good, date: "1997-10-18" }, { ...good, date: "1997-10-07", city: "San Francisco, CA", venue: "Roderick's Chamber" }]);
-    expect(rows.map((r) => r.date)).toEqual(["1997-10-07", "1997-10-18"]);
-    expect(rows[0].id).toBe("san-francisco-1997-10-07");
+    const rows = normalizeShows([{ ...good, date: "2027-03-18" }, { ...good, date: "2027-03-07", city: "Sample City, CA", venue: "Example Hall" }]);
+    expect(rows.map((r) => r.date)).toEqual(["2027-03-07", "2027-03-18"]);
+    expect(rows[0].id).toBe("sample-city-2027-03-07");
   });
 
   it("drops rows missing a valid date, city or venue instead of rendering broken ones", () => {

@@ -1,4 +1,45 @@
 {
+  "band": {
+    "name": "Your Band",
+    "tagline": "One line that says what your band sounds like.",
+    "description": "A sentence or two about the band, used for search results and social cards.",
+    "genre": "Genre",
+    "fictional": false,
+    "siteUrl": "https://example.com",
+    "copyrightYear": 2026,
+    "social": []
+  },
+  "features": {
+    "tour": true,
+    "merch": true,
+    "lyrics": true,
+    "map": true,
+    "press": true
+  },
+  "typography": {
+    "display": {
+      "id": "encode-sans-expanded",
+      "family": "Encode Sans Expanded",
+      "category": "sans-serif",
+      "variable": false,
+      "weights": [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    },
+    "body": {
+      "id": "space-grotesk",
+      "family": "Space Grotesk",
+      "category": "sans-serif",
+      "variable": true,
+      "weights": [300, 400, 500, 600, 700]
+    },
+    "wordmark": null,
+    "kicker": null
+  },
+  "setup": {
+    "initialized": false
+  },
+  "editorial": {
+    "offLimitsFile": "docs/off-limits.md"
+  },
   "palette": {
     "void": "#07050d",
     "surface": "#0e0a18",

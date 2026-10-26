@@ -8,6 +8,7 @@ import { TourMap } from "../../../../design-system/components/TourMap";
 import { getShowById } from "../../../../lib/site/p1-content";
 import { longDate, mapPoints, money, shows } from "../../../../lib/site/tour";
 import { Breadcrumbs } from "../../../../components/site/breadcrumbs";
+import { band, features } from "../../../../lib/band/config";
 import { pageMetadata } from "../../../../lib/site/seo";
 
 type Props = { params: Promise<{ id: string }> };
@@ -15,17 +16,17 @@ type Props = { params: Promise<{ id: string }> };
 export const revalidate = 300;
 
 // Only the repo copy is prerendered; dates added in P1 are rendered on first request and then cached.
-export const generateStaticParams = () => shows.map((s) => ({ id: s.id }));
+export const generateStaticParams = () => (features.tour ? shows.map((s) => ({ id: s.id })) : []);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const show = await getShowById((await params).id);
   return show
-    ? pageMetadata({ title: `Tickets · ${show.city}`, description: `Tickets for PARIS at ${show.venue}, ${show.city}, ${longDate(show.date)}.`, path: `/tickets/${show.id}` })
+    ? pageMetadata({ title: `Tickets · ${show.city}`, description: `Tickets for ${band.name} at ${show.venue}, ${show.city}, ${longDate(show.date)}.`, path: `/tickets/${show.id}` })
     : {};
 }
 
 export default async function Tickets({ params }: Props) {
-  const show = await getShowById((await params).id);
+  const show = features.tour ? await getShowById((await params).id) : undefined;
   if (!show) notFound();
   const pin = mapPoints([show]);
   return (
@@ -39,7 +40,7 @@ export default async function Tickets({ params }: Props) {
         </p>
         {show.address && <p className="text-sm text-dim">{show.address}</p>}
       </div>
-      {pin.length > 0 && <TourMap points={pin} label={`Where ${show.venue} is`} />}
+      {features.map && pin.length > 0 && <TourMap points={pin} label={`Where ${show.venue} is`} />}
       {show.status === "sold-out" ? (
         <p className="border border-dim px-6 py-4 text-muted">This show is sold out.</p>
       ) : (

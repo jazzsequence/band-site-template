@@ -1,6 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { features } from "./helpers/config";
+
+test.skip(!features.tour || !features.map, "the tour or its map is switched off in band.config.json");
+
 // A 1x1 transparent PNG, so the tests never depend on (or send visitors' traffic to) OpenStreetMap.
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 
@@ -24,8 +28,8 @@ function policyErrors(page: Page) {
 }
 
 for (const [route, label, pins] of [
-  ["/tickets/sf-1997-10-07", "Where Roderick's Chamber is", 1],
-  ["/tour", "Tour map", 9],
+  ["/tickets/sample-city-2027-03-12", "Where Example Hall is", 1],
+  ["/tour", "Tour map", 2],
 ] as const) {
   test.describe(route, () => {
     test("asks nobody for a map until Show map is clicked", async ({ page }) => {

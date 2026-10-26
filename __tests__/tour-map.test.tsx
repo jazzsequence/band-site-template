@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest";
 import { TourMap } from "../design-system/components/TourMap";
 
 const points = [
-  { id: "a", label: "Paramount Theatre", detail: "2025 Broadway, Oakland, CA", lat: 37.8099, lon: -122.2687 },
-  { id: "b", label: "Club DV8", detail: "115 S West Temple, Salt Lake City, UT", lat: 40.7668, lon: -111.8938 },
+  { id: "a", label: "Placeholder Theatre", detail: "2 Main St, Sample Town, OR", lat: 44.0, lon: -120.5 },
+  { id: "b", label: "Example Hall", detail: "1 Main St, Sample City, CA", lat: 36.7783, lon: -119.4179 },
 ];
 
 describe("TourMap before the visitor asks for the map", () => {

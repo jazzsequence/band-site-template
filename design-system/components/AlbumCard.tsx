@@ -39,7 +39,7 @@ export function AlbumCard({ title, year, cover, trackCount, featured, href = "#"
         <Heading className="font-display text-lg font-semibold uppercase tracking-wide">{title}</Heading>
         <p className="text-sm text-muted">
           {year ?? "Unreleased"}
-          {trackCount > 0 && ` · ${trackCount} tracks`}
+          {trackCount > 0 && ` · ${trackCount} ${trackCount === 1 ? "track" : "tracks"}`}
         </p>
       </div>
     </AppLink>

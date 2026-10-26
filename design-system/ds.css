@@ -1,25 +1,19 @@
 @import "tailwindcss";
 @import "./theme.generated.css";
-/* Font files are imported from fonts.ts, not here: Vite cannot resolve font URLs that arrive through a
+/* Font files are imported from fonts.ts (generated), not here: Vite cannot resolve font URLs that arrive through a
    Tailwind CSS @import, so the Storybook build shipped no font files and fell back to system fonts. */
 
 /*
  * Design tokens. Dark only. Colours are named by role (accent, accent-2, accent-3, metal), never by hue,
  * so a band can re-theme the system by changing its palette; components must not name a hue.
  * The colour tokens, glows and gradients are generated into theme.generated.css from band.config.json
- * (`pnpm theme`), which also enforces WCAG AA on every text/background pair. Fonts, radius and motion
- * stay here. __tests__/colour-token-roles.test.ts fails if a hue-named token or an original-palette
- * literal appears outside the few allowlisted files.
+ * (`pnpm theme`), which also enforces WCAG AA on every text/background pair, and so are the font stacks
+ * (--font-display, --font-body, --font-wordmark, --font-kicker: the faces are choices in band.config.json).
+ * Radius and motion stay here.
+ * __tests__/colour-token-roles.test.ts fails if a hue-named token or an original-palette literal appears
+ * outside the few allowlisted files.
  */
 @theme {
-  /* Headings. Deliberately not the wordmark face. */
-  --font-display: "Encode Sans Expanded", system-ui, sans-serif;
-  /* The PARIS wordmark only (Wordmark component). Nothing else uses this face. */
-  --font-wordmark: "Unbounded Variable", "Arial Black", sans-serif;
-  --font-body: "Space Grotesk Variable", system-ui, sans-serif;
-  /* Accent only: kickers and flourishes. NEVER the PARIS name, which is always capitals in --font-wordmark. */
-  --font-gothic: "UnifrakturCook", serif;
-
   --radius-card: 0.25rem;
 
   /* A short confirmation sliding up into place (the player bar's notice). Reduced motion turns it off in base.css. */
@@ -38,6 +32,14 @@
 
 :root {
   color-scheme: dark;
+}
+
+/* A display face often comes in one or two weights. Asking for font-extrabold of one that has none would fake a bold
+   (smeared strokes); the face as designed is better. Body text keeps synthesis, so <strong> still shows. */
+.font-display,
+.font-wordmark,
+.font-kicker {
+  font-synthesis-weight: none;
 }
 
 /* Metal-filled display type */
