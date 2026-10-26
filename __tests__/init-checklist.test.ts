@@ -72,6 +72,30 @@ describe("secretsChecklist", () => {
     expect(commands.filter((x) => /secret:site:set neon-orchard (R2_|NEXT_PUBLIC_)/.test(x)).some((x) => x.includes("--rebuild"))).toBe(false);
   });
 
+  it("says where to get every value that is not the same for every site, and never puts a value in the source text", () => {
+    const withSource = (needle: string) => steps.filter((s) => s.command.includes(needle)).map((s) => s.source ?? "");
+    for (const name of ["NEXT_PUBLIC_CSS_SITE_ID", "CSS_API_KEY ", "CSS_API_KEY_LIVE", "R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET", "NEXT_PUBLIC_AUDIO_BASE_URL", "PANTHEON_MACHINE_TOKEN", "CSS_REGISTRY_API_KEY"]) {
+      const sources = withSource(name);
+      expect(sources.length, name).toBeGreaterThan(0);
+      for (const s of sources) expect(s, `${name} has no source`).not.toBe("");
+    }
+    // The P1 base URL and the registry's copies of the base URL and site id are the same for every site, or already given above.
+    expect(steps.find((s) => s.what.startsWith("P1 backend URL"))?.source).toBeUndefined();
+    expect(steps.filter((s) => s.source).every((s) => !/(sat_|github_pat_|ghp_)/.test(s.source as string))).toBe(true);
+  });
+
+  it("tells the person about the traps: tokens shown once, the 90-day Pantheon token, a bucket in a jurisdiction, the r2.dev URL", () => {
+    const text = formatChecklist(steps);
+    expect(text).toContain("most are shown only once");
+    expect(text).toContain("`terminus auth:login`");
+    expect(text).toContain("`gh auth login`");
+    expect(text).toContain("expires after 90 days");
+    expect(text).toContain("must be in the default location, not a jurisdiction");
+    expect(text).toContain("not the r2.dev URL");
+    expect(text).toContain("Object Read only");
+    expect(text).toContain("Get it: P1 dashboard");
+  });
+
   it("formats as copy-paste text grouped by where it runs", () => {
     const text = formatChecklist(steps);
     expect(text).toContain("not in the chat");
