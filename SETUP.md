@@ -30,6 +30,18 @@ When it finishes it has rewritten `band.config.json`, `CLAUDE.md` and `README.md
 and listed the secrets to set. The setup touches far more files than an AI commit may (5 files, 500 lines), so it gives you the
 `USER_COMMIT=1 git commit` to run yourself.
 
+**Typefaces.** It asks for a font name for headings and for body copy, and optionally a wordmark face (for the band name only, in capitals
+or as typed) and a kicker face (the small labels above headings). Any font in [Fontsource](https://fontsource.org) works, which includes
+every Google Font. It is installed as an `@fontsource` package and served from your own site, so the site makes no request to a font CDN
+and visitors are not tracked by one. Setup looks each name up (it needs the network), runs `pnpm install`, and the lockfile change goes
+in the setup commit. To change them later, edit `type` in the answers file it kept under `docs/` (gitignored) and run
+`pnpm exec tsx scripts/init-band.ts apply docs/init-answers.json --force`. That re-applies every answer, so it also rewrites `README.md` and the
+workflow files it installed: commit anything you changed in them first.
+
+**A font that is not in Fontsource** (licensed files, a foundry) cannot be added during setup. Setup uses the nearest Fontsource face as a
+stand-in, records in your `CLAUDE.md` that the real one is owed, and adding it is a design PR after setup: you supply the font files and
+a licence that allows web embedding, and it goes through the design approval workflow with Storybook checked at the relevant sizes.
+
 ## 3. The P1 site
 
 P1 is required: every page the editor builds, and the catalog blocks, come from it. The site falls back to the repository copy

@@ -233,5 +233,5 @@ and Space Grotesk, with the other two off. When `wordmark` or `kicker` is off, t
   variable, weights) so nothing needs the network after setup; `pnpm init-band font-info <name>` looks one up.
 - **Custom fonts (licensed files, a foundry, anything not in Fontsource) are a design PR after setup**, not a setup option: the font files and a licence come from the owner, and a new face
   changes the design system, so it goes through the design approval workflow above (`design-fonts-<name>` from a freshly pulled `main`, Storybook at the relevant sizes). Until then the config
-  names the nearest Fontsource face as a stand-in. The PR adds a face kind for local files to `lib/theme/fonts.ts` (files under `design-system/fonts/`, imported from the generated `fonts.ts`),
+  names the nearest Fontsource face as a stand-in, `/init-band` lists the face under "Custom typefaces still to add" in the band's CLAUDE.md (the `customFonts` answers) and offers this PR once the setup is merged. The PR adds a face kind for local files to `lib/theme/fonts.ts` (files under `design-system/fonts/`, imported from the generated `fonts.ts`),
   keeps them same-origin, and checks that the licence allows web embedding.
