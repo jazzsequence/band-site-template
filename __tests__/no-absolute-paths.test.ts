@@ -15,9 +15,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const HOME_PATH = /\/(?:Users|home)\/(?!runner\/)[A-Za-z0-9._-]+\//;
 
 // Files allowed to hold one, and why. This list should stay empty or shrink.
-const ALLOWED: Record<string, string> = {
-  ".claude/settings.json": "a permission rule naming the owner's checkout; waiting on the owner's decision (make it relative, or drop it)",
-};
+const ALLOWED: Record<string, string> = {};
 
 const SELF = "__tests__/no-absolute-paths.test.ts";
 const files = execFileSync("git", ["ls-files", "-z"], { cwd: root, encoding: "utf-8" })
