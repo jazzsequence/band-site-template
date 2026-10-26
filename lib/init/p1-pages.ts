@@ -166,6 +166,15 @@ export function describeP1Pages(siteId: string, pages: P1PageSpec[]): string {
   return [`P1 site ${siteId}: ${pages.length} pages to create (document path, title, blocks)`, ...rows, ...(notes.length ? ["", "Still yours to supply:", ...notes] : [])].join("\n");
 }
 
+/** The biography file, or a readable reason it cannot be read (so a mistyped --bio path does not surface as a bare ENOENT). */
+export function readBioFile(file: string): string {
+  try {
+    return readFileSync(path.resolve(file), "utf8");
+  } catch (e) {
+    throw new Error(`Could not read the bio file ${file}: ${e instanceof Error ? e.message : e}`);
+  }
+}
+
 /** Loads what buildP1Pages needs from a repo checkout. */
 export function readRepoContent(root: string, bio?: string): P1PageInput {
   const read = (rel: string) => readFileSync(path.join(root, rel), "utf8");

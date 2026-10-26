@@ -3,7 +3,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 
-import { buildP1Pages, describeP1Pages, p1PagesProblem, readRepoContent, withoutTour, type Block, type P1PageInput, type PageDoc } from "../lib/init/p1-pages";
+import { buildP1Pages, describeP1Pages, p1PagesProblem, readBioFile, readRepoContent, withoutTour, type Block, type P1PageInput, type PageDoc } from "../lib/init/p1-pages";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel: string) => readFileSync(resolve(root, rel), "utf-8");
@@ -120,6 +120,13 @@ describe("describeP1Pages", () => {
     expect(text).toMatch(/^ {2}\/ {24}Cinder & Vale {2}\[Hero, TourPreview, AlbumGrid\]$/m);
     expect(text).toContain("Still yours to supply:\n- /bio: The bio page carries only the band description");
     expect(describeP1Pages("site-1", buildP1Pages(input({ bio: "Text." })))).not.toContain("Still yours to supply");
+  });
+});
+
+describe("readBioFile", () => {
+  it("reads the file, and says which file it could not read", () => {
+    expect(readBioFile(resolve(root, "content/press/article.md"))).toContain("Placeholder");
+    expect(() => readBioFile("docs/no-such-bio.md")).toThrow(/Could not read the bio file docs\/no-such-bio\.md: ENOENT/);
   });
 });
 

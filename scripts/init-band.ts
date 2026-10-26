@@ -23,7 +23,7 @@ import { applyInit } from "../lib/init/apply";
 import { AnswersError } from "../lib/init/answers";
 import { paletteReport } from "../lib/init/palette-report";
 import { describeFont, FontLookupError, lookupFont } from "../lib/init/fonts";
-import { buildP1Pages, describeP1Pages, p1PagesProblem, readRepoContent } from "../lib/init/p1-pages";
+import { buildP1Pages, describeP1Pages, p1PagesProblem, readBioFile, readRepoContent } from "../lib/init/p1-pages";
 import { formatChecklist } from "../lib/init/checklist";
 import { band, hosting, setup } from "../lib/band/config";
 import { FONT_ROLES, type FontRole } from "../lib/theme/fonts";
@@ -89,7 +89,7 @@ async function main() {
       const problem = p1PagesProblem({ setup, hosting });
       if (problem) fail(problem);
       const bioFile = flag("bio");
-      const pages = buildP1Pages(readRepoContent(root, bioFile ? readFileSync(path.resolve(bioFile), "utf-8") : undefined));
+      const pages = buildP1Pages(readRepoContent(root, bioFile ? readBioFile(bioFile) : undefined));
       console.log(has("json") ? JSON.stringify({ siteId: hosting.p1SiteId, pages }, null, 2) : describeP1Pages(hosting.p1SiteId as string, pages));
       return;
     }
