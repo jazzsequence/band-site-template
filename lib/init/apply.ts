@@ -208,6 +208,10 @@ export async function applyInit(opts: ApplyOptions): Promise<ApplyReport> {
 
   if (fontsChanged && opts.skipAssets) notes.push("package.json now names the chosen typefaces: run `pnpm install`, then `pnpm theme` (it writes the font imports), and commit pnpm-lock.yaml with the rest.");
   if (fontsChanged && !opts.skipAssets) notes.push("pnpm-lock.yaml changed with the typefaces: commit it with the rest.");
+  if (answers.customFonts?.length) {
+    const list = answers.customFonts.map((c) => `${c.name} (${c.role})`).join(", ");
+    notes.push(`Custom typefaces still to add: ${list}. The config uses a Fontsource stand-in for each until then. Once this setup is merged, adding the real one is a design PR after setup (a design-fonts-<name> branch from a freshly pulled main, per the design approval workflow): have the font files and a licence that allows web embedding ready.`);
+  }
   if (!site) notes.push("No Pantheon site recorded: the promote and deployed-site workflows still use the placeholder name, and no secrets can be listed yet. Create the site, then re-run the hosting questions.");
   if (!answers.hosting?.p1SiteId) notes.push("No P1 site id recorded: the registry sync is not installed. Create the P1 site, then re-run the hosting questions.");
   if (!owner) notes.push("No GitHub owner recorded: .github/CODEOWNERS still names the template's author. Edit it, or re-run with github.owner set.");

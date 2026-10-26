@@ -194,6 +194,19 @@ describe("applyInit", () => {
     expect(report.notes.join("\n")).toContain("run `pnpm install`, then `pnpm theme`");
   });
 
+  it("says at the end that a design PR is owed for each custom typeface, and nothing when there are none", async () => {
+    const none = await apply({ root: tempRepo(), answers: answers(), run, skipAssets: true });
+    expect(none.notes.join("\n")).not.toMatch(/Custom typefaces/);
+    const root = tempRepo();
+    const report = await apply({ root, answers: answers({ customFonts: [{ role: "display", name: "Acme Grotesk" }] }), run, skipAssets: true });
+    const note = report.notes.find((n) => n.startsWith("Custom typefaces still to add"));
+    expect(note).toContain("Acme Grotesk (display)");
+    expect(note).toContain("Fontsource stand-in");
+    expect(note).toContain("design PR after setup");
+    expect(text(root, "CLAUDE.md")).toContain("**Custom typefaces still to add:** Acme Grotesk (display).");
+    expect(JSON.stringify(JSON.parse(text(root, "band.config.json")))).not.toContain("Acme Grotesk");
+  });
+
   it("stops after writing, saying what is wrong, when the installed fonts are not usable", async () => {
     const root = tempRepo();
     await expect(apply({ root, answers: answers(), run, verifyFonts: () => ["@fontsource/bebas-neue/400.css is not installed; run pnpm install"] })).rejects.toThrow(/fonts are not usable:\n- @fontsource\/bebas-neue\/400\.css is not installed[\s\S]*pnpm install && pnpm theme/);
