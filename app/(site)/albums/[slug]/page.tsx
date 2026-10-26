@@ -37,7 +37,7 @@ async function AlbumFallback({ params }: Props) {
       <div className="grid items-end gap-10 md:grid-cols-[20rem_1fr]">
         <LightboxImage src={album.cover} alt={`${album.title} cover art`} width={1024} height={1024} fetchPriority="high" className="w-full rounded-card border border-line" />
         <div className="space-y-5">
-          <p className="font-gothic text-3xl text-accent">{released ? album.kind : "Unreleased"}</p>
+          <p className="font-kicker text-3xl text-accent">{released ? album.kind : "Unreleased"}</p>
           <h1 className="text-metal font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-7xl">
             {album.title}
           </h1>

@@ -4,6 +4,7 @@
  * and exposes it typed. The palette in the same file is validated by lib/theme/palette.ts.
  */
 import raw from "../../band.config.json";
+import { DEFAULT_TYPOGRAPHY, readTypography, type Typography } from "../theme/fonts";
 
 export const FEATURES = ["tour", "merch", "lyrics", "map", "press"] as const;
 export type Feature = (typeof FEATURES)[number];
@@ -26,12 +27,8 @@ export type BandConfig = {
     social: SocialLink[];
   };
   features: Record<Feature, boolean>;
-  typography: {
-    /** Set the band name in the wordmark face (Unbounded, capitals). Off: the display face, as typed. */
-    wordmarkFace: boolean;
-    /** Use the blackletter face for kickers. Off: kickers use the display face. */
-    accentFace: boolean;
-  };
+  /** The typefaces, by role (lib/theme/fonts.ts). Each is a self-hosted Fontsource package. */
+  typography: Typography;
   /** Set by /init-band when it has run. false means this repo is still the placeholder band. */
   setup: { initialized: boolean };
   /** Where the site is hosted. Neither value is a secret; the keys and tokens never go in this file. */
@@ -105,7 +102,7 @@ export function parseBandConfig(input: unknown): BandConfig {
       social,
     },
     features: { tour: false, merch: false, lyrics: false, map: false, press: false },
-    typography: { wordmarkFace: false, accentFace: false },
+    typography: DEFAULT_TYPOGRAPHY,
     setup: { initialized: false },
     hosting: {},
     editorial: { offLimitsFile: "" },
@@ -117,9 +114,7 @@ export function parseBandConfig(input: unknown): BandConfig {
   // The map is part of the tour: it shows venues, so it cannot be on without the tour.
   if (config.features.map && !config.features.tour) problems.push("features.map needs features.tour: the map shows tour venues");
 
-  const t = section("typography");
-  config.typography.wordmarkFace = flag(t, "typography", "wordmarkFace");
-  config.typography.accentFace = flag(t, "typography", "accentFace");
+  config.typography = readTypography(root.typography, problems);
 
   // setup and hosting are optional so a config written before they existed still loads.
   const setupRaw = root.setup;

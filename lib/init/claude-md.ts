@@ -4,6 +4,7 @@
  * bullets) between <!-- template:NAME:start --> and <!-- template:NAME:end -->. Everything outside the markers is
  * the project's real rules and is left alone, so a new repo keeps them but not the template's own history.
  */
+import type { FontFace, Typography } from "../theme/fonts";
 import type { Adjustment } from "../theme/palette";
 import type { Answers } from "./answers";
 
@@ -22,6 +23,10 @@ function replaceBlock(text: string, name: string, replacement: string): string {
   if (!block(name).test(text)) throw new Error(`CLAUDE.md has no template:${name} block to replace`);
   return text.replace(block(name), () => replacement.trimEnd());
 }
+
+const face = (f: FontFace) => `${f.family}${f.variable ? " (variable)" : ""}`;
+const describeType = (t: Typography) =>
+  `headings in ${face(t.display)}, body in ${face(t.body)}; the wordmark ${t.wordmark ? `in ${face(t.wordmark)}${t.wordmark.uppercase ? ", capitals" : ""}` : "uses the display face"}; kickers ${t.kicker ? `in ${face(t.kicker)}` : "use the display face"}`;
 
 const FEATURE_LABELS = { tour: "Tour and tickets", merch: "Merch", lyrics: "Lyrics", map: "Tour map", press: "Press" } as const;
 
@@ -46,7 +51,7 @@ Recorded by \`/init-band\` on ${date}. Change them in \`band.config.json\` (then
 
 - **Band:** ${id.name}${id.fictional ? ", a fictional act (pages never present it as real)" : ""}. ${id.tagline}
 - **Sections on:** ${on.length ? on.join(", ") : "none"}.${off.length ? ` **Off:** ${off.join(", ")}; their routes return 404 and they drop out of the nav, sitemap and \`llms.txt\`.` : ""}
-- **Type:** wordmark face ${a.type.wordmarkFace ? "on (Unbounded, capitals)" : "off (display face, as typed)"}; blackletter kicker accent ${a.type.accentFace ? "on" : "off"}.
+- **Type:** ${describeType(a.type)}.
 - **Palette:** see \`band.config.json\`; the gate${adjustments.length ? ` lifted ${adjustments.map((x) => `\`${x.key}\``).join(", ")} for contrast (the config keeps the written value, the generated theme the lifted one)` : " needed no adjustments"}.
 - **Hosting:** ${host.pantheonSite ? `Pantheon site \`${host.pantheonSite}\`` : "Pantheon site not set yet"}; ${host.p1SiteId ? `P1 site \`${host.p1SiteId}\`` : "P1 site not set yet"}; audio ${a.audio?.baseUrl ? `served from ${a.audio.baseUrl}` : "host not set yet (`NEXT_PUBLIC_AUDIO_BASE_URL`)"}.
 - **Workflows installed:** ${[installed.deployedSite && "`test-deployed-site.yml`", installed.registrySync && "`sync-puck-registry.yml`"].filter(Boolean).join(", ") || "none yet (the examples are in `examples/workflows/`)"}.

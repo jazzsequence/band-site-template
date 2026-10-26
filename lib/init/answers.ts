@@ -4,6 +4,7 @@
  * contrast gate) the site uses at build time: a setup that passes here cannot fail the first build.
  */
 import { parseBandConfig, type Feature, type SocialLink } from "../band/config";
+import type { Typography } from "../theme/fonts";
 import { resolvePalette, validatePalette, type Adjustment, type Palette } from "../theme/palette";
 
 export type Answers = {
@@ -21,7 +22,8 @@ export type Answers = {
     offLimits?: string[];
   };
   look: { palette: Palette };
-  type: { wordmarkFace: boolean; accentFace: boolean };
+  /** The typefaces, as band.config.json records them (lib/theme/fonts.ts). */
+  type: Typography;
   features: Record<Feature, boolean>;
   /** Where audio is served from (the custom domain on the R2 bucket), or absent to decide later. */
   audio?: { baseUrl?: string };
@@ -98,14 +100,15 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
       social: identity.social ?? [],
     },
     features,
-    typography: { wordmarkFace: type.wordmarkFace, accentFace: type.accentFace },
+    typography: type,
     setup: { initialized: true },
     ...(Object.keys(hosting).length ? { hosting } : {}),
     editorial: { offLimitsFile: "docs/off-limits.md" },
     palette: look.palette,
   };
+  let typography: Typography | undefined;
   try {
-    parseBandConfig(config);
+    typography = parseBandConfig(config).typography;
   } catch (e) {
     problems.push(...asAnswerPaths((e as { problems?: string[] }).problems ?? [String(e)]));
   }
@@ -121,7 +124,7 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
     answers: {
       identity: { ...(identity as Answers["identity"]), copyrightYear: config.band.copyrightYear as number },
       look: { palette: validatePalette(look.palette) },
-      type: config.typography as Answers["type"],
+      type: typography as Typography,
       features: features as Answers["features"],
       ...(baseUrl ? { audio: { baseUrl: baseUrl as string } } : {}),
       ...(Object.keys(hosting).length ? { hosting: hosting as Answers["hosting"] } : {}),

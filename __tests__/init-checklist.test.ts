@@ -8,13 +8,14 @@ import { parseAnswers } from "../lib/init/answers";
 import { suggestPalette } from "../lib/init/palette-suggest";
 import { renderReadme } from "../lib/init/readme";
 import { formatChecklist, secretsChecklist } from "../lib/init/checklist";
+import { DEFAULT_TYPOGRAPHY } from "../lib/theme/fonts";
 
 const make = (extra: Record<string, unknown> = {}) =>
   parseAnswers(
     {
       identity: { name: "Neon Orchard", tagline: "Slow synths for fast nights.", description: "A three-piece making slow synth music.", genre: "Synthpop", fictional: true, siteUrl: "https://neon-orchard.example.com" },
       look: { palette: suggestPalette({ hue: 150 }) },
-      type: { wordmarkFace: false, accentFace: false },
+      type: DEFAULT_TYPOGRAPHY,
       features: { tour: true, merch: true, lyrics: true, map: true, press: true },
       audio: { baseUrl: "https://audio.neon-orchard.example.com" },
       hosting: { pantheonSite: "neon-orchard", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" },

@@ -17,8 +17,22 @@
     "press": true
   },
   "typography": {
-    "wordmarkFace": false,
-    "accentFace": false
+    "display": {
+      "id": "encode-sans-expanded",
+      "family": "Encode Sans Expanded",
+      "category": "sans-serif",
+      "variable": false,
+      "weights": [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    },
+    "body": {
+      "id": "space-grotesk",
+      "family": "Space Grotesk",
+      "category": "sans-serif",
+      "variable": true,
+      "weights": [300, 400, 500, 600, 700]
+    },
+    "wordmark": null,
+    "kicker": null
   },
   "setup": {
     "initialized": false

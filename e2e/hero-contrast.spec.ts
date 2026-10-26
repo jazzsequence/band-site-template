@@ -37,8 +37,8 @@ test("text over the hero photo meets contrast at every screen size", async ({ pa
     const boxes = await page.evaluate(() => {
       const hero = document.querySelector("section")!;
       const els: Record<string, Element | undefined> = {
-        kicker: hero.querySelector("p.font-gothic") ?? undefined,
-        blurb: [...hero.querySelectorAll("p")].find((e) => !e.classList.contains("font-gothic")),
+        kicker: hero.querySelector("p.font-kicker") ?? undefined,
+        blurb: [...hero.querySelectorAll("p")].find((e) => !e.classList.contains("font-kicker")),
         title: hero.querySelector("h1") ?? undefined,
       };
       const out: Record<string, { x: number; y: number; w: number; h: number; color: string }> = {};

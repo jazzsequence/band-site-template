@@ -39,8 +39,8 @@ test has something to render.
 | `/p1` | The page editor (sign-in required) |
 
 The tour, merch, lyrics, press and the tour map can each be switched off in `band.config.json`; a switched-off section drops out of
-the navigation, sitemap and `llms.txt`, and its routes return 404. The wordmark face and the blackletter accent for kickers are
-optional too. Audio keeps playing while you move around the site.
+the navigation, sitemap and `llms.txt`, and its routes return 404. The typefaces (headings, body, and optionally a wordmark and a kicker face)
+are choices in the same file; any font in the Fontsource catalogue works, and `/init-band` picks them with you. Audio keeps playing while you move around the site.
 
 ## Commands
 

@@ -114,7 +114,8 @@ Rules for this repository (see CLAUDE.md). Numbering continues from the section 
     file, say only whether there is a conflict. Its wording is allowed nowhere that is committed, so copy, metadata, alt text, filenames,
     comments, README, fixtures and Storybook text never use it. If the file does not exist, report `⚠️ 16: no off-limits file; compared against the diff only` rather than failing.
 17. The band name is never hard-coded in a component, page or test: it comes from `band.config.json` (`band.name`, via `lib/band/config.ts`, or `e2e/helpers/config.ts` in specs).
-    Where a wordmark face is chosen (`typography.wordmarkFace`) it is for the name only, in flat colour, and the blackletter face is never used on the name.
+    Where a wordmark face is chosen (`typography.wordmark`) it is for the name only, in flat colour, and the kicker face (`typography.kicker`) is never used on the name.
+    Faces are self-hosted Fontsource packages named in `band.config.json`; a stylesheet or `<link>` to a font CDN is a third-party request (and the CSP is `font-src 'self'`), so it is a defect.
 
 ### Design system
 **Condition:** any file under `design-system/` is staged

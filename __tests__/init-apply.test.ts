@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { applyInit } from "../lib/init/apply";
 import { suggestPalette } from "../lib/init/palette-suggest";
+import { FULL_TYPOGRAPHY } from "./fixtures/typography";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // The files the init flow reads or rewrites. Each is reset to its template state in the copy, so these tests keep passing once the repo itself has been configured.
@@ -50,7 +51,7 @@ const answers = (extra: Record<string, unknown> = {}) => ({
     offLimits: ["a-very-specific-forbidden-topic"],
   },
   look: { palette: suggestPalette({ hue: 150, loudness: "balanced", scheme: "triad" }) },
-  type: { wordmarkFace: true, accentFace: false },
+  type: FULL_TYPOGRAPHY,
   features: { tour: true, merch: false, lyrics: true, map: true, press: false },
   audio: { baseUrl: "https://audio.neon-orchard.example.com" },
   hosting: { pantheonSite: "neon-orchard", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" },
@@ -167,7 +168,7 @@ describe("applyInit", () => {
   it("changes nothing when an answer is invalid", async () => {
     const root = tempRepo();
     const before = text(root, "band.config.json");
-    await expect(applyInit({ root, answers: answers({ type: { wordmarkFace: "maybe" } }), run, skipAssets: true })).rejects.toThrow(/type\.wordmarkFace/);
+    await expect(applyInit({ root, answers: answers({ type: { ...FULL_TYPOGRAPHY, body: { ...FULL_TYPOGRAPHY.body, id: "Not An Id" } } }), run, skipAssets: true })).rejects.toThrow(/type\.body\.id/);
     expect(text(root, "band.config.json")).toBe(before);
     expect(existsSync(join(root, "docs"))).toBe(false);
   });
