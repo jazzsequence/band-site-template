@@ -126,6 +126,24 @@ describe("renderClaudeMd", () => {
     expect(text).toContain("Real tour venues must be checked");
   });
 
+  it("records custom typefaces still to add, with the stand-in and the design PR, and says nothing when there are none", () => {
+    expect(out).not.toContain("Custom typefaces still to add");
+    const { answers: custom } = parseAnswers(
+      {
+        identity: { name: "Bare", tagline: "t", description: "d", genre: "g", fictional: false, siteUrl: "https://bare.example.com" },
+        look: { palette: suggestPalette({ hue: 20 }) },
+        type: DEFAULT_TYPOGRAPHY,
+        features: { tour: false, merch: false, lyrics: false, map: false, press: false },
+        customFonts: [{ role: "display", name: "Acme Grotesk" }, { role: "kicker", name: "Acme Script" }],
+      },
+      2026,
+    );
+    const text = renderClaudeMd(template, { ...ctx, answers: custom });
+    expect(text).toContain("**Custom typefaces still to add:** Acme Grotesk (display), Acme Script (kicker).");
+    expect(text).toContain("Fontsource stand-in");
+    expect(text).toContain("design PR after setup");
+  });
+
   it("refuses a CLAUDE.md that has lost a template block rather than guessing", () => {
     expect(() => renderClaudeMd(template.replace("<!-- template:placeholders:start -->", ""), ctx)).toThrow(/template:placeholders/);
   });
