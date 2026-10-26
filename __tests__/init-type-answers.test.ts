@@ -1,27 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { AnswersError } from "../lib/init/answers";
-import { FontLookupError, slugify, type FontInfo } from "../lib/init/fonts";
 import { resolveTypeAnswers } from "../lib/init/type-answers";
-import { DEFAULT_TYPOGRAPHY, type FontFace } from "../lib/theme/fonts";
-import { FULL_TYPOGRAPHY } from "./fixtures/typography";
+import { DEFAULT_TYPOGRAPHY } from "../lib/theme/fonts";
+import { FULL_TYPOGRAPHY, makeLookup } from "./fixtures/typography";
 
-// The faces the wordmark and kicker fixtures carry also have an uppercase flag or not; the catalogue holds the facts only.
-const plain = ({ id, family, category, variable, weights }: FontFace): FontFace => ({ id, family, category, variable, weights });
-const CATALOGUE: FontFace[] = [
-  { id: "playfair-display", family: "Playfair Display", category: "serif", variable: true, weights: [400, 500, 600, 700, 800, 900] },
-  { id: "bebas-neue", family: "Bebas Neue", category: "sans-serif", variable: false, weights: [400] },
-  plain(FULL_TYPOGRAPHY.wordmark!),
-  plain(FULL_TYPOGRAPHY.kicker!),
-];
-
-const calls: string[] = [];
-const lookup = async (name: string): Promise<FontInfo> => {
-  calls.push(name);
-  const face = CATALOGUE.find((f) => f.id === slugify(name));
-  if (!face) throw new FontLookupError(`Fontsource has no font "${slugify(name)}".`);
-  return { face, version: "5.3.0", license: "OFL-1.1", specimen: `https://fontsource.org/fonts/${face.id}` };
-};
+const { lookup, calls } = makeLookup();
 const resolve = (raw: unknown, current = DEFAULT_TYPOGRAPHY, installed = () => true) => resolveTypeAnswers(raw, current, installed, lookup);
 const problems = async (raw: unknown, current = DEFAULT_TYPOGRAPHY) => {
   const e = await resolve(raw, current).catch((x) => x);
