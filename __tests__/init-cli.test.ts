@@ -54,6 +54,15 @@ describe("scripts/init-band.ts", () => {
     expect(rejected.out).toContain("too light");
   });
 
+  it("font-info asks for a name and a known role, and refuses something that is not a font name without a request", () => {
+    expect(cli("font-info").err).toContain("Give the font's name");
+    expect(cli("font-info", "--role", "body").err).toContain("Give the font's name");
+    expect(cli("font-info", "Inter", "--role", "footer").err).toContain("--role must be one of display, body, wordmark, kicker");
+    const r = cli("font-info", "???");
+    expect(r.code).toBe(1);
+    expect(r.err).toContain("is not a font name");
+  });
+
   it("apply explains a missing answers file and an invalid one, and changes nothing", () => {
     expect(cli("apply", join(dir, "nope.json")).err).toContain("Could not read");
     const invalid = join(dir, "invalid.json");

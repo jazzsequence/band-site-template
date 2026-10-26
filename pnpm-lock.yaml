@@ -16,13 +16,7 @@ importers:
       '@fontsource-variable/space-grotesk':
         specifier: ^5.3.0
         version: 5.3.0
-      '@fontsource-variable/unbounded':
-        specifier: ^5.3.0
-        version: 5.3.0
       '@fontsource/encode-sans-expanded':
-        specifier: ^5.3.0
-        version: 5.3.0
-      '@fontsource/unifrakturcook':
         specifier: ^5.3.0
         version: 5.3.0
       '@pantheon-systems/cpub-react-sdk':
@@ -95,9 +89,6 @@ importers:
       '@eslint/js':
         specifier: ^9.27.0
         version: 9.39.5
-      '@fontsource/unbounded':
-        specifier: ^5.3.0
-        version: 5.3.0
       '@playwright/test':
         specifier: ^1.64.1
         version: 1.64.1
@@ -654,17 +645,8 @@ packages:
   '@fontsource-variable/space-grotesk@5.3.0':
     resolution: {integrity: sha512-2IxmvfB08i9vnGB3Ym/AXvhRE+8XOjWMXIyDum03c+tPwH0FUoMNQfGpU8NXPxjbws0Vvss3AH0Zqt4oJBBAdw==}
 
-  '@fontsource-variable/unbounded@5.3.0':
-    resolution: {integrity: sha512-ea565Ncn4r7gPdBEHcmaF31V11hDfkL7b/JCklLobQbMfbu2ZZQrVWNgdeEFWFLqNh36yhieZWOgxdAnMTzrLg==}
-
   '@fontsource/encode-sans-expanded@5.3.0':
     resolution: {integrity: sha512-ay7t9tx7TvBTjL6H9oAR+Z5NOWxOEXTK9IOJ2jKNtT/+j/2Sn2wpPV2E1eY716Be0kOcEFHcluzlphTZvQGt+g==}
-
-  '@fontsource/unbounded@5.3.0':
-    resolution: {integrity: sha512-pPD6hsTnjoQRr6pCsqMHbHBfauB4LZygCNQEUJHu+CO2wzDFHqELEFSG7sTwo5Z5Gr4q3OK0fIILOXBJDv6lcw==}
-
-  '@fontsource/unifrakturcook@5.3.0':
-    resolution: {integrity: sha512-oOeUerPztcIBR6/+krMW4n/8VLF8A4NrjCNpR1C6F/C8JLekLMoSm5JzrxfPtyn5RtJdYQdTYigk4CtUCWxBCw==}
 
   '@google-cloud/paginator@5.0.2':
     resolution: {integrity: sha512-DJS3s0OVH4zFDB1PzjxAsHqJT6sKVbRwwML0ZBP9PbU7Yebtu/7SWMRzvO2J3nUi9pRNITCfu4LJeooM2w4pjg==}
@@ -5884,13 +5866,7 @@ snapshots:
 
   '@fontsource-variable/space-grotesk@5.3.0': {}
 
-  '@fontsource-variable/unbounded@5.3.0': {}
-
   '@fontsource/encode-sans-expanded@5.3.0': {}
-
-  '@fontsource/unbounded@5.3.0': {}
-
-  '@fontsource/unifrakturcook@5.3.0': {}
 
   '@google-cloud/paginator@5.0.2':
     dependencies:

@@ -5,6 +5,8 @@
  *   suggest-palette --hue N [--loudness quiet|balanced|loud] [--scheme analogous|complement|triad|mono]
  *                                           print a proposed palette (JSON) and its contrast report
  *   check-palette <file.json>               gate a palette file; exit 1 if it is rejected
+ *   font-info <name> [--role display|body|wordmark|kicker]
+ *                                           look a font up in Fontsource: how it ships, its licence, where to see it, and notes for the role
  *   apply <answers.json> [--force] [--skip-assets]
  *                                           write the band's config, notes, docs, workflows and assets; print the secrets to set
  *
@@ -18,8 +20,10 @@ import { LOUDNESS, SCHEMES, suggestPalette, type Loudness, type Scheme } from ".
 import { applyInit } from "../lib/init/apply";
 import { AnswersError } from "../lib/init/answers";
 import { paletteReport } from "../lib/init/palette-report";
+import { describeFont, FontLookupError, lookupFont } from "../lib/init/fonts";
 import { formatChecklist } from "../lib/init/checklist";
 import { band, setup } from "../lib/band/config";
+import { FONT_ROLES, type FontRole } from "../lib/theme/fonts";
 import { validatePalette } from "../lib/theme/palette";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -66,6 +70,18 @@ async function main() {
       if (!report.ok) process.exit(1);
       return;
     }
+    case "font-info": {
+      const role = flag("role") as FontRole | undefined;
+      if (!rest[0] || rest[0].startsWith("--")) fail("Give the font's name, such as: font-info \"Playfair Display\" --role display");
+      if (role !== undefined && !FONT_ROLES.includes(role)) fail(`--role must be one of ${FONT_ROLES.join(", ")}`);
+      try {
+        console.log(describeFont(await lookupFont(rest[0]), role));
+      } catch (e) {
+        if (e instanceof FontLookupError) fail(e.message);
+        throw e;
+      }
+      return;
+    }
     case "apply": {
       const report = await applyInit({ root, answers: readJson(rest[0]), force: has("force"), skipAssets: has("skip-assets") });
       console.log(`Wrote ${report.written.length} files:\n${report.written.map((f) => `  ${f}`).join("\n")}`);
@@ -76,7 +92,7 @@ async function main() {
       return;
     }
     default:
-      fail("Usage: tsx scripts/init-band.ts status | suggest-palette --hue N | check-palette <file> | apply <answers.json> [--force] [--skip-assets]");
+      fail("Usage: tsx scripts/init-band.ts status | suggest-palette --hue N | check-palette <file> | font-info <name> | apply <answers.json> [--force] [--skip-assets]");
   }
 }
 

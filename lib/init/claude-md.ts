@@ -51,14 +51,14 @@ Recorded by \`/init-band\` on ${date}. Change them in \`band.config.json\` (then
 
 - **Band:** ${id.name}${id.fictional ? ", a fictional act (pages never present it as real)" : ""}. ${id.tagline}
 - **Sections on:** ${on.length ? on.join(", ") : "none"}.${off.length ? ` **Off:** ${off.join(", ")}; their routes return 404 and they drop out of the nav, sitemap and \`llms.txt\`.` : ""}
-- **Type:** ${describeType(a.type)}.
+- **Type:** ${describeType(a.type)}.${a.customFonts?.length ? ` **Custom typefaces still to add:** ${a.customFonts.map((c) => `${c.name} (${c.role})`).join(", ")}. The config names a Fontsource stand-in for each until then; adding the real one is a design PR after setup (see "Custom fonts" under the design approval workflow).` : ""}
 - **Palette:** see \`band.config.json\`; the gate${adjustments.length ? ` lifted ${adjustments.map((x) => `\`${x.key}\``).join(", ")} for contrast (the config keeps the written value, the generated theme the lifted one)` : " needed no adjustments"}.
 - **Hosting:** ${host.pantheonSite ? `Pantheon site \`${host.pantheonSite}\`` : "Pantheon site not set yet"}; ${host.p1SiteId ? `P1 site \`${host.p1SiteId}\`` : "P1 site not set yet"}; audio ${a.audio?.baseUrl ? `served from ${a.audio.baseUrl}` : "host not set yet (`NEXT_PUBLIC_AUDIO_BASE_URL`)"}.
 - **Workflows installed:** ${[installed.deployedSite && "`test-deployed-site.yml`", installed.registrySync && "`sync-puck-registry.yml`"].filter(Boolean).join(", ") || "none yet (the examples are in `examples/workflows/`)"}.
 - Secrets are never in files; see "Secrets on Pantheon" below for how each is set.`;
 
   const placeholders = `- **Placeholder content.** The albums, shows, lyrics, merch, bio and press article are still the template's neutral samples until the band replaces them (\`CONTENT.md\` says where).
-  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette
+  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette, in the wordmark face (or the display face as typed) from its static Fontsource files, so \`pnpm install\` must have run
   (\`node scripts/make-brand-assets.mjs\`). Both read the generated theme, so run \`pnpm theme\` first after changing the palette. The seeded tour has one on-sale and one sold-out date
   so both ticket pages stay covered by tests; the ticket flow (\`/tickets/[id]\` -> \`/ticket?...\`) keeps all state in the URL and collects nothing.${id.fictional ? " Tour dates are fictional and must never be presented as real." : " Real tour venues must be checked against a source before they are added."}`;
 
