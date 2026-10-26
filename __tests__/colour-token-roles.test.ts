@@ -13,6 +13,8 @@ import { describe, expect, it } from "vitest";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const HUES = "magenta|violet|cyan|chrome-hi|chrome-lo";
+// Typefaces are named by role too: font-kicker, never font-gothic (the face is the band's choice, so it may not be blackletter).
+const FACE_NAMED = /(?:--font|\bfont)-gothic\b/;
 // Tokens and utilities named after a hue: --color-magenta, --shadow-glow-cyan, --grad-neon,
 // text-violet, hover:bg-cyan, [&_a]:text-cyan, .text-chrome, .text-neon.
 const HUE_NAMED = new RegExp(
@@ -94,6 +96,14 @@ describe("tracked files use colour roles", () => {
 
   it("names no colour by hue", () => {
     const offenders = files.filter((f) => HUE_NAMED.test(read(f)));
+    expect(offenders).toEqual([]);
+  });
+
+  it("names no typeface by style", () => {
+    expect("font-gothic text-3xl").toMatch(FACE_NAMED);
+    expect("--font-gothic: x").toMatch(FACE_NAMED);
+    expect("font-kicker").not.toMatch(FACE_NAMED);
+    const offenders = files.filter((f) => FACE_NAMED.test(read(f)));
     expect(offenders).toEqual([]);
   });
 

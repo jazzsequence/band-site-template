@@ -19,6 +19,9 @@ importers:
       '@fontsource-variable/unbounded':
         specifier: ^5.3.0
         version: 5.3.0
+      '@fontsource/encode-sans-expanded':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource/unifrakturcook':
         specifier: ^5.3.0
         version: 5.3.0
@@ -92,9 +95,6 @@ importers:
       '@eslint/js':
         specifier: ^9.27.0
         version: 9.39.5
-      '@fontsource/encode-sans-expanded':
-        specifier: ^5.3.0
-        version: 5.3.0
       '@fontsource/unbounded':
         specifier: ^5.3.0
         version: 5.3.0

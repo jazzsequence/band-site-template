@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { AnswersError, parseAnswers } from "../lib/init/answers";
 import { suggestPalette } from "../lib/init/palette-suggest";
+import { FULL_TYPOGRAPHY } from "./fixtures/typography";
 
 const good = () => ({
   identity: {
@@ -15,7 +16,7 @@ const good = () => ({
     offLimits: ["a topic the band never discusses"],
   },
   look: { palette: suggestPalette({ hue: 150, loudness: "balanced", scheme: "triad" }) },
-  type: { wordmarkFace: true, accentFace: false },
+  type: FULL_TYPOGRAPHY,
   features: { tour: true, merch: false, lyrics: true, map: true, press: false },
   audio: { baseUrl: "https://audio.neon-orchard.example.com" },
   hosting: { pantheonSite: "neon-orchard", p1SiteId: "0e5a1c2e-9d3b-4f60-8a7e-1b2c3d4e5f60" },
@@ -37,7 +38,7 @@ describe("parseAnswers", () => {
     expect(config).toMatchObject({
       band: { name: "Neon Orchard", genre: "Synthpop", fictional: true, copyrightYear: 2026, social: [{ label: "Bandcamp" }] },
       features: { tour: true, merch: false, lyrics: true, map: true, press: false },
-      typography: { wordmarkFace: true, accentFace: false },
+      typography: FULL_TYPOGRAPHY,
       setup: { initialized: true },
       hosting: { pantheonSite: "neon-orchard" },
       editorial: { offLimitsFile: "docs/off-limits.md" },
@@ -65,14 +66,14 @@ describe("parseAnswers", () => {
     const a = good() as Record<string, any>;
     a.identity.name = "";
     a.identity.siteUrl = "http://nope.example";
-    a.type = { wordmarkFace: "yes" };
+    a.type = { ...FULL_TYPOGRAPHY, wordmark: { ...FULL_TYPOGRAPHY.wordmark, uppercase: "yes" } };
     a.features.map = true;
     a.features.tour = false;
     a.audio = { baseUrl: "https://audio.example.com/path" };
     const out = problems(a);
     expect(out).toContain("identity.name must be a non-empty string");
     expect(out).toContain("identity.siteUrl must be an https:// URL");
-    expect(out).toContain("type.wordmarkFace must be true or false");
+    expect(out).toContain("type.wordmark.uppercase must be true or false");
     expect(out).toContain("features.map needs features.tour");
     expect(out).toContain("audio.baseUrl must be an https:// origin");
   });
