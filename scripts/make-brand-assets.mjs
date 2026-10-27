@@ -3,7 +3,7 @@
  *
  * app/   icon.png, icon.svg, apple-icon.png, favicon.ico   (Next file conventions)
  * public/icons/   icon-192.png, icon-512.png, icon-maskable-512.png   (referenced by app/manifest.ts)
- * public/og-default.png   1200x630 social card
+ * public/og-default.jpg   1200x630 social card (JPEG: with a photo behind the name a PNG is megabytes, and link previews fetch it)
  *
  * The mark is the band name's first letter on the site's darkest surface with an accent bar, and the card is the name on a surface
  * gradient. Both are set the way the site sets the name: in the wordmark face (capitals if typography.wordmark.uppercase) or, with no
@@ -98,9 +98,9 @@ const open = async (html, w, h) => {
   await page.evaluate(() => document.fonts.ready);
   return page;
 };
-const shoot = async (html, w, h, selector) => {
+const shoot = async (html, w, h, selector, options = { omitBackground: true, type: "png" }) => {
   const page = await open(html, w, h);
-  const buf = await page.locator(selector).screenshot({ omitBackground: true, type: "png" });
+  const buf = await page.locator(selector).screenshot(options);
   await page.close();
   return buf;
 };
@@ -121,7 +121,7 @@ writeFileSync("public/icons/icon-192.png", await icon(192));
 writeFileSync("public/icons/icon-512.png", await icon(512));
 // Maskable: full bleed, with the mark inside the central 80% safe zone.
 writeFileSync("public/icons/icon-maskable-512.png", await icon(512, { round: false, scale: 0.5 }));
-writeFileSync("public/og-default.png", await shoot(cardHtml(TITLE_SIZE), 1200, 630, ".card"));
+writeFileSync("public/og-default.jpg", await shoot(cardHtml(TITLE_SIZE), 1200, 630, ".card", { type: "jpeg", quality: 90 }));
 writeFileSync("app/icon.svg", `${iconSvg({ round: true, scale: 0.64 })}\n`);
 
 // PNG-in-ICO: header, directory entries, then the PNG payloads.

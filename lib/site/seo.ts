@@ -8,7 +8,7 @@ import { band } from "../band/config";
  */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? band.siteUrl).replace(/\/$/, "");
 export const SITE_NAME = band.name;
-export const DEFAULT_OG_IMAGE = "/og-default.png";
+export const DEFAULT_OG_IMAGE = "/og-default.jpg";
 
 type PageMeta = {
   title: string;
