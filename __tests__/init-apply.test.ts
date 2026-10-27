@@ -101,7 +101,7 @@ describe("applyInit", () => {
     const root = tempRepo();
     const report = await apply({ root, answers: example, run, skipAssets: true });
     const config = JSON.parse(text(root, "band.config.json"));
-    expect(config).toMatchObject({ band: { name: "Neon Orchard" }, setup: { initialized: true }, typography: { display: { id: "playfair-display" }, wordmark: { id: "unbounded", uppercase: true }, kicker: null } });
+    expect(config).toMatchObject({ band: { name: "Neon Orchard" }, setup: { initialized: true }, typography: { display: { id: "playfair-display" }, wordmark: { id: "bebas-neue", uppercase: true }, kicker: null } });
     expect(report.written).toContain("package.json");
     // The next step for a P1 site is named in the closing notes and in the band's own CLAUDE.md, so the next session knows it too.
     expect(report.notes.join("\n")).toContain("Then run /init-p1-pages to create the site's P1 pages as drafts (it never publishes).");
