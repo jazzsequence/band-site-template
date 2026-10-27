@@ -1,5 +1,12 @@
 /**
- * Regenerates icons and the social card in the band's own type. Run: node scripts/make-brand-assets.mjs
+ * Regenerates icons and the social card in the band's own type.
+ *
+ *   node scripts/make-brand-assets.mjs [--hero <image>] [--focus <x%>,<y%>]
+ *
+ * With --hero the card is that photo, cropped to the card's shape, with the name set over a darkening of the surface colour at the foot
+ * of it; --focus (default 50,50) is the point of the photo to keep in frame when the crop cuts it, as percentages from the top left.
+ * Use the same photo as the home page's hero (public/images/...). Without --hero the card is the name on the surface gradient. The photo
+ * is the band's own, so nothing here checks it: look at public/og-default.jpg before committing it.
  *
  * app/   icon.png, icon.svg, apple-icon.png, favicon.ico   (Next file conventions)
  * public/icons/   icon-192.png, icon-512.png, icon-maskable-512.png   (referenced by app/manifest.ts)
@@ -22,8 +29,20 @@ import { chromium } from "@playwright/test";
 import opentype from "opentype.js";
 
 import { assetFace, assetWeight, readTypography } from "../lib/theme/fonts.ts";
+import { heroMime, parseCardArgs } from "../lib/theme/og-card.ts";
 
 const require = createRequire(import.meta.url);
+
+const card = parseCardArgs(process.argv.slice(2));
+const heroUrl = card.hero
+  ? (() => {
+      try {
+        return `data:${heroMime(card.hero)};base64,${readFileSync(card.hero).toString("base64")}`;
+      } catch (e) {
+        throw new Error(`Could not read the hero image ${card.hero}: ${e.message}`);
+      }
+    })()
+  : null;
 
 const { band, typography: rawTypography } = JSON.parse(readFileSync("band.config.json", "utf8"));
 const problems = [];
@@ -86,9 +105,12 @@ const cardHtml = (titleSize) => `<!doctype html><meta charset="utf-8"><style>
   ${fontFace}
   html, body { margin: 0; }
   .card { width: 1200px; height: 630px; position: relative; overflow: hidden; background: linear-gradient(135deg, ${INK} 0%, ${SURFACE} 45%, ${RAISED} 100%); }
-  .card h1 { position: absolute; left: 72px; right: 72px; bottom: 64px; margin: 0; font: ${weight} ${titleSize}px/1 U; letter-spacing: ${TRACKING}; ${face.uppercase ? "text-transform: uppercase; " : ""}color: ${METAL_HI}; }
+${heroUrl ? `  .card .photo { position: absolute; inset: 0; background: url(${heroUrl}) ${card.focus.x}% ${card.focus.y}% / cover no-repeat; }
+  /* Enough of the surface colour under the name that it reads on any photo, fading out before the face of a portrait. */
+  .card .scrim { position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, ${INK} 92%, transparent) 0%, color-mix(in srgb, ${INK} 75%, transparent) 28%, transparent 62%); }
+` : ""}  .card h1 { position: absolute; left: 72px; right: 72px; bottom: 64px; margin: 0; font: ${weight} ${titleSize}px/1 U; letter-spacing: ${TRACKING}; ${face.uppercase ? "text-transform: uppercase; " : ""}color: ${METAL_HI}; }
   .card .bar { position: absolute; left: 72px; bottom: 40px; width: 150px; height: 8px; background: ${ACCENT}; }
-</style><div class="card"><h1>${esc(NAME)}</h1><div class="bar"></div></div>`;
+</style><div class="card">${heroUrl ? '<div class="photo"></div><div class="scrim"></div>' : ""}<h1>${esc(NAME)}</h1><div class="bar"></div></div>`;
 
 const browser = await chromium.launch();
 const open = async (html, w, h) => {
