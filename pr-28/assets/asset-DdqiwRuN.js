@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-CsOFd3vK.js";function t(e){return!n||!e.startsWith(`/images/`)||e.includes(`?`)?e:`${e}?v=${n}`}var n;function r(){return(r=e((()=>{n=typeof process<`u`?`mvqz7arp`:void 0})))()}export{r as n,t};
