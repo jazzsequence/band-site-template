@@ -64,7 +64,11 @@ Songs and lyrics are independent: lyrics with no audio, or audio with no lyrics,
 
 Keep images small: JPEG, at most 1600 px wide, ideally under 300 KB. Resize before adding.
 The seeded images are solid-colour placeholders in the palette (`node scripts/make-placeholder-images.mjs`); replace them with real art.
-Icons and the 1200x630 social card (`public/og-default.png`) are generated from the band name and palette: `node scripts/make-brand-assets.mjs`.
+Icons and the 1200x630 social card (`public/og-default.jpg`) are generated from the band name and palette: `node scripts/make-brand-assets.mjs`.
+To put the band's hero photo behind the name on the card, as most bands' links should show, add the photo under `public/images/` (the one the home page hero uses) and run
+`node scripts/make-brand-assets.mjs --hero public/images/<hero-file>`. The photo is cropped to the card's shape; if that cuts the subject, say which part to keep with
+`--focus <x%>,<y%>` (percentages from the top left, default `50,50`; `--focus 50,25` keeps the upper middle). Look at `public/og-default.jpg` before committing it: the name sits over a dark fade
+at the foot of the photo, so keep the subject out of the bottom third. Run it with the same `--hero` every time: without it (and when `/init-band` re-themes the site) the card goes back to the plain one.
 
 ## Standards and discovery
 
