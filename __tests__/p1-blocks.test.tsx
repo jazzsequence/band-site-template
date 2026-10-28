@@ -42,6 +42,32 @@ describe("the P1 page definitions", () => {
 });
 
 describe("blocks", () => {
+  // P1 media serves an upload at its original size unless the URL asks for less (lib/site/media-url.ts): a page of band photos was 11 MB without this.
+  describe("P1 media pictures", () => {
+    const media = "https://media.p1.pantheon.io/image/00000000-0000-0000-0000-000000000000/assets/8cb57e31/photo.jpg?fit=scale-down";
+    const html = (type: string, props: object) => {
+      const block = components[type] as { render: (p: never) => React.ReactElement; defaultProps?: object };
+      return renderToStaticMarkup(block.render({ ...block.defaultProps, ...props } as never));
+    };
+
+    it("are requested at the size they are drawn at, wider for two columns than for three", () => {
+      const items = [{ imageUrl: media, alt: "A photo" }];
+      expect(html("ImageGalleryBlock", { columns: "2", items })).toContain("width=1200");
+      expect(html("ImageGalleryBlock", { columns: "3", items })).toContain("width=1000");
+      expect(html("ImageTextBlock", { imageUrl: media, imageAlt: "A photo" })).toContain("width=1000");
+      expect(html("MerchGridBlock", { items: [{ name: "Tee", price: "$25", imageUrl: media }] })).toContain("width=1000");
+      expect(html("HeroBlock", { imageUrl: media, title: "Title" })).toContain("width=1920");
+    });
+
+    it("leave local images and other hosts alone", () => {
+      const items = [
+        { imageUrl: "/images/hero.jpg", alt: "Local" },
+        { imageUrl: "https://example.com/photo.jpg", alt: "Elsewhere" },
+      ];
+      expect(html("ImageGalleryBlock", { columns: "2", items })).not.toContain("width=");
+    });
+  });
+
   it("every block renders from its default props without throwing", async () => {
     const site = await getSiteData();
     for (const [name, block] of Object.entries(components)) {

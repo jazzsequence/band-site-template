@@ -4,6 +4,7 @@ import { ButtonLink } from "../../../design-system/components/Button";
 import { Hero, type HeroAction } from "../../../design-system/components/Hero";
 import { LightboxImage } from "../../../design-system/components/LightboxImage";
 import { SectionHeading } from "../../../design-system/components/SectionHeading";
+import { mediaUrl } from "../../../lib/site/media-url";
 
 type ActionItem = { label?: string; href?: string; style?: "primary" | "outline" };
 
@@ -52,7 +53,7 @@ export const heroBlock = {
     ],
   },
   render: ({ imageUrl, kicker, title, blurb, actions }: { imageUrl?: string; kicker?: string; title?: string; blurb?: string; actions?: ActionItem[] }) => (
-    <Hero image={imageUrl ?? ""} kicker={kicker ?? ""} title={title ?? ""} blurb={blurb ?? ""} actions={toActions(actions)} />
+    <Hero image={mediaUrl(imageUrl, 1920)} kicker={kicker ?? ""} title={title ?? ""} blurb={blurb ?? ""} actions={toActions(actions)} />
   ),
 };
 
@@ -94,6 +95,9 @@ export const articleBlock = {
 
 type GalleryItem = { imageUrl?: string; alt?: string };
 
+/** Pixels to ask P1 media for: about twice the column the picture is drawn in (the lightbox opens the same file larger, so not less). */
+const galleryWidth = (columns?: string) => (columns === "3" ? 1000 : 1200);
+
 /** Pictures in a grid; each opens larger in the lightbox. */
 export const imageGalleryBlock = {
   label: "Image gallery",
@@ -126,7 +130,7 @@ export const imageGalleryBlock = {
           .map((i) => (
             <LightboxImage
               key={i.imageUrl}
-              src={i.imageUrl ?? ""}
+              src={mediaUrl(i.imageUrl, galleryWidth(columns))}
               alt={i.alt || "Picture"}
               loading="lazy"
               decoding="async"
