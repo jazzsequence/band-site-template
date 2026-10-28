@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/copy-maplibre-worker.mjs && next build && pnpm copy-standalone",
+    "build": "node scripts/copy-maplibre-worker.mjs && next build && node scripts/check-prerender.mjs && pnpm copy-standalone",
     "copy-standalone": "cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
     "clean": "rm -rf .next out *.tsbuildinfo node_modules/.vite",
     "dev": "tsx scripts/generate-theme.ts && node scripts/copy-maplibre-worker.mjs && next dev",

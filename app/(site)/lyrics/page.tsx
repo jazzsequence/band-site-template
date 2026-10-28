@@ -11,6 +11,8 @@ import { features } from "../../../lib/band/config";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
+export const revalidate = 300;
+
 export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Lyrics", description: "Every lyric, by album.", path: "/lyrics" });
 
 async function LyricsFallback() {
