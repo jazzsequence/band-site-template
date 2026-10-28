@@ -26,7 +26,7 @@ Make anything you are missing first.
 - **P1 site id → `NEXT_PUBLIC_CSS_SITE_ID`** (and `hosting.p1SiteId`; not secret). In the P1 dashboard at content.pantheon.io: shown when the
   site is created, and the last part of the site's dashboard URL.
 - **P1 tokens, three of them.** In the P1 dashboard, generate a token for the site and choose its scope; each is shown once. The drafts token
-  (scope "All content including drafts") is `CSS_API_KEY` on dev and test; a second, published-content-only token is `CSS_API_KEY_LIVE` on live;
+  (scope "All content including drafts") is `CSS_API_KEY` (dev, test and every multidev); a second, published-content-only token is `CSS_API_KEY_LIVE` (read on live);
   a third with the registry-sync scope (`write:registry`, no read access) is the `CSS_REGISTRY_API_KEY` GitHub secret. The dashboard names the
   scopes: pick the one that matches each description. Never reuse one token for another job.
 - **Audio, in Cloudflare R2.** Create the bucket in the **default location**: the site lists it at `<account>.r2.cloudflarestorage.com`, so a
@@ -81,13 +81,14 @@ of each page if P1 is unreachable, so CI and outages keep working.
 
    | Variable | Where | Scope |
    |---|---|---|
-   | `CSS_API_KEY` | Pantheon, `dev` and `test` | reads drafts and published pages |
-   | `CSS_API_KEY_LIVE` | Pantheon, `live` | published pages only |
+   | `CSS_API_KEY` | Pantheon, the site (dev, test and every multidev) | reads drafts and published pages |
+   | `CSS_API_KEY_LIVE` | Pantheon, the site (only `live` reads it) | published pages only |
    | `CSS_REGISTRY_API_KEY` | GitHub Actions secret | the "component registry sync" token (`write:registry` only; it has no read access) |
 
    `NEXT_PUBLIC_CSS_BASE_URL` is `https://ccr.p1.pantheon.io` everywhere and is **required**: without it the sign-in routes return
    500 "Server configuration error". The live environment never uses the drafts key: if `CSS_API_KEY_LIVE` is missing, live returns
-   500 on purpose rather than fall back to it.
+   500 on purpose rather than fall back to it. (Both keys are set on the site, so live's environment does hold the drafts key too; the
+   code, not where the value is set, keeps live off it.)
 3. **Register the blocks** once the secrets exist: push a change under `components/puck/` (the registry workflow does it) or run
    `pnpm sync:registry` with the three registry variables set.
 4. **Create the pages, then publish them.** Once the band's own albums, shows, merch and copy are in the repo, run the `/init-p1-pages` skill:
@@ -104,18 +105,22 @@ If `/init-band` did not create the Pantheon site, create it from the Next.js ups
 command for you to approve. Provisioning takes a few minutes; `terminus node:builds:wait <site>.dev` fails with "only works for sites
 using external VCS" until it finishes, which is expected.
 
-Secrets are set with `terminus secret:site:set <site>[.env] NAME value --type=env --scope=web`. `--type=env --scope=web` is required
+Secrets are set with `terminus secret:site:set <site> NAME value --type=env --scope=web`. `--type=env --scope=web` is required
 for a value to reach `process.env` at build and runtime. `/init-band` prints each command; the keys are read from a hidden prompt
-(`read -rs`), so nothing is typed into a chat or left in shell history. Run them in your own terminal. Two things to know:
+(`read -rs`), so nothing is typed into a chat or left in shell history. Run them in your own terminal. Three things to know:
 
-- A site-level `secret:site:set` with `--rebuild` fatals in current Terminus, so only the per-environment keys use it.
+- **Set every secret on the site, once, with a real value.** A Pantheon secret has a base value that every environment without one of
+  its own builds with, and an environment cannot have its own until a base exists. Setting a key on `dev` and `test` only once forced a
+  dummy base, which every multidev then built with and could not sign in to P1. Never set a stand-in to replace later: leave a secret
+  unset until you have the real value (a non-live build serves the repo copies, and live refuses to start without its key).
+- A site-level `secret:site:set` with `--rebuild` fatals in current Terminus, so none of the commands use it; rebuild afterwards.
 - Secrets only take effect after a rebuild. Rebuild each environment after setting them (the Pantheon MCP's
   `pantheon_rebuild_site`, or push a commit).
 
 | Name | Value |
 |---|---|
 | `NEXT_PUBLIC_CSS_SITE_ID`, `NEXT_PUBLIC_CSS_BASE_URL` | the P1 site id and `https://ccr.p1.pantheon.io` (not secret) |
-| `CSS_API_KEY` (`dev`, `test`), `CSS_API_KEY_LIVE` (`live`) | the P1 keys above |
+| `CSS_API_KEY`, `CSS_API_KEY_LIVE` | the P1 drafts key and the published-only key above (both on the site; live reads the second) |
 | `NEXT_PUBLIC_AUDIO_BASE_URL` | the audio origin, `https://audio.example.com` (not secret) |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` | a read-only R2 token, used on the server to list tracks |
 | `SECURITY_CONTACT` (optional) | a `mailto:` or `https:` URL; `/.well-known/security.txt` returns 404 until it is set |
