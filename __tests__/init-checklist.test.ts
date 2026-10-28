@@ -49,12 +49,22 @@ describe("secretsChecklist", () => {
     expect(commands.filter((c) => c.startsWith("gh secret set") && c.includes("--body")).every((c) => /CSS_(BASE_URL|SITE_ID)/.test(c))).toBe(true);
   });
 
-  it("keeps the drafts key off live: dev and test get CSS_API_KEY, live gets only CSS_API_KEY_LIVE", () => {
-    const text = commands.join("\n");
-    expect(text).toMatch(/terminus secret:site:set neon-orchard\.dev CSS_API_KEY /);
-    expect(text).toMatch(/terminus secret:site:set neon-orchard\.test CSS_API_KEY /);
-    expect(text).toMatch(/terminus secret:site:set neon-orchard\.live CSS_API_KEY_LIVE /);
-    expect(text).not.toMatch(/neon-orchard\.live CSS_API_KEY /);
+  // A Pantheon secret has a base value and optional values of an environment's own, and an environment cannot have its own until a base
+  // exists. Setting the key per environment is what once left a dummy base that every multidev built with.
+  it("sets every secret once, on the site: never on an environment, so a multidev gets the same key as dev", () => {
+    const targets = commands.flatMap((c) => [...c.matchAll(/terminus secret:site:set (\S+) (\S+) /g)].map((m) => ({ target: m[1], name: m[2] })));
+    expect(targets.length).toBeGreaterThan(0);
+    for (const { target, name } of targets) expect(target, `${name} is set on an environment`).toBe("neon-orchard");
+    expect(targets.filter((t) => t.name === "CSS_API_KEY")).toHaveLength(1);
+    expect(targets.filter((t) => t.name === "CSS_API_KEY_LIVE")).toHaveLength(1);
+  });
+
+  it("never asks for a stand-in value: every value is real, read from a prompt or given as a fact", () => {
+    const everything = [...steps.flatMap((s) => [s.what, s.command, s.source ?? ""]), formatChecklist(steps)].join("\n");
+    // The one allowed mention is the instruction not to do it.
+    const withoutRule = everything.replace(/Never a stand-in to be replaced later: a dummy value[^\n]*/, "");
+    expect(withoutRule).not.toMatch(/placeholder|dummy|stand-in|changeme|fake|temporary|todo/i);
+    expect(formatChecklist(steps)).toContain("Set every value for real or not at all");
   });
 
   it("asks for nothing it cannot use: no hosting means no steps, no P1 site means no registry secrets", () => {
@@ -67,9 +77,8 @@ describe("secretsChecklist", () => {
     expect(noAudio).not.toContain("R2_");
   });
 
-  it("puts --rebuild only on the per-environment keys, never on a site-level set (it fatals in the current Terminus)", () => {
-    for (const c of commands.filter((x) => x.includes("--rebuild"))) expect(c, c).toMatch(/terminus secret:site:set neon-orchard\.(dev|test|live) /);
-    expect(commands.filter((x) => /secret:site:set neon-orchard (R2_|NEXT_PUBLIC_)/.test(x)).some((x) => x.includes("--rebuild"))).toBe(false);
+  it("never uses --rebuild: every set is site-level and a site-level one fatals in the current Terminus", () => {
+    expect(commands.filter((x) => x.includes("--rebuild"))).toEqual([]);
   });
 
   it("says where to get every value that is not the same for every site, and never puts a value in the source text", () => {
