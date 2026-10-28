@@ -14,3 +14,16 @@ export function getP1ApiKey(env: Env = process.env): string | undefined {
   if (!key) throw new Error("CSS_API_KEY_LIVE (the published-only P1 key) is required on the live environment.");
   return key;
 }
+
+/**
+ * The P1 SDK does not call getP1ApiKey: it reads `CSS_API_KEY` from the environment itself, so on live that variable has to
+ * hold the published-only key before any P1 request. It must happen at build time as well as at server start. At build the SDK
+ * used to send whatever `CSS_API_KEY` held on live, P1 refused it, and the SDK's `connection()` call turned every P1-backed
+ * route dynamic for that build: no ISR, `no-store` on every page, a P1 round trip on every request.
+ * Returns the key this environment uses. Throws on live without the live key, like getP1ApiKey.
+ */
+export function applyP1ApiKey(env: Env = process.env): string | undefined {
+  const key = getP1ApiKey(env);
+  if (isLive(env) && key) env.CSS_API_KEY = key;
+  return key;
+}

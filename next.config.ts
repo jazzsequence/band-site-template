@@ -3,6 +3,16 @@ import { createRequire } from "node:module";
 import type { NextConfig } from "next";
 
 import { isP1Configured } from "./lib/site/p1-config";
+import { applyP1ApiKey } from "./lib/site/p1-key";
+
+// The SDK reads CSS_API_KEY itself, at build time too, and instrumentation.ts does not run during `next build`. Without this the
+// live build sent the drafts-default key, P1 refused it and every P1-backed route came out dynamic. Environments without the key
+// (a live build before the secret is set) are left alone here: isP1Configured() is false for them and the server refuses to start.
+try {
+  applyP1ApiKey();
+} catch {
+  /* see above */
+}
 
 const require = createRequire(import.meta.url);
 
