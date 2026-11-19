@@ -12,7 +12,7 @@ const doc = (title: string, content: Block[] = []): PageDoc => ({ path: "/x", ro
 // A band that is not the placeholder, so nothing here depends on the repo's own content.
 const input = (over: Partial<P1PageInput> = {}): P1PageInput => ({
   band: { name: "Cinder & Vale", description: "A duo." },
-  features: { tour: true, merch: true, lyrics: true, map: true, press: true },
+  features: { tour: true, merch: true, lyrics: true, map: true, press: true, pressKit: true },
   albums: [
     { slug: "ash", title: "Ash", featured: false },
     { slug: "embers", title: "Embers", featured: true, gallery: [{ src: "/images/back.png", alt: "Back cover" }, { src: "/images/inner.png", alt: "Inner" }] },
@@ -42,7 +42,7 @@ describe("buildP1Pages", () => {
   });
 
   it("leaves out the sections that are switched off, and the tour button with them", () => {
-    const pages = byPath(buildP1Pages(input({ features: { tour: false, merch: false, lyrics: false, map: false, press: false } })));
+    const pages = byPath(buildP1Pages(input({ features: { tour: false, merch: false, lyrics: false, map: false, press: false, pressKit: false } })));
     for (const gone of ["/tour", "/merch", "/lyrics", "/press"]) expect(pages, gone).not.toHaveProperty([gone]);
     expect(pages["/"].components.map((c) => c.type)).not.toContain("TourPreviewBlock");
     expect((pages["/"].components[0].props.actions as { href: string }[]).map((a) => a.href)).toEqual(["/listen"]);

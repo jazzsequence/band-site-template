@@ -81,7 +81,7 @@ If they have no idea, suggest two or three pairings that fit the mood from fonts
 
 ## Step 4: features and audio (fourth batch)
 
-Which sections should exist: **tour and tickets**, **merch**, **lyrics**, **press**, and the **tour map** (needs the tour). A section that is off drops out of the nav, footer, sitemap and `llms.txt`, and its routes return 404.
+Which sections should exist: **tour and tickets**, **merch**, **lyrics**, **press** (the `/press` article page), the **press kit** (the P1-only `/press/kit` page, linked from the footer) and the **tour map** (needs the tour). A section that is off drops out of the nav, footer, sitemap and `llms.txt`, and its routes return 404, except the press kit: turning it off only removes its footer link and its sitemap and `llms.txt` entries. The page itself lives in P1, so unpublish it there to take it down.
 
 Audio: tracks are `<album-slug>/<NN>-<track-slug>.m4a` in a Cloudflare R2 bucket served from a custom domain. Ask for that origin (`https://audio.example.com`, https, no path), or "later".
 
