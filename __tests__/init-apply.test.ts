@@ -14,6 +14,8 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // The files the init flow reads or rewrites. Each is reset to its template state in the copy, so these tests keep passing once the repo itself has been configured.
 const FILES = ["band.config.json", "README.md", ".gitignore", ".env.example", "content/p1-pages/home.json", "package.json", ".github/workflows/promote-pantheon.yml", "examples/workflows/test-deployed-site.yml", "examples/workflows/sync-puck-registry.yml"];
 
+const DEFAULT_FACE_VERSIONS = { [DEFAULT_TYPOGRAPHY.display.id]: "5.3.0", [DEFAULT_TYPOGRAPHY.body.id]: "5.3.0" };
+
 const text = (root: string, rel: string) => readFileSync(join(root, rel), "utf-8");
 const dirs: string[] = [];
 function tempRepo() {
@@ -24,17 +26,22 @@ function tempRepo() {
     cpSync(join(repo, f), join(root, f));
   }
   cpSync(join(repo, "__tests__/fixtures/claude-template.md"), join(root, "CLAUDE.md"));
+  // The repo's own home.json loses its tour blocks once a band turns the tour off, so the template's copy is a fixture.
+  cpSync(join(repo, "__tests__/fixtures/home-template.json"), join(root, "content/p1-pages/home.json"));
   const config = JSON.parse(text(root, "band.config.json"));
   config.setup = { initialized: false };
   delete config.hosting;
+  // The template's typefaces, whatever this repo has chosen since: these tests describe a repo that has just been made from the template.
+  config.typography = DEFAULT_TYPOGRAPHY;
   writeFileSync(join(root, "band.config.json"), JSON.stringify(config, null, 2));
   // A stand-in CODEOWNERS (the real one names whoever owns this repo now), and the package name reset to the template's.
   mkdirSync(join(root, ".github"), { recursive: true });
   writeFileSync(join(root, ".github/CODEOWNERS"), "# Design changes are approved by the repo owner.\n/.storybook/ @template-author\n/design-system/ @template-author\n/.github/ @template-author @second-owner\n");
   const pkg = JSON.parse(text(root, "package.json"));
   pkg.name = "band-site-template";
-  // The template ships with exactly the Fontsource packages its default faces need, whatever this repo has chosen since.
-  writeFileSync(join(root, "package.json"), JSON.stringify(syncFontPackages(pkg, DEFAULT_TYPOGRAPHY, {}).pkg, null, 2));
+  // The template ships with exactly the Fontsource packages its default faces need, whatever this repo has chosen since. This repo's own
+  // package.json may no longer list them, so their versions are given here instead of being read from it.
+  writeFileSync(join(root, "package.json"), JSON.stringify(syncFontPackages(pkg, DEFAULT_TYPOGRAPHY, DEFAULT_FACE_VERSIONS).pkg, null, 2));
   const promote = ".github/workflows/promote-pantheon.yml";
   writeFileSync(join(root, promote), text(root, promote).replace(/^(\s*PANTHEON_SITE_NAME:\s*).*$/m, "$1your-site-name"));
   return root;
