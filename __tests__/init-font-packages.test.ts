@@ -1,12 +1,34 @@
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
-import { describe, expect, it } from "vitest";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { dirname, join } from "path";
+import { afterAll, describe, expect, it } from "vitest";
 
 import { fontFileProblems, syncFontPackages, type PackageJson } from "../lib/init/font-packages";
-import { DEFAULT_TYPOGRAPHY } from "../lib/theme/fonts";
+import { assetFace, assetWeight, cssFamily, DEFAULT_TYPOGRAPHY, type Typography } from "../lib/theme/fonts";
 import { FULL_TYPOGRAPHY } from "./fixtures/typography";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// The font files these tests look for are written into a temporary node_modules, so they describe the template's default faces
+// whatever typefaces this repo has chosen since (a configured repo no longer has the default packages installed).
+const root = mkdtempSync(join(tmpdir(), "font-files-"));
+afterAll(() => rmSync(root, { recursive: true, force: true }));
+function installFontFiles(t: Typography) {
+  const put = (rel: string, content: string) => {
+    const file = join(root, "node_modules", rel);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  };
+  for (const face of [t.display, t.body, t.wordmark, t.kicker]) {
+    if (!face) continue;
+    const declares = `@font-face { font-family: '${cssFamily(face)}'; }`;
+    if (face.variable) put(`@fontsource-variable/${face.id}/index.css`, declares);
+    else for (const w of face.weights) put(`@fontsource/${face.id}/${w}.css`, declares);
+  }
+  // The icons and the social card are drawn from the static files of the asset face.
+  const asset = assetFace(t);
+  for (const ext of ["woff2", "woff"]) put(`@fontsource/${asset.id}/files/${asset.id}-latin-${assetWeight(t)}-normal.${ext}`, "");
+}
+installFontFiles(DEFAULT_TYPOGRAPHY);
+
 const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v));
 
 // A package.json as the template ships it once the unused Unbounded and UnifrakturCook packages are gone, plus unrelated entries.
