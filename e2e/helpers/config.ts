@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 // Read as files: Playwright's ESM loader rejects a bare JSON import, so specs cannot import lib/band/config.
 const config = JSON.parse(readFileSync("band.config.json", "utf8")) as {
   band: { name: string };
-  features: Record<"tour" | "merch" | "lyrics" | "map" | "press", boolean>;
+  features: Record<"tour" | "merch" | "lyrics" | "map" | "press" | "pressKit", boolean>;
 };
 
 export const band = config.band;

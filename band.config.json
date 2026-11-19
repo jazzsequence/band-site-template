@@ -14,7 +14,8 @@
     "merch": true,
     "lyrics": true,
     "map": true,
-    "press": true
+    "press": true,
+    "pressKit": true
   },
   "typography": {
     "display": {

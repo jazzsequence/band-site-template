@@ -66,6 +66,7 @@ test.describe("discovery files", () => {
     const body = await (await request.get("/sitemap.xml")).text();
     expect(body).toContain("/albums/first-ep");
     if (features.lyrics) expect(body).toContain("/lyrics/first-song");
+    if (features.pressKit) expect(body).toContain("/press/kit");
     if (features.tour) expect(body).toContain("/tickets/sample-city-2027-03-12");
     expect(body).not.toMatch(/\/ticket<\/loc>/);
   });

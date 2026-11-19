@@ -6,7 +6,7 @@
 import raw from "../../band.config.json";
 import { DEFAULT_TYPOGRAPHY, readTypography, type Typography } from "../theme/fonts";
 
-export const FEATURES = ["tour", "merch", "lyrics", "map", "press"] as const;
+export const FEATURES = ["tour", "merch", "lyrics", "map", "press", "pressKit"] as const;
 export type Feature = (typeof FEATURES)[number];
 
 export type SocialLink = { label: string; url: string };
@@ -101,7 +101,7 @@ export function parseBandConfig(input: unknown): BandConfig {
       ...(typeof imprint === "string" && imprint.trim() ? { imprint: imprint.trim() } : {}),
       social,
     },
-    features: { tour: false, merch: false, lyrics: false, map: false, press: false },
+    features: { tour: false, merch: false, lyrics: false, map: false, press: false, pressKit: false },
     typography: DEFAULT_TYPOGRAPHY,
     setup: { initialized: false },
     hosting: {},
@@ -109,7 +109,8 @@ export function parseBandConfig(input: unknown): BandConfig {
   };
 
   const f = section("features");
-  for (const key of FEATURES) config.features[key] = flag(f, "features", key);
+  // pressKit is optional (off when absent) so a config written before it existed still loads, like setup and hosting below.
+  for (const key of FEATURES) config.features[key] = key === "pressKit" && f[key] === undefined ? false : flag(f, "features", key);
   for (const key of Object.keys(f)) if (!(FEATURES as readonly string[]).includes(key)) problems.push(`features.${key} is not a known feature (${FEATURES.join(", ")})`);
   // The map is part of the tour: it shows venues, so it cannot be on without the tour.
   if (config.features.map && !config.features.tour) problems.push("features.map needs features.tour: the map shows tour venues");
