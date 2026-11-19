@@ -25,6 +25,21 @@ describe("band.config.json", () => {
     expect(Object.keys(parseBandConfig(valid).features).sort()).toEqual([...FEATURES].sort());
   });
 
+  it("treats pressKit as optional: off when absent, as written when present, and a non-boolean is refused", () => {
+    const without = clone();
+    delete without.features.pressKit;
+    expect(problems(without)).toBe("");
+    expect(parseBandConfig(without).features.pressKit).toBe(false);
+
+    const on = clone();
+    on.features.pressKit = true;
+    expect(parseBandConfig(on).features.pressKit).toBe(true);
+
+    const bad = clone();
+    bad.features.pressKit = "yes";
+    expect(problems(bad)).toContain("features.pressKit must be true or false");
+  });
+
   it("lists every problem at once", () => {
     const c = clone();
     c.band.name = "";
@@ -106,7 +121,7 @@ describe("features switch sections off", () => {
     vi.resetModules();
     vi.doMock("../lib/band/config", async (importOriginal) => {
       const actual = await importOriginal<typeof import("../lib/band/config")>();
-      return { ...actual, features: { tour: false, merch: false, lyrics: false, map: false, press: false } };
+      return { ...actual, features: { tour: false, merch: false, lyrics: false, map: false, press: false, pressKit: false } };
     });
     const { navLinks } = await import("../design-system/components/SiteHeader");
     expect(navLinks.filter(([, , on]) => on).map(([label]) => label)).toEqual(["Listen", "Albums", "Bio"]);

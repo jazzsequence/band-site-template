@@ -10,7 +10,7 @@ export function GET() {
     `- [Albums](${SITE_URL}/albums): the full catalogue`,
     features.lyrics && `- [Lyrics](${SITE_URL}/lyrics): every lyric`,
     features.press && `- [Press](${SITE_URL}/press): interviews and reviews`,
-    features.press && `- [Press kit](${SITE_URL}/press/kit): bios, quick facts, photos and artwork`,
+    features.pressKit && `- [Press kit](${SITE_URL}/press/kit): bios, quick facts, photos and artwork`,
     `- [Bio](${SITE_URL}/bio)`,
   ].filter(Boolean);
   const body = [

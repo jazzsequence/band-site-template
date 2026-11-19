@@ -26,7 +26,7 @@ const routes = [
   "/privacy",
   // Unknown URLs go through the P1 catch-all, which needs real P1 credentials; CI has none.
   // P1-only pages have no repo copy, so CI (placeholder credentials) cannot render them.
-  ...(process.env.A11Y_P1_ROUTES ? [...when("press", "/press/kit"), "/this-page-does-not-exist"] : []),
+  ...(process.env.A11Y_P1_ROUTES ? [...when("pressKit", "/press/kit"), "/this-page-does-not-exist"] : []),
 ];
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];

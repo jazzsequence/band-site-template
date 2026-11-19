@@ -77,6 +77,7 @@ describe("renderClaudeMd", () => {
     expect(out).toContain("Recorded by `/init-band` on 2026-10-23.");
     expect(out).toContain("**Sections on:** Tour and tickets, Lyrics, Tour map.");
     expect(out).toContain("**Off:** Merch, Press");
+    expect(out).toContain("**Press kit off:** it is a P1-only page");
     expect(out).toContain("headings in Encode Sans Expanded, body in Space Grotesk (variable); the wordmark in Unbounded (variable), capitals; kickers in UnifrakturCook");
     expect(out).toContain("Pantheon site `neon-orchard`");
     expect(out).toContain("served from https://audio.neon-orchard.example.com");
@@ -107,6 +108,22 @@ describe("renderClaudeMd", () => {
     const lifted = renderClaudeMd(template, { ...ctx, adjustments: [{ key: "dim", from: "#111111", to: "#222222", reason: "x" }] });
     expect(lifted).toContain("lifted `dim` for contrast");
     expect(out).toContain("needed no adjustments");
+  });
+
+  it("lists the press kit under Sections on when it is on, and under Off when the answers do not mention it", () => {
+    const on = renderClaudeMd(template, { ...ctx, answers: { ...answers, features: { ...answers.features, pressKit: true } } });
+    expect(on).toContain("**Sections on:** Tour and tickets, Lyrics, Tour map, Press kit.");
+    expect(on).toContain("**Off:** Merch, Press; their routes return 404");
+    expect(on).not.toContain("Press kit off");
+    expect(renderClaudeMd(template, ctx)).toContain("**Press kit off:**");
+  });
+
+  it("does not say the press kit's route returns 404 when it is the only section that is off", () => {
+    const text = renderClaudeMd(template, { ...ctx, answers: { ...answers, features: { tour: true, merch: true, lyrics: true, map: true, press: true, pressKit: false } } });
+    expect(text).toContain("**Press kit off:** it is a P1-only page");
+    expect(text).not.toContain("**Off:**");
+    expect(text).not.toContain("route returns 404");
+    expect(text).not.toContain("routes return 404");
   });
 
   it("says what was left undecided when hosting is not known yet", () => {

@@ -79,7 +79,8 @@ describe("scripts/init-band.ts", () => {
     expect(cli("apply", join(dir, "nope.json")).err).toContain("Could not read");
     const invalid = join(dir, "invalid.json");
     writeFileSync(invalid, JSON.stringify({ identity: {} }));
-    const r = cli("apply", invalid, "--skip-assets");
+    // --force: a repo that has been set up refuses before it reads the answers, and this checks what it says about bad ones. Nothing is written when they are invalid.
+    const r = cli("apply", invalid, "--skip-assets", "--force");
     expect(r.code).toBe(1);
     expect(r.err).toContain("init answers rejected");
     expect(r.err).toContain("identity.name must be a non-empty string");
