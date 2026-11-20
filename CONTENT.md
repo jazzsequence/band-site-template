@@ -14,7 +14,7 @@ Sign in at `/p1` and edit these pages in the visual editor. Changes go live when
 | `/listen` | The intro. The albums and their songs come from the catalog | Page heading, Album with tracks |
 | `/albums`, `/albums/<album>` | Headings and text around each album. Cover, year and songs come from the catalog | Album header, Track list, Album grid, Image gallery |
 | `/lyrics` | The intro. The list comes from the lyrics files | Page heading, Lyrics index |
-| `/press`, `/privacy` | The text, in Markdown | Article |
+| `/press`, `/privacy` | The text, written right on the page (rich text: select text for the toolbar). Pages made as Markdown keep rendering until text goes in the Article's Text field | Article |
 | `/press/kit` | The press kit: one-liner, bios, quick facts, the band, photos and the download link. It exists only in P1; turning `features.pressKit` off removes its sitemap and `llms.txt` entries and its footer link, not the page | Page heading, Image gallery (Columns 1 for the wide lead photo, 3 for the grid; Vertical alignment sets where shorter pictures sit in a row), Article |
 | `/bio` | Bio text and photo | Image and text |
 | `/merch` | Merch items, prices and images | Page heading, Merch grid |

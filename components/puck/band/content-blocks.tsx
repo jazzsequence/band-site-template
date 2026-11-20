@@ -73,21 +73,31 @@ export const sectionHeadingBlock = {
 };
 
 /**
- * Long text in Markdown: an interview, a policy. Use `# Title` once for the page's h1 and `## Heading` for
- * sections. Links, lists, quotes and emphasis all work.
+ * Long text: an interview, a policy, a press kit. Rich text, edited right on the page in the editor (select text for the toolbar;
+ * headings, lists, quotes, links and emphasis all work). Use one Heading 1 for the page's h1 when nothing else supplies it, and
+ * Heading 2 for sections.
+ *
+ * Pages made before this block was rich text hold their words in `markdown`. They keep rendering from it until the editor
+ * puts text in the Text field, which then wins; nothing is converted behind anyone's back.
  */
 export const articleBlock = {
   label: "Article",
   fields: {
     kicker: { type: "text" as const, label: "Small label above the text (optional)" },
-    markdown: { type: "textarea" as const, label: "Text (Markdown)" },
+    body: {
+      type: "richtext" as const,
+      label: "Text",
+      contentEditable: true,
+      initialHeight: 320,
+      options: { heading: { levels: [1, 2, 3] as (1 | 2 | 3)[] } },
+    },
   },
-  defaultProps: { kicker: "", markdown: "# Title\n\nWrite here." },
-  render: ({ kicker, markdown }: { kicker?: string; markdown?: string }) => (
+  defaultProps: { kicker: "", body: "<h1>Title</h1><p>Write here.</p>" },
+  render: ({ kicker, body, markdown }: { kicker?: string; body?: React.ReactNode; markdown?: string }) => (
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
       {kicker ? <p className="mb-2 font-kicker text-2xl text-accent">{kicker}</p> : null}
       <article className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-2xl prose-h2:text-text prose-p:text-muted prose-strong:text-text prose-a:text-accent-3">
-        <Markdown>{markdown ?? ""}</Markdown>
+        {body ? body : <Markdown>{markdown ?? ""}</Markdown>}
       </article>
     </div>
   ),
