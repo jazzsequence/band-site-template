@@ -23,6 +23,17 @@ describe("the Article block", () => {
     expect(out).toContain('href="/bio"');
   });
 
+  it("moves a Markdown page's words into the rich text field when it is opened, so they can be edited in place", async () => {
+    const resolve = articleBlock.resolveData as (d: { props: object }) => { props: { body?: string; markdown?: string } };
+    const out = resolve({ props: { kicker: "Media", markdown: "## Short bio\n\nBorn in **Daly City**. [More](/bio)" } }).props;
+    expect(out.body).toContain("<h2>Short bio</h2>");
+    expect(out.body).toContain("<strong>Daly City</strong>");
+    expect(out.body).toContain('<a href="/bio">More</a>');
+    expect(out.markdown).toBe("");
+    expect(resolve({ props: { body: "<p>New</p>", markdown: "old" } }).props.body).toBe("<p>New</p>");
+    expect(resolve({ props: {} }).props.body).toBeUndefined();
+  });
+
   it("keeps rendering pages that were written as Markdown, until text is put in the rich text field", () => {
     expect(html({ markdown: "## Old page\n\nStill here." })).toContain("<h2>Old page</h2>");
     const both = html({ markdown: "## Old page", body: "<h2>New page</h2>" });
