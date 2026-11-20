@@ -1,3 +1,4 @@
+import { sanitizeRichtextHtml } from "@pantheon-systems/puck-css/sanitize-richtext";
 import { micromark } from "micromark";
 import Markdown from "react-markdown";
 
@@ -5,6 +6,7 @@ import { ButtonLink } from "../../../design-system/components/Button";
 import { Hero, type HeroAction } from "../../../design-system/components/Hero";
 import { LightboxImage } from "../../../design-system/components/LightboxImage";
 import { SectionHeading } from "../../../design-system/components/SectionHeading";
+import { articleRichtextField } from "../../../lib/rich-link-field";
 import { mediaUrl } from "../../../lib/site/media-url";
 
 type ActionItem = { label?: string; href?: string; style?: "primary" | "outline" };
@@ -74,6 +76,16 @@ export const sectionHeadingBlock = {
 };
 
 /**
+ * The Article's text. A string (stored HTML) is sanitised first, with h1 allowed on top of the sanitiser's defaults because a
+ * page may take its h1 from here; anything else is already a rendered node (Puck hands one over on the public page and while
+ * editing on the canvas) and passes through.
+ */
+function ArticleBody({ body }: { body: React.ReactNode }) {
+  if (typeof body === "string") return <div dangerouslySetInnerHTML={{ __html: sanitizeRichtextHtml(body, { allowedTags: ["h1"] }) }} />;
+  return <>{body}</>;
+}
+
+/**
  * Long text: an interview, a policy, a press kit. Rich text, edited right on the page in the editor (select text for the toolbar;
  * headings, lists, quotes, links and emphasis all work). Use one Heading 1 for the page's h1 when nothing else supplies it, and
  * Heading 2 for sections.
@@ -86,13 +98,7 @@ export const articleBlock = {
   label: "Article",
   fields: {
     kicker: { type: "text" as const, label: "Small label above the text (optional)" },
-    body: {
-      type: "richtext" as const,
-      label: "Text",
-      contentEditable: true,
-      initialHeight: 320,
-      options: { heading: { levels: [1, 2, 3] as (1 | 2 | 3)[] } },
-    },
+    body: articleRichtextField,
   },
   defaultProps: { kicker: "", body: "<h1>Title</h1><p>Write here.</p>" },
   resolveData: ({ props }: { props: { body?: unknown; markdown?: string } }) =>
@@ -101,7 +107,7 @@ export const articleBlock = {
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
       {kicker ? <p className="mb-2 font-kicker text-2xl text-accent">{kicker}</p> : null}
       <article className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-2xl prose-h2:text-text prose-p:text-muted prose-strong:text-text prose-a:text-accent-3">
-        {body ? body : <Markdown>{markdown ?? ""}</Markdown>}
+        {body ? <ArticleBody body={body} /> : <Markdown>{markdown ?? ""}</Markdown>}
       </article>
     </div>
   ),
