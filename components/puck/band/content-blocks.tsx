@@ -1,3 +1,4 @@
+import { micromark } from "micromark";
 import Markdown from "react-markdown";
 
 import { ButtonLink } from "../../../design-system/components/Button";
@@ -77,8 +78,9 @@ export const sectionHeadingBlock = {
  * headings, lists, quotes, links and emphasis all work). Use one Heading 1 for the page's h1 when nothing else supplies it, and
  * Heading 2 for sections.
  *
- * Pages made before this block was rich text hold their words in `markdown`. They keep rendering from it until the editor
- * puts text in the Text field, which then wins; nothing is converted behind anyone's back.
+ * Pages made before this block was rich text hold their words in `markdown`. They render from it as before, and when one is opened
+ * in the editor `resolveData` moves the words into the Text field (Markdown to HTML, same text) so they can be edited in place;
+ * the page is only changed in P1 when the editor saves it.
  */
 export const articleBlock = {
   label: "Article",
@@ -93,6 +95,8 @@ export const articleBlock = {
     },
   },
   defaultProps: { kicker: "", body: "<h1>Title</h1><p>Write here.</p>" },
+  resolveData: ({ props }: { props: { body?: unknown; markdown?: string } }) =>
+    !props.body && props.markdown ? { props: { ...props, body: micromark(props.markdown), markdown: "" } } : { props },
   render: ({ kicker, body, markdown }: { kicker?: string; body?: React.ReactNode; markdown?: string }) => (
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
       {kicker ? <p className="mb-2 font-kicker text-2xl text-accent">{kicker}</p> : null}

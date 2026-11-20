@@ -38,6 +38,7 @@
     "aws4fetch": "^1.0.20",
     "classnames": "^2.5.1",
     "maplibre-gl": "6.16.0",
+    "micromark": "4.0.3",
     "next": "^16.4.6",
     "postcss": "^8.5.32",
     "qrcode.react": "^4.2.0",
