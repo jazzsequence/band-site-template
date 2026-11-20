@@ -1,7 +1,10 @@
+import type { ReactNode } from "react";
+
 import { assetUrl } from "../asset";
 import { ButtonLink } from "./Button";
 
-export type HeroAction = { label: string; href: string; variant?: "primary" | "outline" };
+/** `label` may be the editable element the page editor passes while a page is being edited in place. */
+export type HeroAction = { label: ReactNode; href: string; variant?: "primary" | "outline" };
 
 const DEFAULT_ACTIONS: HeroAction[] = [
   { label: "Tour dates", href: "/tour" },
@@ -16,9 +19,10 @@ export function Hero({
   actions = DEFAULT_ACTIONS,
 }: {
   image: string;
-  kicker: string;
-  title: string;
-  blurb: string;
+  /** Text, or the editable element the page editor passes while a page is being edited in place. Drawn as given. */
+  kicker: ReactNode;
+  title: ReactNode;
+  blurb: ReactNode;
   /** Buttons under the blurb. Defaults to Tour dates and Listen. */
   actions?: HeroAction[];
 }) {
@@ -39,8 +43,8 @@ export function Hero({
         <h1 className="text-metal font-display text-6xl font-extrabold uppercase leading-[0.9] tracking-[-0.04em] md:text-8xl lg:text-6xl xl:text-7xl 2xl:text-8xl">{title}</h1>
         <p className="max-w-xl text-lg text-text">{blurb}</p>
         <div className="flex flex-wrap gap-3">
-          {actions.map((a) => (
-            <ButtonLink key={`${a.label}-${a.href}`} href={a.href} variant={a.variant ?? "primary"}>
+          {actions.map((a, i) => (
+            <ButtonLink key={`${i}-${a.href}`} href={a.href} variant={a.variant ?? "primary"}>
               {a.label}
             </ButtonLink>
           ))}
