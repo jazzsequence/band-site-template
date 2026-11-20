@@ -4,6 +4,9 @@ import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 
 import { parseAnswers } from "../lib/init/answers";
+import { resolveTypeAnswers } from "../lib/init/type-answers";
+import { DEFAULT_TYPOGRAPHY } from "../lib/theme/fonts";
+import { makeLookup } from "./fixtures/typography";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const skill = readFileSync(resolve(root, ".claude/skills/init-band/SKILL.md"), "utf-8");
@@ -18,10 +21,10 @@ describe("the /init-band skill", () => {
   });
 
   it("only documents commands the CLI has", () => {
-    const documented = [...skill.matchAll(/^\| `(status|suggest-palette|check-palette|apply)\b/gm)].map((m) => m[1]);
-    expect(documented.sort()).toEqual(["apply", "check-palette", "status", "suggest-palette"]);
+    const documented = [...skill.matchAll(/^\| `(status|suggest-palette|check-palette|font-info|apply)\b/gm)].map((m) => m[1]);
+    expect(documented.sort()).toEqual(["apply", "check-palette", "font-info", "status", "suggest-palette"]);
     for (const c of documented) expect(cli, c).toContain(`case "${c}"`);
-    for (const flag of ["--hue", "--loudness", "--scheme", "--force", "--skip-assets"]) expect(cli, flag).toContain(flag.slice(2));
+    for (const flag of ["--hue", "--loudness", "--scheme", "--force", "--skip-assets", "--role"]) expect(cli, flag).toContain(flag.slice(2));
   });
 
   it("states the rules that must never bend", () => {
@@ -43,6 +46,12 @@ describe("the /init-band skill", () => {
     const step7 = skill.slice(skill.indexOf("## Step 7"), skill.indexOf("## Step 8"));
     expect(step7).toContain("explicit yes to that exact action");
     expect(step7).toContain("Do not push a commit");
+    // The person is guided to the credentials first, with the two traps, and never asked to paste a value.
+    expect(step7).toContain("Get it:");
+    expect(step7).toContain("SETUP.md section 0a");
+    expect(step7).toContain("expires after 90 days");
+    expect(step7).toContain("default location");
+    expect(step7).toContain("Never ask them to paste a value here");
   });
 
   it("keeps drafted public copy clear of the local off-limits list, and stops when the repo cannot be identified", () => {
@@ -56,13 +65,30 @@ describe("the /init-band skill", () => {
     }
   });
 
+  it("tells the person to check every font, what to do about one Fontsource does not have, and the design PR that is then owed", () => {
+    const step3 = skill.slice(skill.indexOf("## Step 3"), skill.indexOf("## Step 4"));
+    expect(step3).toContain("font-info");
+    expect(step3).toContain("customFonts");
+    expect(step3).toContain("stand-in");
+    expect(step3).toContain("design PR after setup");
+    expect(step3).toMatch(/do not look for a CDN link/);
+    const step8 = skill.slice(skill.indexOf("## Step 8"), skill.indexOf("## Quick reference"));
+    expect(step8).toContain("design-fonts-<name>");
+    expect(step8).toContain("`/init-p1-pages`");
+    expect(step8).toContain("Do not run it now");
+    expect(step8).toContain("what licence they come under");
+    expect(step8).toContain("wait for a yes");
+  });
+
   it("refuses to run in the template repository itself", () => {
     expect(skill).toContain("isTemplate");
   });
 
-  it("ships example answers that the real parser accepts, including the owner CODEOWNERS is pointed at", () => {
-    expect(() => parseAnswers(example, 2026)).not.toThrow();
-    expect(parseAnswers(example, 2026).answers.github?.owner).toBeTruthy();
+  it("ships example answers that the real parser accepts, including the owner CODEOWNERS is pointed at", async () => {
+    // type is font names; apply resolves them (here against a stand-in for Fontsource) before the rest is parsed.
+    const { typography } = await resolveTypeAnswers(example.type, DEFAULT_TYPOGRAPHY, () => false, makeLookup().lookup);
+    const parsed = parseAnswers({ ...example, type: typography }, 2026);
+    expect(parsed.answers.github?.owner).toBeTruthy();
     expect(skill).toContain("github.owner");
     expect(skill).toContain("answers.example.json");
   });

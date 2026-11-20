@@ -1,4 +1,5 @@
 import { MerchCard } from "../../../design-system/components/MerchCard";
+import { mediaUrl } from "../../../lib/site/media-url";
 
 type Item = { name?: string; price?: string; imageUrl?: string };
 
@@ -25,7 +26,7 @@ export const merchGridBlock = {
         {(items ?? [])
           .filter((i) => i.name)
           .map((i) => (
-            <MerchCard key={`${i.name}-${i.imageUrl}`} name={i.name ?? ""} price={i.price ?? ""} image={i.imageUrl ?? ""} headingLevel="h2" />
+            <MerchCard key={`${i.name}-${i.imageUrl}`} name={i.name ?? ""} price={i.price ?? ""} image={mediaUrl(i.imageUrl, 1000)} headingLevel="h2" />
           ))}
       </div>
     </div>

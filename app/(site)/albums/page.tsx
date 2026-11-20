@@ -8,6 +8,8 @@ import { P1Page } from "../../../components/site/p1-page";
 import { getP1Page } from "../../../lib/site/p1-content";
 import { p1PageMetadata } from "../../../lib/site/p1-metadata";
 
+export const revalidate = 300;
+
 export const generateMetadata = (): Promise<Metadata> => p1PageMetadata({ title: "Albums", description: "Albums, EPs and unreleased recordings.", path: "/albums" });
 
 function AlbumsFallback() {

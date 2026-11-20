@@ -30,8 +30,11 @@ You are a principal engineer on this project. You have comprehensive knowledge o
    ```
    Bash({ command: 'date +%s' })
    Bash({ command: 'bash .githooks/lib/approval.sh fingerprint' })
-   Write({ file_path: "/Users/chris.reynolds/git/band-site-template/reviewer-approved", content: "<timestamp> <fingerprint>" })
+   Write({ file_path: "<repo root>/reviewer-approved", content: "<timestamp> <fingerprint>" })
    ```
+   `<repo root>` is the absolute path of this repository's root: your primary working directory, the folder that contains
+   `.githooks/` and `package.json`. The Write tool needs an absolute path, and a path copied from another checkout (or
+   another person's machine) is wrong here: the hook only reads `reviewer-approved` at this repository's root.
    The content is the Unix timestamp, one space, then the fingerprint exactly as the script printed it, on one
    line with no trailing newline. The fingerprint binds the approval to the exact content you reviewed: if
    anything is staged or unstaged afterwards, the flag no longer matches and the commit is blocked. Use the Write

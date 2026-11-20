@@ -18,6 +18,11 @@ permissions:
   contents: write
   pull-requests: write
 
+# Two runs pushing gh-pages at the same time reject each other ("fetch first", or "cannot lock ref"): that failed the
+# Storybook check on two unrelated PRs of a sister site, two minutes apart. So every job that writes gh-pages, publishing or
+# cleaning up, shares one group (`storybook-gh-pages`, on both jobs below) and waits its turn. `queue: max` matters: by
+# default only one run may wait and a newer one cancels it, which would drop a PR's preview and leave a required check
+# cancelled. This workflow-level group is separate: it stops a superseded build of the same PR before it reaches the queue.
 concurrency:
   group: storybook-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -26,6 +31,9 @@ jobs:
   deploy:
     if: github.event.action != 'closed'
     name: Build and publish Storybook
+    concurrency:
+      group: storybook-gh-pages
+      queue: max
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -68,6 +76,9 @@ jobs:
   cleanup:
     if: github.event.action == 'closed'
     name: Remove preview
+    concurrency:
+      group: storybook-gh-pages
+      queue: max
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

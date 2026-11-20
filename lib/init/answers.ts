@@ -4,7 +4,7 @@
  * contrast gate) the site uses at build time: a setup that passes here cannot fail the first build.
  */
 import { parseBandConfig, type Feature, type SocialLink } from "../band/config";
-import type { Typography } from "../theme/fonts";
+import { FAMILY_PATTERN, FONT_ROLES, type FontRole, type Typography } from "../theme/fonts";
 import { resolvePalette, validatePalette, type Adjustment, type Palette } from "../theme/palette";
 
 export type Answers = {
@@ -28,6 +28,11 @@ export type Answers = {
   /** Where audio is served from (the custom domain on the R2 bucket), or absent to decide later. */
   audio?: { baseUrl?: string };
   hosting?: { pantheonSite?: string; p1SiteId?: string };
+  /**
+   * Typefaces the band wants that are not in Fontsource (licensed files, a foundry). The config names a Fontsource stand-in for the
+   * role meanwhile; adding the real one is a design PR after setup, and CLAUDE.md records that it is owed.
+   */
+  customFonts?: { role: FontRole; name: string }[];
   /** The GitHub user or org that owns the repo. CODEOWNERS is pointed at it so the template author is not asked to review a band's PRs. */
   github?: { owner?: string };
 };
@@ -73,6 +78,22 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
   const owner = github.owner;
   if (owner !== undefined && (typeof owner !== "string" || !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner))) {
     problems.push("github.owner must be a GitHub user or organisation name (letters, digits, hyphens)");
+  }
+
+  const customFonts: { role: FontRole; name: string }[] = [];
+  if (root.customFonts !== undefined) {
+    if (!Array.isArray(root.customFonts) || root.customFonts.length > FONT_ROLES.length) {
+      problems.push(`customFonts must be a list of up to ${FONT_ROLES.length} { role, name } entries`);
+    } else {
+      root.customFonts.forEach((c, i) => {
+        const role = isObject(c) ? c.role : undefined;
+        const name = isObject(c) ? c.name : undefined;
+        if (!(FONT_ROLES as readonly unknown[]).includes(role)) problems.push(`customFonts[${i}].role must be one of ${FONT_ROLES.join(", ")}`);
+        else if (typeof name !== "string" || !FAMILY_PATTERN.test(name)) problems.push(`customFonts[${i}].name must be the font's name (letters, digits, spaces, "." "+" "-")`);
+        else if (customFonts.some((x) => x.role === role)) problems.push(`customFonts has the ${String(role)} role twice`);
+        else customFonts.push({ role: role as FontRole, name });
+      });
+    }
   }
 
   const offLimits = identity.offLimits;
@@ -128,6 +149,7 @@ export function parseAnswers(raw: unknown, currentYear = new Date().getFullYear(
       features: features as Answers["features"],
       ...(baseUrl ? { audio: { baseUrl: baseUrl as string } } : {}),
       ...(Object.keys(hosting).length ? { hosting: hosting as Answers["hosting"] } : {}),
+      ...(customFonts.length ? { customFonts } : {}),
       ...(owner ? { github: { owner: owner as string } } : {}),
     },
     config,

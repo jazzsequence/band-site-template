@@ -28,14 +28,21 @@ const face = (f: FontFace) => `${f.family}${f.variable ? " (variable)" : ""}`;
 const describeType = (t: Typography) =>
   `headings in ${face(t.display)}, body in ${face(t.body)}; the wordmark ${t.wordmark ? `in ${face(t.wordmark)}${t.wordmark.uppercase ? ", capitals" : ""}` : "uses the display face"}; kickers ${t.kicker ? `in ${face(t.kicker)}` : "use the display face"}`;
 
-const FEATURE_LABELS = { tour: "Tour and tickets", merch: "Merch", lyrics: "Lyrics", map: "Tour map", press: "Press" } as const;
+const FEATURE_LABELS = { tour: "Tour and tickets", merch: "Merch", lyrics: "Lyrics", map: "Tour map", press: "Press", pressKit: "Press kit" } as const;
 
 export function renderClaudeMd(template: string, ctx: ClaudeMdContext): string {
   const { answers: a, date, adjustments, offLimitsCount, installed } = ctx;
   const id = a.identity;
   const on = (Object.keys(FEATURE_LABELS) as (keyof typeof FEATURE_LABELS)[]).filter((k) => a.features[k]).map((k) => FEATURE_LABELS[k]);
-  const off = (Object.keys(FEATURE_LABELS) as (keyof typeof FEATURE_LABELS)[]).filter((k) => !a.features[k]).map((k) => FEATURE_LABELS[k]);
   const host = a.hosting ?? {};
+  // The press kit is a P1-only page: its route is not gated, so it is kept out of the "routes return 404" sentence and gets its own.
+  const gatedOff = (Object.keys(FEATURE_LABELS) as (keyof typeof FEATURE_LABELS)[]).filter((k) => k !== "pressKit" && !a.features[k]).map((k) => FEATURE_LABELS[k]);
+  const offSentence = gatedOff.length
+    ? ` **Off:** ${gatedOff.join(", ")}; ${gatedOff.length > 1 ? "their routes return 404 and they drop" : "its route returns 404 and it drops"} out of the nav, sitemap and \`llms.txt\`.`
+    : "";
+  const kitSentence = a.features.pressKit
+    ? ""
+    : " **Press kit off:** it is a P1-only page, so this only removes its footer link and its sitemap and `llms.txt` entries; unpublish the page in P1 to take it down.";
 
   const intro = `${id.name} ${id.fictional ? "(a fictional act)" : "site"}. ${id.genre}. Next.js 16 + P1 (Puck), deployed to Pantheon${host.pantheonSite ? ` (\`${host.pantheonSite}\`)` : ""}.
 Everything band-specific comes from \`band.config.json\` (identity, which sections exist, type choices, palette, hosting, the location of the local
@@ -50,16 +57,16 @@ because the list itself would give the topics away. It has ${offLimitsCount} ${o
 Recorded by \`/init-band\` on ${date}. Change them in \`band.config.json\` (then \`pnpm theme\` if the palette or type changed), not here; this list is the why.
 
 - **Band:** ${id.name}${id.fictional ? ", a fictional act (pages never present it as real)" : ""}. ${id.tagline}
-- **Sections on:** ${on.length ? on.join(", ") : "none"}.${off.length ? ` **Off:** ${off.join(", ")}; their routes return 404 and they drop out of the nav, sitemap and \`llms.txt\`.` : ""}
-- **Type:** ${describeType(a.type)}.
+- **Sections on:** ${on.length ? on.join(", ") : "none"}.${offSentence}${kitSentence}
+- **Type:** ${describeType(a.type)}.${a.customFonts?.length ? ` **Custom typefaces still to add:** ${a.customFonts.map((c) => `${c.name} (${c.role})`).join(", ")}. The config names a Fontsource stand-in for each until then; adding the real one is a design PR after setup (see "Custom fonts" under the design approval workflow).` : ""}
 - **Palette:** see \`band.config.json\`; the gate${adjustments.length ? ` lifted ${adjustments.map((x) => `\`${x.key}\``).join(", ")} for contrast (the config keeps the written value, the generated theme the lifted one)` : " needed no adjustments"}.
 - **Hosting:** ${host.pantheonSite ? `Pantheon site \`${host.pantheonSite}\`` : "Pantheon site not set yet"}; ${host.p1SiteId ? `P1 site \`${host.p1SiteId}\`` : "P1 site not set yet"}; audio ${a.audio?.baseUrl ? `served from ${a.audio.baseUrl}` : "host not set yet (`NEXT_PUBLIC_AUDIO_BASE_URL`)"}.
 - **Workflows installed:** ${[installed.deployedSite && "`test-deployed-site.yml`", installed.registrySync && "`sync-puck-registry.yml`"].filter(Boolean).join(", ") || "none yet (the examples are in `examples/workflows/`)"}.
 - Secrets are never in files; see "Secrets on Pantheon" below for how each is set.`;
 
-  const placeholders = `- **Placeholder content.** The albums, shows, lyrics, merch, bio and press article are still the template's neutral samples until the band replaces them (\`CONTENT.md\` says where).
-  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette
-  (\`node scripts/make-brand-assets.mjs\`). Both read the generated theme, so run \`pnpm theme\` first after changing the palette. The seeded tour has one on-sale and one sold-out date
+  const placeholders = `- **Placeholder content.** The albums, shows, lyrics, merch, bio and press article are still the template's neutral samples until the band replaces them (\`CONTENT.md\` says where). Once the band's own content is in, run the \`/init-p1-pages\` skill: it creates the site's P1 pages from the repo as drafts (it never publishes; publishing a page in P1 is the go-live step and the owner's).
+  Images are solid-colour PNGs in the palette (\`node scripts/make-placeholder-images.mjs\`); icons and the social card are drawn from the band name and palette, in the wordmark face (or the display face as typed) from its static Fontsource files, so \`pnpm install\` must have run
+  (\`node scripts/make-brand-assets.mjs\`). Both read the generated theme, so run \`pnpm theme\` first after changing the palette. The card is the name on a gradient until the band's hero photo is added: \`node scripts/make-brand-assets.mjs --hero public/images/<file>\` (optionally \`--focus <x%>,<y%>\`; \`CONTENT.md\` has the details), and it must be run that way again after any re-theme. The seeded tour has one on-sale and one sold-out date
   so both ticket pages stay covered by tests; the ticket flow (\`/tickets/[id]\` -> \`/ticket?...\`) keeps all state in the URL and collects nothing.${id.fictional ? " Tour dates are fictional and must never be presented as real." : " Real tour venues must be checked against a source before they are added."}`;
 
   const deployed = installed.deployedSite

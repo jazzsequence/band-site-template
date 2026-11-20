@@ -42,6 +42,53 @@ describe("the P1 page definitions", () => {
 });
 
 describe("blocks", () => {
+  // P1 media serves an upload at its original size unless the URL asks for less (lib/site/media-url.ts): a page of band photos was 11 MB without this.
+  describe("P1 media pictures", () => {
+    const media = "https://media.p1.pantheon.io/image/00000000-0000-0000-0000-000000000000/assets/8cb57e31/photo.jpg?fit=scale-down";
+    const html = (type: string, props: object) => {
+      const block = components[type] as { render: (p: never) => React.ReactElement; defaultProps?: object };
+      return renderToStaticMarkup(block.render({ ...block.defaultProps, ...props } as never));
+    };
+
+    it("are requested at the size they are drawn at, wider for two columns than for three", () => {
+      const items = [{ imageUrl: media, alt: "A photo" }];
+      expect(html("ImageGalleryBlock", { columns: "2", items })).toContain("width=1200");
+      expect(html("ImageGalleryBlock", { columns: "3", items })).toContain("width=1000");
+      expect(html("ImageTextBlock", { imageUrl: media, imageAlt: "A photo" })).toContain("width=1000");
+      expect(html("MerchGridBlock", { items: [{ name: "Tee", price: "$25", imageUrl: media }] })).toContain("width=1000");
+      expect(html("HeroBlock", { imageUrl: media, title: "Title" })).toContain("width=1920");
+    });
+
+    it("the gallery's one-column option is one wide picture, and 2 and 3 keep the grid", () => {
+      const items = [{ imageUrl: media, alt: "A" }, { imageUrl: `${media}&x=2`, alt: "B" }];
+      const render = (columns: string) => html("ImageGalleryBlock", { columns, items });
+      const options = (components.ImageGalleryBlock as unknown as { fields: { columns: { options: { value: string }[] } } }).fields.columns.options;
+      expect(options.map((o) => o.value)).toEqual(["1", "2", "3"]);
+      expect(render("1")).not.toContain("grid-cols");
+      expect(render("1")).toContain("width=1400");
+      expect(render("2")).toContain("sm:grid-cols-2");
+      expect(render("3")).toContain("md:grid-cols-3");
+    });
+
+    it("the gallery aligns pictures of different heights to the top, middle or bottom, top by default", () => {
+      const items = [{ imageUrl: media, alt: "A" }];
+      const render = (props: object) => html("ImageGalleryBlock", { columns: "3", items, ...props });
+      expect(render({})).toContain("items-start");
+      expect(render({ verticalAlign: "top" })).toContain("items-start");
+      expect(render({ verticalAlign: "middle" })).toContain("items-center");
+      expect(render({ verticalAlign: "bottom" })).toContain("items-end");
+      expect(render({ verticalAlign: "sideways" })).toContain("items-start");
+    });
+
+    it("leave local images and other hosts alone", () => {
+      const items = [
+        { imageUrl: "/images/hero.jpg", alt: "Local" },
+        { imageUrl: "https://example.com/photo.jpg", alt: "Elsewhere" },
+      ];
+      expect(html("ImageGalleryBlock", { columns: "2", items })).not.toContain("width=");
+    });
+  });
+
   it("every block renders from its default props without throwing", async () => {
     const site = await getSiteData();
     for (const [name, block] of Object.entries(components)) {

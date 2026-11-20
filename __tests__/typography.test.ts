@@ -1,9 +1,10 @@
-import { existsSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 
 import { typography } from "../lib/band/config";
+import { fontFileProblems } from "../lib/init/font-packages";
 import {
   assetFace,
   assetWeight,
@@ -173,14 +174,6 @@ describe("the faces band.config.json chose", () => {
   });
 
   it("are installed, with every file fonts.ts imports, declaring the family the CSS stack names", () => {
-    const faces = [typography.display, typography.body, ...(typography.wordmark ? [typography.wordmark] : []), ...(typography.kicker ? [typography.kicker] : [])];
-    for (const spec of fontImports(typography)) {
-      const file = resolve(root, "node_modules", spec.endsWith(".css") ? spec : `${spec}/index.css`);
-      expect(existsSync(file), `${spec} is not installed; run pnpm install`).toBe(true);
-    }
-    for (const face of faces) {
-      const css = resolve(root, "node_modules", face.variable ? `@fontsource-variable/${face.id}/index.css` : `@fontsource/${face.id}/${pickWeights(face.weights, [400])[0]}.css`);
-      expect(readFileSync(css, "utf-8"), `${face.id} declares a different family than "${cssFamily(face)}"`).toContain(`font-family: '${cssFamily(face)}'`);
-    }
+    expect(fontFileProblems(root, typography)).toEqual([]);
   });
 });

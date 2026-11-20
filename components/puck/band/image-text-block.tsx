@@ -2,6 +2,7 @@ import Markdown from "react-markdown";
 
 import { ButtonLink } from "../../../design-system/components/Button";
 import { LightboxImage } from "../../../design-system/components/LightboxImage";
+import { mediaUrl } from "../../../lib/site/media-url";
 
 type Props = {
   imageUrl?: string;
@@ -54,7 +55,7 @@ export const imageTextBlock = {
           // The order class sits on this wrapper: inside the lightbox the image is no longer a grid child.
           <div className={imageSide === "right" ? "md:order-2" : ""}>
             <LightboxImage
-              src={imageUrl}
+              src={mediaUrl(imageUrl, 1000)}
               alt={imageAlt || title || "Photo"}
               loading="lazy"
               decoding="async"

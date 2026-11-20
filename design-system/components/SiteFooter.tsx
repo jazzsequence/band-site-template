@@ -11,7 +11,7 @@ export function SiteFooter() {
         © {band.copyrightYear} {band.name}. All rights reserved.
       </p>
       <nav aria-label="Footer" className="flex flex-wrap gap-x-6">
-        {features.press && (
+        {features.pressKit && (
           <AppLink href="/press/kit" className="inline-block py-2 underline underline-offset-4 hover:text-text">
             Press kit
           </AppLink>

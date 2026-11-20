@@ -54,11 +54,33 @@ describe("scripts/init-band.ts", () => {
     expect(rejected.out).toContain("too light");
   });
 
+  it("font-info asks for a name and a known role, and refuses something that is not a font name without a request", () => {
+    expect(cli("font-info").err).toContain("Give the font's name");
+    expect(cli("font-info", "--role", "body").err).toContain("Give the font's name");
+    expect(cli("font-info", "Inter", "--role", "footer").err).toContain("--role must be one of display, body, wordmark, kicker");
+    const r = cli("font-info", "???");
+    expect(r.code).toBe(1);
+    expect(r.err).toContain("is not a font name");
+  });
+
+  it("p1-pages refuses to build pages for a repo that is still the placeholder band", () => {
+    const initialized = JSON.parse(cli("status").out).initialized;
+    const r = cli("p1-pages");
+    if (!initialized) {
+      expect(r.code).toBe(1);
+      expect(r.err).toContain("still the placeholder band");
+    } else {
+      // A repo that has been set up has a P1 site or says it has none.
+      expect([0, 1]).toContain(r.code);
+    }
+  });
+
   it("apply explains a missing answers file and an invalid one, and changes nothing", () => {
     expect(cli("apply", join(dir, "nope.json")).err).toContain("Could not read");
     const invalid = join(dir, "invalid.json");
     writeFileSync(invalid, JSON.stringify({ identity: {} }));
-    const r = cli("apply", invalid, "--skip-assets");
+    // --force: a repo that has been set up refuses before it reads the answers, and this checks what it says about bad ones. Nothing is written when they are invalid.
+    const r = cli("apply", invalid, "--skip-assets", "--force");
     expect(r.code).toBe(1);
     expect(r.err).toContain("init answers rejected");
     expect(r.err).toContain("identity.name must be a non-empty string");

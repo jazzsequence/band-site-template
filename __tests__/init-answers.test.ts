@@ -107,6 +107,27 @@ describe("parseAnswers", () => {
     expect(out).toContain("features must be an object");
   });
 
+  it("records the custom typefaces still to add, outside the config, and rejects a malformed list", () => {
+    const a = good() as Record<string, any>;
+    a.customFonts = [{ role: "display", name: "Acme Grotesk" }, { role: "kicker", name: "Acme Script" }];
+    const parsed = parseAnswers(a, 2026);
+    expect(parsed.answers.customFonts).toEqual(a.customFonts);
+    expect(JSON.stringify(parsed.config)).not.toContain("Acme");
+    expect(parseAnswers(good(), 2026).answers).not.toHaveProperty("customFonts");
+
+    for (const [bad, message] of [
+      ["Acme", "customFonts must be a list"],
+      [[{ role: "footer", name: "Acme" }], "customFonts[0].role must be one of display, body, wordmark, kicker"],
+      [[{ role: "display", name: 'Acme"; }' }], "customFonts[0].name must be the font's name"],
+      [[{ role: "display", name: "A" }, { role: "display", name: "B" }], "customFonts has the display role twice"],
+      [[{ role: "display", name: "A" }, { role: "body", name: "B" }, { role: "wordmark", name: "C" }, { role: "kicker", name: "D" }, { role: "kicker", name: "E" }], "customFonts must be a list of up to 4"],
+    ] as const) {
+      const c = good() as Record<string, any>;
+      c.customFonts = bad;
+      expect(problems(c), JSON.stringify(bad)).toContain(message);
+    }
+  });
+
   it("lifts a failing text colour and reports it, keeping the author's value in the config", () => {
     const a = good() as Record<string, any>;
     a.look.palette = { ...a.look.palette, accent: "#4a1030" };

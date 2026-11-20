@@ -14,7 +14,8 @@ Sign in at `/p1` and edit these pages in the visual editor. Changes go live when
 | `/listen` | The intro. The albums and their songs come from the catalog | Page heading, Album with tracks |
 | `/albums`, `/albums/<album>` | Headings and text around each album. Cover, year and songs come from the catalog | Album header, Track list, Album grid, Image gallery |
 | `/lyrics` | The intro. The list comes from the lyrics files | Page heading, Lyrics index |
-| `/press`, `/privacy` | The text, in Markdown | Article |
+| `/press`, `/privacy` | The text, written right on the page (rich text: select text for the toolbar). Pages made as Markdown keep rendering until text goes in the Article's Text field | Article |
+| `/press/kit` | The press kit: one-liner, bios, quick facts, the band, photos and the download link. It exists only in P1; turning `features.pressKit` off removes its sitemap and `llms.txt` entries and its footer link, not the page | Page heading, Image gallery (Columns 1 for the wide lead photo, 3 for the grid; Vertical alignment sets where shorter pictures sit in a row), Article |
 | `/bio` | Bio text and photo | Image and text |
 | `/merch` | Merch items, prices and images | Page heading, Merch grid |
 
@@ -28,8 +29,12 @@ checkout and e-ticket, and the error pages.
 `content/p1-pages/*.json` holds each page above as designed (the placeholder band's versions). They are tested against the code versions in CI,
 and are the copy to rebuild a page from if one is ever damaged.
 
+The `/init-p1-pages` skill creates all of these pages in P1 from your own content once it is in (drafts only; publishing is yours): the albums and
+tour dates from `data/`, the press article from `content/press/article.md`, and a bio from text you give it.
+
 Notes:
 - **Tour dates:** each show has an optional **URL id**. Set it once and never change it, because ticket links use it. If left empty it is made from the city and date.
+- **Pictures uploaded to P1 media:** upload the original if you like. The site asks P1 for each picture at the width its slot needs (about twice the column), so a 4000 px photo is not sent to visitors at 4000 px. A URL you paste that already has `width=...` is left as you wrote it.
 - **Always one h1:** every page needs exactly one. Use a Page heading block, or set an Image and text block's title to h1.
 - **Fallback:** if P1 is unreachable, or a page is not published, every page above falls back to the code version in this repo (`data/tour.json`, `data/merch.json` and the page files under `app/(site)/`). Keep those roughly current.
 - **Workstreams:** work on a P1 workstream and merge to main to publish.
@@ -61,7 +66,11 @@ Songs and lyrics are independent: lyrics with no audio, or audio with no lyrics,
 
 Keep images small: JPEG, at most 1600 px wide, ideally under 300 KB. Resize before adding.
 The seeded images are solid-colour placeholders in the palette (`node scripts/make-placeholder-images.mjs`); replace them with real art.
-Icons and the 1200x630 social card (`public/og-default.png`) are generated from the band name and palette: `node scripts/make-brand-assets.mjs`.
+Icons and the 1200x630 social card (`public/og-default.jpg`) are generated from the band name and palette: `node scripts/make-brand-assets.mjs`.
+To put the band's hero photo behind the name on the card, as most bands' links should show, add the photo under `public/images/` (the one the home page hero uses) and run
+`node scripts/make-brand-assets.mjs --hero public/images/<hero-file>`. The photo is cropped to the card's shape; if that cuts the subject, say which part to keep with
+`--focus <x%>,<y%>` (percentages from the top left, default `50,50`; `--focus 50,25` keeps the upper middle). Look at `public/og-default.jpg` before committing it: the name sits over a dark fade
+at the foot of the photo, so keep the subject out of the bottom third. Run it with the same `--hero` every time: without it (and when `/init-band` re-themes the site) the card goes back to the plain one.
 
 ## Standards and discovery
 

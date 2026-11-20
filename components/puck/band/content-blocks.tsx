@@ -1,9 +1,11 @@
+import { micromark } from "micromark";
 import Markdown from "react-markdown";
 
 import { ButtonLink } from "../../../design-system/components/Button";
 import { Hero, type HeroAction } from "../../../design-system/components/Hero";
 import { LightboxImage } from "../../../design-system/components/LightboxImage";
 import { SectionHeading } from "../../../design-system/components/SectionHeading";
+import { mediaUrl } from "../../../lib/site/media-url";
 
 type ActionItem = { label?: string; href?: string; style?: "primary" | "outline" };
 
@@ -52,7 +54,7 @@ export const heroBlock = {
     ],
   },
   render: ({ imageUrl, kicker, title, blurb, actions }: { imageUrl?: string; kicker?: string; title?: string; blurb?: string; actions?: ActionItem[] }) => (
-    <Hero image={imageUrl ?? ""} kicker={kicker ?? ""} title={title ?? ""} blurb={blurb ?? ""} actions={toActions(actions)} />
+    <Hero image={mediaUrl(imageUrl, 1920)} kicker={kicker ?? ""} title={title ?? ""} blurb={blurb ?? ""} actions={toActions(actions)} />
   ),
 };
 
@@ -72,21 +74,34 @@ export const sectionHeadingBlock = {
 };
 
 /**
- * Long text in Markdown: an interview, a policy. Use `# Title` once for the page's h1 and `## Heading` for
- * sections. Links, lists, quotes and emphasis all work.
+ * Long text: an interview, a policy, a press kit. Rich text, edited right on the page in the editor (select text for the toolbar;
+ * headings, lists, quotes, links and emphasis all work). Use one Heading 1 for the page's h1 when nothing else supplies it, and
+ * Heading 2 for sections.
+ *
+ * Pages made before this block was rich text hold their words in `markdown`. They render from it as before, and when one is opened
+ * in the editor `resolveData` moves the words into the Text field (Markdown to HTML, same text) so they can be edited in place;
+ * the page is only changed in P1 when the editor saves it.
  */
 export const articleBlock = {
   label: "Article",
   fields: {
     kicker: { type: "text" as const, label: "Small label above the text (optional)" },
-    markdown: { type: "textarea" as const, label: "Text (Markdown)" },
+    body: {
+      type: "richtext" as const,
+      label: "Text",
+      contentEditable: true,
+      initialHeight: 320,
+      options: { heading: { levels: [1, 2, 3] as (1 | 2 | 3)[] } },
+    },
   },
-  defaultProps: { kicker: "", markdown: "# Title\n\nWrite here." },
-  render: ({ kicker, markdown }: { kicker?: string; markdown?: string }) => (
+  defaultProps: { kicker: "", body: "<h1>Title</h1><p>Write here.</p>" },
+  resolveData: ({ props }: { props: { body?: unknown; markdown?: string } }) =>
+    !props.body && props.markdown ? { props: { ...props, body: micromark(props.markdown), markdown: "" } } : { props },
+  render: ({ kicker, body, markdown }: { kicker?: string; body?: React.ReactNode; markdown?: string }) => (
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
       {kicker ? <p className="mb-2 font-kicker text-2xl text-accent">{kicker}</p> : null}
       <article className="prose prose-invert max-w-none prose-headings:font-display prose-headings:font-extrabold prose-headings:uppercase prose-headings:tracking-[-0.03em] prose-h1:text-4xl prose-h2:text-2xl prose-h2:text-text prose-p:text-muted prose-strong:text-text prose-a:text-accent-3">
-        <Markdown>{markdown ?? ""}</Markdown>
+        {body ? body : <Markdown>{markdown ?? ""}</Markdown>}
       </article>
     </div>
   ),
@@ -94,7 +109,13 @@ export const articleBlock = {
 
 type GalleryItem = { imageUrl?: string; alt?: string };
 
-/** Pictures in a grid; each opens larger in the lightbox. */
+/** Where pictures of different heights sit in their row. Literal class names, so Tailwind sees them. */
+const GALLERY_ALIGN: Record<string, string> = { top: "items-start", middle: "items-center", bottom: "items-end" };
+
+/** Pixels to ask P1 media for: about twice the column the picture is drawn in (the lightbox opens the same file larger, so not less). */
+const galleryWidth = (columns?: string) => (columns === "1" ? 1400 : columns === "3" ? 1000 : 1200);
+
+/** Pictures in a grid, or one wide picture across the full width (Columns: 1); each opens larger in the lightbox. */
 export const imageGalleryBlock = {
   label: "Image gallery",
   fields: {
@@ -102,8 +123,18 @@ export const imageGalleryBlock = {
       type: "radio" as const,
       label: "Columns",
       options: [
+        { label: "1 (one wide picture)", value: "1" },
         { label: "2", value: "2" },
         { label: "3", value: "3" },
+      ],
+    },
+    verticalAlign: {
+      type: "radio" as const,
+      label: "Vertical alignment (pictures of different heights)",
+      options: [
+        { label: "Top", value: "top" },
+        { label: "Middle", value: "middle" },
+        { label: "Bottom", value: "bottom" },
       ],
     },
     items: {
@@ -117,16 +148,16 @@ export const imageGalleryBlock = {
       getItemSummary: (i: GalleryItem) => i.alt || i.imageUrl || "Picture",
     },
   },
-  defaultProps: { columns: "2", items: [] as GalleryItem[] },
-  render: ({ columns, items }: { columns?: string; items?: GalleryItem[] }) => (
+  defaultProps: { columns: "2", verticalAlign: "top", items: [] as GalleryItem[] },
+  render: ({ columns, verticalAlign, items }: { columns?: string; verticalAlign?: string; items?: GalleryItem[] }) => (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <div className={`grid gap-6 sm:grid-cols-2 ${columns === "3" ? "md:grid-cols-3" : ""}`}>
+      <div className={`grid gap-6 ${GALLERY_ALIGN[verticalAlign ?? "top"] ?? "items-start"} ${columns === "1" ? "" : `sm:grid-cols-2 ${columns === "3" ? "md:grid-cols-3" : ""}`}`}>
         {(items ?? [])
           .filter((i) => i.imageUrl)
           .map((i) => (
             <LightboxImage
               key={i.imageUrl}
-              src={i.imageUrl ?? ""}
+              src={mediaUrl(i.imageUrl, galleryWidth(columns))}
               alt={i.alt || "Picture"}
               loading="lazy"
               decoding="async"
