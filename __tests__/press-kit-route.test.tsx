@@ -39,6 +39,10 @@ describe("the /press/kit route", () => {
     expect(readFileSync(new URL("../app/(site)/press/kit/page.tsx", import.meta.url), "utf-8")).not.toMatch(/features\.pressKit/);
   });
 
+  it("gates the footer link on the pressKit switch", () => {
+    expect(readFileSync(new URL("../design-system/components/SiteFooter.tsx", import.meta.url), "utf-8")).toMatch(/features\.pressKit/);
+  });
+
   it("has a canonical URL, og:url, og:image and a large Twitter card, with the title and description published in P1", async () => {
     const meta = await generateMetadata();
     expect(meta.alternates?.canonical).toBe("/press/kit");
