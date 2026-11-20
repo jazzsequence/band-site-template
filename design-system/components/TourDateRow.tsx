@@ -1,12 +1,15 @@
+import type { ReactNode } from "react";
+
 import { ButtonLink } from "./Button";
 
 export type TourDateRowProps = {
   month: string; // "NOV"
   day: string; // "14"
   year: number;
-  city: string;
-  venue: string;
-  capacity?: string;
+  /** Text, or the editable element the page editor passes while a page is being edited in place. Drawn as given. */
+  city: ReactNode;
+  venue: ReactNode;
+  capacity?: ReactNode;
   status?: "on-sale" | "sold-out";
   href?: string;
   /** Heading level for the title; use "h2" when the card sits directly under the page h1. */
