@@ -30,7 +30,7 @@
     "@pantheon-systems/nextjs-cache-handler": "0.14.0",
     "@pantheon-systems/p1-media": "^0.5.2",
     "@pantheon-systems/p1-next-sdk": "^0.25.0",
-    "@pantheon-systems/pds-toolkit-react": "2.0.0-beta.14",
+    "@pantheon-systems/pds-toolkit-react": "2.0.0-beta.19",
     "@pantheon-systems/puck-css": "^0.25.0",
     "@puckeditor/core": "^0.24.0",
     "@tailwindcss/postcss": "^4.3.4",
